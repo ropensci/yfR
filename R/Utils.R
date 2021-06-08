@@ -191,6 +191,10 @@ df.fill.na = function(df.in) {
 
 }
 
+yf_get_message_index <- function(index_in, my_n) {
+  cli::cli_alert_success('Got {index_in} composition with {my_n} rows')
+  return(invisible(TRUE))
+}
 
 .onAttach <- function(libname,pkgname) {
 

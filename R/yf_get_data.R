@@ -1,7 +1,6 @@
 #' Function to download financial data
 #'
-#' This function downloads financial data from Yahoo Finance using \code{\link[quantmod]{getSymbols}}.
-#' Based on a set of tickers and a time period, the function will download the data for each ticker and return a report of the process, along with the actual data in the long dataframe format.
+#' This function downloads financial data from Yahoo Finance. Based on a set of tickers and a time period, the function will download the data for each ticker and return a report of the process, along with the actual data in the long dataframe format.
 #' The main advantage of the function is that it automatically recognizes the source of the dataset from the ticker and structures the resulting data from different sources in the long format.
 #' A caching system is also available, making it very fast.
 #'
@@ -45,13 +44,13 @@
 #' first.date <- Sys.Date()-30
 #' last.date <- Sys.Date()
 #'
-#' l.out <- BatchGetSymbols(tickers = tickers,
-#'                          first.date = first.date,
-#'                         last.date = last.date, do.cache=FALSE)
+#' l.out <- yf_get_data(tickers = tickers,
+#'                      first.date = first.date,
+#'                      last.date = last.date, do.cache=FALSE)
 #'
 #' print(l.out$df.control)
 #' print(l.out$df.tickers)
-BatchGetSymbols <- function(tickers,
+yf_get_data <- function(tickers,
                             first.date = Sys.Date()-30,
                             last.date = Sys.Date(),
                             thresh.bad.data = 0.75,

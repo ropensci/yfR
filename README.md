@@ -7,8 +7,8 @@
 
 ## Changes from `BatchGetSymbols`
 
-- New and more intuitive function names: BatchGetSymbols() -->  get_yf_data()
-- Use of collections for fetching large scale data (function `get_collection()`)
+- New and more intuitive function names: BatchGetSymbols() -->  yf_get_data()
+- Use of collections for fetching large scale data (function `yf_get_collection()`)
 - No more dependency of quantmod:getSymbols
 - Better status bars
 - Better handling of invalid data
