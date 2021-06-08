@@ -6,12 +6,6 @@
 \usage{
 reshape.wide(df.tickers)
 }
-\arguments{
-\item{df.tickers}{Dataframe in the long format}
-}
-\value{
-A list with dataframes in the wide format
-}
 \description{
 Transforms a dataframe in the long format to a list of dataframes in the wide format
 }

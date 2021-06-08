@@ -27,20 +27,7 @@ myGetSymbols(
 
 \item{src}{The source of the data ('google' or'yahoo')}
 
-\item{first.date}{The first date to download data (date or char as YYYY-MM-DD)}
-
-\item{last.date}{The last date to download data (date or char as YYYY-MM-DD)}
-
-\item{do.cache}{Use cache system? (default = TRUE)}
-
-\item{cache.folder}{Where to save cache files? (default = file.path(tempdir(), 'BGS_Cache') )}
-
 \item{df.bench}{Data for bechmark ticker}
-
-\item{be.quiet}{Logical for printing statements (default = FALSE)}
-
-\item{thresh.bad.data}{A percentage threshold for defining bad data. The dates of the benchmark ticker are compared to each asset. If the percentage of non-missing dates
-with respect to the benchmark ticker is lower than thresh.bad.data, the function will ignore the asset (default = 0.75)}
 }
 \value{
 A dataframe with the financial data

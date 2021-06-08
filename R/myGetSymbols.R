@@ -8,7 +8,7 @@
 #' @param i.ticker A index for the stock that is downloading (for cat() purposes)
 #' @param length.tickers total number of stocks being downloaded (also for cat() purposes)
 #' @param df.bench Data for bechmark ticker
-#' @inheritParams BatchGetSymbols
+#' @inheritParams yf_get_data
 #'
 #' @return A dataframe with the financial data
 #'

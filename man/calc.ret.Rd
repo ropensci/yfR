@@ -6,20 +6,6 @@
 \usage{
 calc.ret(P, tickers = rep("ticker", length(P)), type.return = "arit")
 }
-\arguments{
-\item{P}{Price vector}
-
-\item{tickers}{Ticker of symbols (usefull if working with long dataframe)}
-
-\item{type.return}{Type of price return to calculate: 'arit' (default) - aritmetic, 'log' - log returns.}
-}
-\value{
-A vector of returns
-}
 \description{
-Created so that a return column is added to a dataframe with prices in the long (tidy) format.
-}
-\examples{
-P <- c(1,2,3)
-R <- calc.ret(P)
+Function to calculate returns from a price and ticker vector
 }

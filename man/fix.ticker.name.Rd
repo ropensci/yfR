@@ -6,12 +6,6 @@
 \usage{
 fix.ticker.name(ticker.in)
 }
-\arguments{
-\item{ticker.in}{A bad ticker name}
-}
-\value{
-A good ticker name
-}
 \description{
-Removes bad symbols from names of tickers. This is useful for naming files with cache system.
+Fix name of ticker
 }

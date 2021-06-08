@@ -1,3 +1,13 @@
+#' Get current composition of stock indices
+#'
+#' @param mkt_index the index (e.g. IBOV, SP500, FTSE)
+#' @inheritParams yf_get_data
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' df_sp500 <- yf_get_index_comp('SP500')
 yf_get_index_comp <- function(mkt_index,
                               do_cache = TRUE,
                               cache_folder = yf_get_default_cache_folder()) {
@@ -19,36 +29,29 @@ yf_get_index_comp <- function(mkt_index,
     df_index <- yf_get_sp500_stocks()
   }
 
+  if (mkt_index == 'FTSE') {
+    df_index <- yf_get_ftse_stocks()
+  }
+
+  return(df_index)
+
 }
 
 yf_get_available_indices <- function() {
-  available_indices <- c('SP500', 'IBOV', 'FTSE100')
+  available_indices <- c('SP500', 'IBOV', 'FTSE')
 
   return(available_indices)
 }
 
+# returns the default folder for caching (used in various functions)
 yf_get_default_cache_folder <- function() {
-  path_cache <- file.path(tempdir(), 'BGS_Cache')
+  path_cache <- file.path(tempdir(), 'yf_cache')
   return(path_cache)
 }
 
 #' Function to download the current components of the Ibovespa index from B3 website
-#'
-#' This function scrapes the stocks that constitute the Ibovespa index from the wikipedia page at http://bvmf.bmfbovespa.com.br/indices/ResumoCarteiraTeorica.aspx?Indice=IBOV&idioma=pt-br.
-#'
-#' @param max_tries Maximum number of attempts to download the data
-#' @inheritParams BatchGetSymbols
-#'
-#' @return A dataframe that includes a column with the list of tickers of companies that belong to the Ibovespa index
-#' @export
-#' @examples
-#' \dontrun{
-#' df.ibov <- GetIbovStocks()
-#' print(df.ibov$tickers)
-#' }
 yf_get_ibov_stocks <- function(do_cache = TRUE,
-                               cache_folder = file.path(tempdir(),
-                                                        'BGS_Cache'),
+                               cache_folder = yf_get_default_cache_folder(),
                                max_tries  = 10){
 
   cache_file <- file.path(cache_folder,
@@ -101,73 +104,53 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
 }
 
 
-#' Function to download the current components of the FTSE100 index from Wikipedia
-#'
-#' This function scrapes the stocks that constitute the FTSE100 index from the wikipedia page at <https://en.wikipedia.org/wiki/FTSE_100_Index#List_of_FTSE_100_companies>.
-#'
-#' @inheritParams BatchGetSymbols
-#'
-#' @return A dataframe that includes a column with the list of tickers of companies that belong to the FTSE100 index
-#' @export
-#' @import rvest
-#' @examples
-#' \dontrun{
-#' df.FTSE100 <- GetFTSE100Stocks()
-#' print(df.FTSE100$tickers)
-#' }
-GetFTSE100Stocks <- function(do_cache = TRUE,
-                             cache_folder = file.path(tempdir(),
-                                                      'BGS_Cache')){
+yf_get_ftse_stocks <- function(do_cache = TRUE,
+                             cache_folder = yf_get_default_cache_folder()){
 
   cache_file <- file.path(cache_folder,
-                          paste0('FTSE100_Composition_', Sys.Date(), '.rds') )
+                          paste0('yf_ftse100_Composition_', Sys.Date(), '.rds') )
 
   if (do_cache) {
     # check if file exists
     flag <- file.exists(cache_file)
 
     if (flag) {
-      df.FTSE100Stocks <- readRDS(cache_file)
-      return(df.FTSE100Stocks)
+      df_ftse <- readr::read_rds(cache_file)
+      return(df_ftse)
     }
   }
 
-  my.url <- 'https://en.wikipedia.org/wiki/FTSE_100_Index'
+  my_url <- 'https://en.wikipedia.org/wiki/FTSE_100_Index'
 
-  read_html <- 0 # fix for global variable nagging from BUILD
-  my.xpath <- '//*[@id="mw-content-text"]/div/table[2]' # old xpath
-  my.xpath <- '//*[@id="constituents"]'
-  df.FTSE100Stocks <- my.url %>%
-    read_html() %>%
-    html_nodes(xpath = my.xpath) %>%
-    html_table()
+  my_xpath <- '//*[@id="mw-content-text"]/div/table[2]' # old xpath
+  my_xpath <- '//*[@id="constituents"]'
+  df_ftse <- my_url |>
+    rvest::read_html() |>
+    rvest::html_nodes(xpath = my_xpath) |>
+    rvest::html_table()
 
-  df.FTSE100Stocks <- df.FTSE100Stocks[[1]]
+  df_ftse <- df_ftse[[1]]
 
-  colnames(df.FTSE100Stocks) <- c('company','tickers','ICB.sector')
+  df_ftse <- df_ftse |>
+    dplyr::rename(ticker = EPIC,
+           company = Company,
+           sector = names(df_ftse)[3])
 
   if (do_cache) {
 
     if (!dir.exists(cache_folder)) dir.create(cache_folder)
 
-    saveRDS(df.FTSE100Stocks, cache_file)
+    readr::write_rds(df_ftse, cache_file)
   }
 
-  return(df.FTSE100Stocks)
+  yf_get_message_index('FTSE', nrow(df_ftse))
+
+  return(df_ftse)
 }
 
 #' Function to download the current components of the SP500 index from Wikipedia
-#'
-#' This function scrapes the stocks that constitute the SP500 index from the wikipedia page at https://en.wikipedia.org/wiki/List_of_S%26P_500_companies.
-#'
-#' @inheritParams BatchGetSymbols
-#'
-#' @return A dataframe that includes a column with the list of tickers of companies that belong to the SP500 index
-#' @export
-#' @import rvest dplyr
 yf_get_sp500_stocks <- function(do_cache = TRUE,
-                                cache_folder = file.path(tempdir(),
-                                                         'BGS_Cache')){
+                                cache_folder = yf_get_default_cache_folder()){
 
   cache_file <- file.path(cache_folder,
                           paste0('SP500_Composition_', Sys.Date(), '.rds') )
@@ -186,10 +169,10 @@ yf_get_sp500_stocks <- function(do_cache = TRUE,
 
   read_html <- 0 # fix for global variable nagging from BUILD
   my_xpath <- '//*[@id="constituents"]'
-  df_sp500 <- my_url %>%
-    read_html() %>%
-    html_nodes(xpath = my_xpath) %>%
-    html_table(fill = TRUE)
+  df_sp500 <- my_url |>
+    rvest::read_html() |>
+    rvest::html_nodes(xpath = my_xpath) |>
+    rvest::html_table(fill = TRUE)
 
   df_sp500 <- df_sp500[[1]]
 
@@ -211,4 +194,7 @@ yf_get_sp500_stocks <- function(do_cache = TRUE,
   return(df_sp500)
 }
 
-
+yf_get_message_index <- function(index_in, my_n) {
+  cli::cli_alert_success('Got {index_in} composition with {my_n} rows')
+  return(invisible(TRUE))
+}

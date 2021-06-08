@@ -6,19 +6,6 @@
 \usage{
 get.clean.data(tickers, src = "yahoo", first.date, last.date)
 }
-\arguments{
-\item{tickers}{A vector of tickers. If not sure whether the ticker is available, check the websites of google and yahoo finance. The source for downloading
-the data can either be Google or Yahoo. The function automatically selects the source webpage based on the input ticker.}
-
-\item{src}{Source of data (yahoo or google)}
-
-\item{first.date}{The first date to download data (date or char as YYYY-MM-DD)}
-
-\item{last.date}{The last date to download data (date or char as YYYY-MM-DD)}
-}
-\value{
-A dataframe with the cleaned data
-}
 \description{
 Get clean data from yahoo/google
 }

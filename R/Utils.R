@@ -1,10 +1,4 @@
 #' Fix name of ticker
-#'
-#' Removes bad symbols from names of tickers. This is useful for naming files with cache system.
-#'
-#' @param ticker.in A bad ticker name
-#' @return A good ticker name
-#'
 fix.ticker.name <- function(ticker.in){
 
   ticker.in <- stringr::str_replace_all(ticker.in, stringr::fixed('.'), '')
@@ -15,12 +9,6 @@ fix.ticker.name <- function(ticker.in){
 
 
 #' Get clean data from yahoo/google
-#'
-#' @param src Source of data (yahoo or google)
-#' @inheritParams BatchGetSymbols
-#'
-#' @return A dataframe with the cleaned data
-#'
 get.clean.data <- function(tickers,
                            src = 'yahoo',
                            first.date,
@@ -76,11 +64,6 @@ get.clean.data <- function(tickers,
 
 
 #' Transforms a dataframe in the long format to a list of dataframes in the wide format
-#'
-#' @param df.tickers Dataframe in the long format
-#'
-#' @return A list with dataframes in the wide format
-#'
 reshape.wide <- function(df.tickers) {
 
   cols.to.keep <- c('ref.date', 'ticker')
@@ -106,19 +89,6 @@ reshape.wide <- function(df.tickers) {
 
 
 #' Function to calculate returns from a price and ticker vector
-#'
-#' Created so that a return column is added to a dataframe with prices in the long (tidy) format.
-#'
-#' @param P Price vector
-#' @param tickers Ticker of symbols (usefull if working with long dataframe)
-#' @inheritParams BatchGetSymbols
-#'
-#' @return A vector of returns
-#' @export
-#'
-#' @examples
-#' P <- c(1,2,3)
-#' R <- calc.ret(P)
 calc.ret <- function(P,
                      tickers = rep('ticker', length(P)),
                      type.return = 'arit') {
@@ -191,10 +161,7 @@ df.fill.na = function(df.in) {
 
 }
 
-yf_get_message_index <- function(index_in, my_n) {
-  cli::cli_alert_success('Got {index_in} composition with {my_n} rows')
-  return(invisible(TRUE))
-}
+
 
 .onAttach <- function(libname,pkgname) {
 

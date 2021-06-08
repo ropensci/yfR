@@ -1,23 +1,20 @@
 library(testthat)
 library(yf)
 
-#test_that(desc = 'Test of download function',{
-#          expect_equal(1, 1) } )
+# test for indices
+available_indices <- yf_get_available_indices()
+for (i_index in available_indices) {
+  test_that(desc = stringr::str_glue('Test of {i_index}'),{
+    expect_true(is.data.frame(yf_get_index_comp(i_index))) } )
+}
 
-first.date <- Sys.Date()-30
-last.date <- Sys.Date()
 
-# my.tickers <- c('MMM')
-# 
-# l.out <- BatchGetSymbols(tickers = my.tickers,
-#                          first.date = first.date,
-#                          last.date = last.date)
-# 
-# 
-# test_that(desc = 'Test of read function',{
-#   expect_true(nrow(l.out$df.tickers)>0)
-#   } )
+my_tickers <- c('MMM')
 
-#cat('\nDeleting test folder')
-#unlink(dl.folder, recursive = T)
+test_that(desc = stringr::str_glue('Test of main fct'),{
+  l.out <- yf_get_data(tickers = my_tickers,
+                       first_date = Sys.Date()-30,
+                       last_date = Sys.Date())
+
+  expect_true(is.list(l.out))})
 
