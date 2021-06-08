@@ -1,4 +1,4 @@
 library(testthat)
-library(BatchGetSymbols)
+library(yf)
 
-test_check("BatchGetSymbols")
+test_check("yf")

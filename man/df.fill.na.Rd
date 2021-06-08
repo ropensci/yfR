@@ -15,10 +15,3 @@ A fixed dataframe.
 \description{
 Helper function for BatchGetSymbols. Replaces NA values and returns fixed dataframe.
 }
-\examples{
-
-df <- data.frame(price.adjusted = c(NA, 10, 11, NA, 12, 12.5, NA ), volume = c(1,10, 0, 2, 0, 1, 5))
-
-df.fixed.na <- df.fill.na(df)
-
-}

@@ -15,8 +15,3 @@ A good ticker name
 \description{
 Removes bad symbols from names of tickers. This is useful for naming files with cache system.
 }
-\examples{
-bad.ticker <- '^GSPC'
-good.ticker <- fix.ticker.name(bad.ticker)
-good.ticker
-}

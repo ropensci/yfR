@@ -22,8 +22,3 @@ A dataframe with the cleaned data
 \description{
 Get clean data from yahoo/google
 }
-\examples{
-df.sp500 <- get.clean.data('^GSPC',
-                           first.date = as.Date('2010-01-01'),
-                           last.date = as.Date('2010-02-01'))
-}

@@ -4,11 +4,7 @@
 #'
 #' @param ticker.in A bad ticker name
 #' @return A good ticker name
-#' @export
-#' @examples
-#' bad.ticker <- '^GSPC'
-#' good.ticker <- fix.ticker.name(bad.ticker)
-#' good.ticker
+#'
 fix.ticker.name <- function(ticker.in){
 
   ticker.in <- stringr::str_replace_all(ticker.in, stringr::fixed('.'), '')
@@ -24,12 +20,7 @@ fix.ticker.name <- function(ticker.in){
 #' @inheritParams BatchGetSymbols
 #'
 #' @return A dataframe with the cleaned data
-#' @export
 #'
-#' @examples
-#' df.sp500 <- get.clean.data('^GSPC',
-#'                            first.date = as.Date('2010-01-01'),
-#'                            last.date = as.Date('2010-02-01'))
 get.clean.data <- function(tickers,
                            src = 'yahoo',
                            first.date,
@@ -89,14 +80,7 @@ get.clean.data <- function(tickers,
 #' @param df.tickers Dataframe in the long format
 #'
 #' @return A list with dataframes in the wide format
-#' @export
 #'
-#' @examples
-#'
-#' my.f <- system.file( 'extdata/ExampleData.rds', package = 'BatchGetSymbols' )
-#' df.tickers <- readRDS(my.f)
-#' l.wide <- reshape.wide(df.tickers)
-#' l.wide
 reshape.wide <- function(df.tickers) {
 
   cols.to.keep <- c('ref.date', 'ticker')
@@ -158,14 +142,6 @@ calc.ret <- function(P,
 #' @param df.in DAtaframe to be fixed
 #'
 #' @return A fixed dataframe.
-#' @export
-#'
-#' @examples
-#'
-#' df <- data.frame(price.adjusted = c(NA, 10, 11, NA, 12, 12.5, NA ), volume = c(1,10, 0, 2, 0, 1, 5))
-#'
-#' df.fixed.na <- df.fill.na(df)
-#'
 df.fill.na = function(df.in) {
 
 
