@@ -1,89 +1,54 @@
 #' Fix name of ticker
-fix.ticker.name <- function(ticker.in){
+fix_ticker_name <- function(ticker_in){
 
-  ticker.in <- stringr::str_replace_all(ticker.in, stringr::fixed('.'), '')
-  ticker.in <- stringr::str_replace_all(ticker.in, stringr::fixed('^'), '')
+  ticker_in <- stringr::str_replace_all(ticker_in, stringr::fixed('.'), '')
+  ticker_in <- stringr::str_replace_all(ticker_in, stringr::fixed('^'), '')
 
-  return(ticker.in)
+  return(ticker_in)
 }
 
+get_morale_boost <- function() {
+  morale_boost <- c(rep(c('OK!', 'Got it!','Nice!','Good stuff!',
+                          'Looking good!', 'Good job!', 'Well done!',
+                          'Feels good!', 'You got it!', 'Youre doing good!'), 10),
+                    'Boa!', 'Mas bah tche, que coisa linda!',
+                    'Mais contente que cusco de cozinheira!',
+                    'Feliz que nem lambari de sanga!',
+                    'Mais faceiro que guri de bombacha nova!')
 
-#' Get clean data from yahoo/google
-get.clean.data <- function(tickers,
-                           src = 'yahoo',
-                           first.date,
-                           last.date) {
+  return(sample(morale_boost, 1))
+}
 
-  # dont push luck with yahoo servers
-  # No problem in my testings, so far. You can safely leave it unrestricted
-  #Sys.sleep(0.5)
-
-  # set empty df for errors
-  df.out <- data.frame()
-
-  suppressMessages({
-    suppressWarnings({
-      try(df.out <- quantmod::getSymbols(Symbols = tickers,
-                                          src = src,
-                                          from = first.date,
-                                          to = last.date,
-                                          auto.assign = F),
-          silent = T)
-    }) })
-
-  if (nrow(df.out) == 0) return(df.out)
-
-  df.out <- as.data.frame(df.out[!duplicated(zoo::index(df.out))])
-
-  # adjust df for difference of columns from yahoo and google
-  if (src=='google'){
-
-    colnames(df.out) <- c('price.open','price.high','price.low','price.close','volume')
-    df.out$price.adjusted <- NA
-
-  } else {
-
-    colnames(df.out) <- c('price.open','price.high','price.low','price.close','volume','price.adjusted')
-  }
-
-  # get a nice column for dates and tickers
-  df.out$ref.date <- as.Date(rownames(df.out))
-  df.out$ticker <- tickers
-
-  # remove rownames
-  rownames(df.out) <- NULL
-
-  # remove rows with NA
-  idx <- !is.na(df.out$price.adjusted)
-  df.out <- df.out[idx, ]
-
-  if (nrow(df.out) ==0) return('Error in download')
-
-  return(df.out)
+date_to_unix <- function(date_in) {
+  out <- as.numeric(
+    as.POSIXct(as.Date(date_in,
+                       origin = "1970-01-01"))
+  )
+  return(out)
 }
 
 
 #' Transforms a dataframe in the long format to a list of dataframes in the wide format
-reshape.wide <- function(df.tickers) {
+reshape_wide <- function(df_in) {
 
-  cols.to.keep <- c('ref.date', 'ticker')
+  cols_to_keep <- c('ref_date', 'ticker')
 
-  my.cols <- setdiff(names(df.tickers), cols.to.keep)
+  my_cols <- setdiff(names(df_in), cols_to_keep)
 
-  fct.format.wide <- function(name.in, df.tickers) {
+  fct_format_wide <- function(name_in, df_in) {
 
-    temp.df <- df.tickers[, c('ref.date', 'ticker', name.in)]
+    temp_df <- df_in[, c('ref_date', 'ticker', name_in)]
 
     ticker <- NULL # fix for CHECK: "no visible binding..."
-    temp.df.wide <- tidyr::spread(temp.df, ticker, name.in)
-    return(temp.df.wide)
+    temp_df_wide <- tidyr::spread(temp_df, ticker, name_in)
+    return(temp_df_wide)
 
   }
 
-  l.out <- lapply(my.cols, fct.format.wide, df.tickers = df.tickers)
-  names(l.out) <- my.cols
+  l_out <- lapply(my_cols, fct_format_wide, df_in = df_in)
+  names(l_out) <- my_cols
 
-  return(l.out)
+  return(l_out)
 
 }
 
