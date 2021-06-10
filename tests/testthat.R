@@ -1,4 +1,4 @@
 library(testthat)
-library(yf)
+library(yfR)
 
-test_check("yf")
+test_check("yfR")

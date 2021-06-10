@@ -5,10 +5,10 @@ Authors@R: person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role =
 Description: Makes it easy to download financial data from Yahoo Finance <https://finance.yahoo.com/>.
 Date: 2021-06-30
 Depends:
-    R (>= 4.0), rvest, dplyr
+    R (>= 4.0)
 Imports: stringr, curl, quantmod, XML, tidyr, 
     lubridate, scales, furrr, purrr, future, tibble, zoo, crayon,
-    cli, readr
+    cli, readr, rvest, dplyr
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1

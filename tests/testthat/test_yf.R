@@ -1,5 +1,5 @@
 library(testthat)
-library(yf)
+library(yfR)
 
 # test for indices
 available_indices <- yf_get_available_indices()

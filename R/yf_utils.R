@@ -1,4 +1,4 @@
-#' Fix name of ticker
+# Fix name of ticker
 fix_ticker_name <- function(ticker_in){
 
   ticker_in <- stringr::str_replace_all(ticker_in, stringr::fixed('.'), '')
@@ -7,18 +7,25 @@ fix_ticker_name <- function(ticker_in){
   return(ticker_in)
 }
 
+# a morale phrase
 get_morale_boost <- function() {
-  morale_boost <- c(rep(c('OK!', 'Got it!','Nice!','Good stuff!',
-                          'Looking good!', 'Good job!', 'Well done!',
-                          'Feels good!', 'You got it!', 'Youre doing good!'), 10),
+  my_user <- Sys.getenv('USER')
+  morale_boost <- c(rep(c('All OK!',
+                          'Time for some tea?',
+                          'Got it!','Nice!','Good stuff!',
+                          'Looking good!', 'Good job {my_user}!',
+                          'Well done {my_user}!',
+                          'You got it {my_user}!', 'Youre doing good!'), 10),
                     'Boa!', 'Mas bah tche, que coisa linda!',
+                    'Parabens {my_user}, tudo certo!',
                     'Mais contente que cusco de cozinheira!',
                     'Feliz que nem lambari de sanga!',
                     'Mais faceiro que guri de bombacha nova!')
 
-  return(sample(morale_boost, 1))
+  return(stringr::str_glue(sample(morale_boost, 1)))
 }
 
+# converts date to unix (to yf query)
 date_to_unix <- function(date_in) {
   out <- as.numeric(
     as.POSIXct(as.Date(date_in,
@@ -28,7 +35,7 @@ date_to_unix <- function(date_in) {
 }
 
 
-#' Transforms a dataframe in the long format to a list of dataframes in the wide format
+# Transforms a dataframe in the long format to a list of dataframes in the wide format
 reshape_wide <- function(df_in) {
 
   cols_to_keep <- c('ref_date', 'ticker')
@@ -53,8 +60,8 @@ reshape_wide <- function(df_in) {
 }
 
 
-#' Function to calculate returns from a price and ticker vector
-calc.ret <- function(P,
+# Function to calculate returns from a price and ticker vector
+calc_ret <- function(P,
                      tickers = rep('ticker', length(P)),
                      type.return = 'arit') {
 
@@ -70,33 +77,27 @@ calc.ret <- function(P,
   return(ret)
 }
 
-#' Replaces NA values in dataframe for closest price
-#'
-#' Helper function for BatchGetSymbols. Replaces NA values and returns fixed dataframe.
-#'
-#' @param df.in DAtaframe to be fixed
-#'
-#' @return A fixed dataframe.
-df.fill.na = function(df.in) {
+# Replaces NA values in dataframe for closest price
+df_fill_na = function(df_in) {
 
 
   # find NAs or volume == 0
-  idx.na <- which(is.na(df.in$price.adjusted) |
-                    df.in$volume == 0)
+  idx_na <- which(is.na(df_in$price.adjusted) |
+                    df_in$volume == 0)
 
-  if (length(idx.na) ==0) return(df.in)
+  if (length(idx_na) ==0) return(df_in)
 
-  idx.not.na <- which(!is.na(df.in$price.adjusted))
+  idx_not_na <- which(!is.na(df_in$price_adjusted))
 
-  cols.to.adjust <- c("price.open", "price.high", "price.low",
-                      "price.close", "price.adjusted")
+  cols_to_adjust <- c("price_open", "price_high", "price_low",
+                      "price_close", "price_adjusted")
 
-  print(unique(df.in$ticker))
+  print(unique(df_in$ticker))
 
-  cols.to.adjust <- cols.to.adjust[cols.to.adjust %in% names(df.in)]
+  cols_to_adjust <- cols_to_adjust[cols_to_adjust %in% names(df_in)]
 
   # function for finding closest price
-  fct.find.min.dist <- function(x, vec.comp) {
+  fct_find_min_dist <- function(x, vec.comp) {
 
     if (x < min(vec.comp)) return(min(vec.comp))
 
@@ -108,21 +109,21 @@ df.fill.na = function(df.in) {
 
   }
 
-  for (i.col in cols.to.adjust) {
+  for (i_col in cols_to_adjust) {
 
     # adjust for NA by replacing values
-    idx.to.use <- sapply(idx.na,
-                         fct.find.min.dist,
-                         vec.comp = idx.not.na)
+    idx_to_use <- sapply(idx_na,
+                         fct_find_min_dist,
+                         vec.comp = idx_not_na)
 
-    df.in[idx.na, i.col] <- unlist(df.in[idx.to.use, i.col])
+    df_in[idx_na, i_col] <- unlist(df_in[idx_to_use, i_col])
 
   }
 
   # adjust volume for all NAs
-  df.in$volume[idx.na] <- 0
+  df_in$volume[idx_na] <- 0
 
-  return(df.in)
+  return(df_in)
 
 }
 
@@ -147,3 +148,15 @@ df.fill.na = function(df.in) {
 
 }
 
+set_cli_msg <- function(msg_in, level = 0) {
+
+  tab_in <- paste0(rep('\t', level), collapse = '')
+
+  if (level == 1) {
+    tab_in <- paste0(tab_in, '- ')
+  }
+
+  msg_in <- paste0(tab_in, msg_in)
+  return(msg_in)
+
+}

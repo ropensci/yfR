@@ -21,7 +21,7 @@
 #' @param freq_data Frequency of financial data ('daily', 'weekly', 'monthly', 'yearly')
 #' @param how_to_aggregate Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
 #'  For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
-#'  aggregated values such as price.adjusted.
+#'  aggregated values such as price_adjusted.
 #' @param thresh_bad_data A percentage threshold for defining bad data. The dates of the benchmark ticker are compared to each asset. If the percentage of non-missing dates
 #'  with respect to the benchmark ticker is lower than thresh_bad_data, the function will ignore the asset (default = 0.75)
 #' @param do_complete_data Return a complete/balanced dataset? If TRUE, all missing pairs of ticker-date will be replaced by NA or closest price (see input do_fill_missing_prices). Default = FALSE.
@@ -31,8 +31,8 @@
 #' @param do_parallel Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.
 #' @param be_quiet Logical for printing statements (default = FALSE)
 #' @return A list with the following items: \describe{
-#' \item{df.control }{A dataframe containing the results of the download process for each asset}
-#' \item{df.tickers}{A dataframe with the financial data for all valid tickers} }
+#' \item{df_control }{A dataframe containing the results of the download process for each asset}
+#' \item{df_tickers}{A dataframe with the financial data for all valid tickers} }
 #' @export
 #' @import dplyr
 #'
@@ -41,15 +41,16 @@
 #' @examples
 #' tickers <- c('FB','MMM')
 #'
-#' first_date <- Sys.Date()-30
+#' first_date <- Sys.Date()-15
 #' last_date <- Sys.Date()
 #'
-#' l.out <- yf_get_data(tickers = tickers,
+#' l_out <- yf_get_data(tickers = tickers,
 #'                      first_date = first_date,
-#'                      last_date = last_date, do_cache=FALSE)
+#'                      last_date = last_date,
+#'                      do_cache=FALSE)
 #'
-#' print(l.out$df.control)
-#' print(l.out$df.tickers)
+#' print(l_out$df_control)
+#' print(l_out$df_tickers)
 yf_get_data <- function(tickers,
                             first_date = Sys.Date()-30,
                             last_date = Sys.Date(),
@@ -126,79 +127,65 @@ yf_get_data <- function(tickers,
     stop('Input thresh_bad_data should be a proportion between 0 and 1')
   }
 
-  # build tickers_src (google tickers have : in their name)
-  tickers_src <- ifelse(stringr::str_detect(tickers,':'),'google','yahoo')
-
-  if (any(tickers_src == 'google')) {
-    my_msg <- 'Google is no longer providing price data.
-    You should be using tickers from YFinance'
-    stop(my_msg)
-  }
-
-  # fix for dates with google finance data
-  # details: http://stackoverflow.com/questions/20472376/quantmod-empty-dates-in-getsymbols-from-google
-
-  if(any(tickers_src=='google')){
-    suppressWarnings({
-      invisible(Sys.setlocale("LC_MESSAGES", "C"))
-      invisible(Sys.setlocale("LC_TIME", "C"))
-    })
-  }
-
   # disable dplyr group message
   options(dplyr.summarise.inform = FALSE)
 
   # first screen msgs
 
   if (!be_quiet) {
-    message('\nRunning BatchGetSymbols for:', appendLF = FALSE )
-    message('\n   tickers =', paste0(tickers, collapse = ', '), appendLF = FALSE )
-    message('\n   Downloading data for benchmark ticker', appendLF = FALSE )
+    days_diff <- as.numeric(last_date - first_date)
+
+    #cli::cli_h1('yfR -- Yahoo Finance for R')
+
+    my_msg <- paste0('\nRunning yfR for {length(tickers)} stocks | ',
+                     '{as.character(first_date)} --> {as.character(last_date)} ({days_diff} days)')
+    cli::cli_h2(my_msg)
+
+    my_msg <- set_cli_msg('Downloading data for benchmark ticker {bench_ticker}',
+                          level = 0)
+
+    cli::cli_alert_info(my_msg)
   }
 
-  # detect if bench_src is google or yahoo (google tickers have : in their name)
-  bench_src <- ifelse(stringr::str_detect(bench_ticker,':'),'google','yahoo')
-
-  df.bench <- myGetSymbols(ticker = bench_ticker,
-                           i.ticker = 1,
-                           length.tickers = 1,
-                           src = bench_src,
+  df_bench <- yf_get_single_ticker(ticker = bench_ticker,
+                           i_ticker = 1,
+                           length_tickers = 1,
                            first_date = first_date,
                            last_date = last_date,
                            do_cache = do_cache,
                            cache_folder = cache_folder,
-                           be_quiet = be_quiet)
+                           be_quiet = TRUE)
 
   # run fetching function for all tickers
 
-  l.args <- list(ticker = tickers,
-                 i.ticker = seq_along(tickers),
-                 length.tickers = length(tickers),
-                 src = tickers_src,
+  l_args <- list(ticker = tickers,
+                 i_ticker = seq_along(tickers),
+                 length_tickers = length(tickers),
                  first_date = first_date,
                  last_date = last_date,
                  do_cache = do_cache,
                  cache_folder = cache_folder,
-                 df.bench = rep(list(df.bench), length(tickers)),
+                 df_bench = rep(list(df_bench), length(tickers)),
                  thresh_bad_data = thresh_bad_data,
                  be_quiet =  be_quiet)
 
   if (!do_parallel) {
 
-    my.l <- purrr::pmap(.l = l.args,
-                        .f = myGetSymbols)
+    my_l <- purrr::pmap(.l = l_args,
+                        .f = yf_get_single_ticker)
 
   } else {
 
     # find number of used cores
-    formals.parallel <- formals(future::plan())
-    used.workers <- formals.parallel$workers
+    formals_parallel <- formals(future::plan())
+    used_workers<- formals_parallel$workers
 
-    available.cores <- future::availableCores()
+    available_cores <- future::availableCores()
 
     if (!be_quiet) {
-      message(paste0('\nRunning parallel BatchGetSymbols with ', used.workers, ' cores (',
-                     available.cores, ' available)'), appendLF = FALSE )
+      message(paste0('\nRunning parallel BatchGetSymbols with ',
+                     used_workers, ' cores (',
+                     available_cores, ' available)'), appendLF = FALSE )
       message('\n\n', appendLF = FALSE )
     }
 
@@ -218,44 +205,44 @@ yf_get_data <- function(tickers,
     }
 
 
-    my.l <- furrr::future_pmap(.l = l.args,
-                               .f = myGetSymbols,
+    my_l <- furrr::future_pmap(.l = l_args,
+                               .f = yf_get_single_ticker,
                                .progress = TRUE)
 
   }
 
-  df.tickers <- dplyr::bind_rows(purrr::map(my.l, 1))
-  df.control <- dplyr::bind_rows(purrr::map(my.l, 2))
+  df_tickers <- dplyr::bind_rows(purrr::map(my_l, 1))
+  df_control <- dplyr::bind_rows(purrr::map(my_l, 2))
 
   # remove tickers with bad data
-  tickers.to.keep <- df.control$ticker[df.control$threshold.decision=='KEEP']
-  idx <- df.tickers$ticker %in% tickers.to.keep
-  df.tickers <- df.tickers[idx, ]
+  tickers_to_keep <- df_control$ticker[df_control$threshold_decision=='KEEP']
+  idx <- df_tickers$ticker %in% tickers_to_keep
+  df_tickers <- df_tickers[idx, ]
 
   # do data manipulations
   if (do_complete_data) {
-    ticker <- ref.date <- NULL # for cran check: "no visible binding for global..."
-    df.tickers <- tidyr::complete(df.tickers, ticker, ref.date)
+    ticker <- ref_date <- NULL # for cran check: "no visible binding for global..."
+    df_tickers <- tidyr::complete(df_tickers, ticker, ref_date)
 
-    l.out <- lapply(split(df.tickers, f = df.tickers$ticker),
-                    df.fill.na)
+    l_out <- lapply(split(df_tickers, f = df_tickers$ticker),
+                    df_fill_na)
 
-    df.tickers <- dplyr::bind_rows(l.out)
+    df_tickers <- dplyr::bind_rows(l_out)
 
   }
 
   # change frequency of data
   if (freq_data != 'daily') {
 
-    str.freq <- switch(freq_data,
+    str_freq <- switch(freq_data,
                        'weekly' = '1 week',
                        'monthly' = '1 month',
                        'yearly' = '1 year')
 
     # find the first monday (see issue #19)
     # https://github.com/msperlin/BatchGetSymbols/issues/19
-    temp_dates <- seq(as.Date(paste0(lubridate::year(min(df.tickers$ref.date)), '-01-01')),
-                      as.Date(paste0(lubridate::year(max(df.tickers$ref.date))+1, '-12-31')),
+    temp_dates <- seq(as.Date(paste0(lubridate::year(min(df_tickers$ref_date)), '-01-01')),
+                      as.Date(paste0(lubridate::year(max(df_tickers$ref_date))+1, '-12-31')),
                       by = '1 day')
 
     temp_weekdays <- lubridate::wday(temp_dates, week_start = 1)
@@ -264,78 +251,80 @@ yf_get_data <- function(tickers,
 
     if (freq_data == 'weekly') {
       # make sure it starts on a monday
-      week.vec <- seq(first_monday,
-                      as.Date(paste0(lubridate::year(max(df.tickers$ref.date))+1, '-12-31')),
-                      by = str.freq)
+      week_vec <- seq(first_monday,
+                      as.Date(paste0(lubridate::year(max(df_tickers$ref_date))+1, '-12-31')),
+                      by = str_freq)
     } else {
       # every other case
-      week.vec <- seq(as.Date(paste0(lubridate::year(min(df.tickers$ref.date)), '-01-01')),
-                      as.Date(paste0(lubridate::year(max(df.tickers$ref.date))+1, '-12-31')),
-                      by = str.freq)
+      week_vec <- seq(as.Date(paste0(lubridate::year(min(df_tickers$ref_date)), '-01-01')),
+                      as.Date(paste0(lubridate::year(max(df_tickers$ref_date))+1, '-12-31')),
+                      by = str_freq)
     }
 
 
-    df.tickers$time.groups <- cut(x = df.tickers$ref.date, breaks = week.vec, right = FALSE)
+    df_tickers$time_groups <- cut(x = df_tickers$ref_date,
+                                  breaks = week_vec,
+                                  right = FALSE)
 
     # set NULL vars for CRAN check: "no visible binding..."
-    time.groups <- volume <- price.open <- price.close <- price.adjusted <- NULL
-    price.high <- price.low <- NULL
+    time_groups <- volume <- price_open <- price_close <- price_adjusted <- NULL
+    price_high <- price_low <- NULL
 
     if (how_to_aggregate == 'first') {
 
-      df.tickers <- df.tickers %>%
-        group_by(time.groups, ticker) %>%
-        summarise(ref.date = min(ref.date),
-                  volume = sum(volume, na.rm = TRUE),
-                  price.open = first(price.open),
-                  price.high = max(price.high),
-                  price.low = min(price.low),
-                  price.close = first(price.close),
-                  price.adjusted = first(price.adjusted)) %>%
-        ungroup() %>%
-        #select(-time.groups) %>%
-        arrange(ticker, ref.date)
+      df_tickers <- df_tickers |>
+        group_by(time_groups, ticker) |>
+        summarise(ref_date = min(ref_date),
+                  price_open = first(price.open),
+                  price_high = max(price.high),
+                  price_low = min(price.low),
+                  price_close = first(price_close),
+                  price_adjusted = first(price_adjusted),
+                  volume = sum(volume, na.rm = TRUE)) |>
+        ungroup() |>
+        #select(-time_groups) %>%
+        arrange(ticker, ref_date)
 
 
     } else if (how_to_aggregate == 'last') {
 
-      df.tickers <- df.tickers %>%
-        group_by(time.groups, ticker) %>%
-        summarise(ref.date = min(ref.date),
+      df_tickers <- df_tickers %>%
+        group_by(time_groups, ticker) %>%
+        summarise(ref_date = min(ref_date),
                   volume = sum(volume, na.rm = TRUE),
-                  price.open = first(price.open),
-                  price.high = max(price.high),
-                  price.low = min(price.low),
-                  price.close = last(price.close),
-                  price.adjusted = last(price.adjusted) ) %>%
+                  price_open = first(price_open),
+                  price_high = max(price_high),
+                  price_low = min(price_low),
+                  price_close = last(price_close),
+                  price_adjusted = last(price_adjusted) ) %>%
         ungroup() %>%
-        #select(-time.groups) %>%
-        arrange(ticker, ref.date)
+        #select(-time_groups) %>%
+        arrange(ticker, ref_date)
     }
 
 
-    df.tickers$time.groups <- NULL
+    df_tickers$time_groups <- NULL
   }
 
 
   # calculate returns
-  df.tickers$ret.adjusted.prices <- calc.ret(df.tickers$price.adjusted,
-                                             df.tickers$ticker,
+  df_tickers$ret.adjusted.prices <- calc_ret(df_tickers$price_adjusted,
+                                             df_tickers$ticker,
                                              type_return)
-  df.tickers$ret.closing.prices  <- calc.ret(df.tickers$price.close,
-                                             df.tickers$ticker,
+  df_tickers$ret.closing.prices  <- calc_ret(df_tickers$price_close,
+                                             df_tickers$ticker,
                                              type_return)
 
   # fix for issue with repeated rows (see git issue 16)
   # https://github.com/msperlin/BatchGetSymbols/issues/16
-  df.tickers = unique(df.tickers)
+  df_tickers = unique(df_tickers)
 
   # remove rownames from output (see git issue #18)
   # https://github.com/msperlin/BatchGetSymbols/issues/18
-  rownames(df.tickers) <- NULL
+  rownames(df_tickers) <- NULL
 
-  my.l <- list(df.control = df.control,
-               df.tickers = df.tickers)
+  my_l <- list(df_control = df_control,
+               df_tickers = df_tickers)
 
   # check if cach folder is tempdir()
   flag <- stringr::str_detect(cache_folder,
@@ -353,5 +342,5 @@ yf_get_data <- function(tickers,
   # enable dplyr group message
   options(dplyr.summarise.inform = TRUE)
 
-  return(my.l)
+  return(my_l)
 }

@@ -1,17 +1,18 @@
 ## Motivation
 
-[![](https://cranlogs.r-pkg.org/badges/BatchGetSymbols)](https://CRAN.R-project.org/package=BatchGetSymbols)
+[![](https://cranlogs.r-pkg.org/badges/BatchGetSymbols)](https://CRAN.R-project.org/yfR)
 
-`yf` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), a R package for large-scale download of financial data from Yahoo Finance. Based on a set of tickers and date ranges, the package will download and organize the financial data in the tidy/long format.
+`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), a R package for large-scale download of financial data from Yahoo Finance. Based on a set of tickers and date ranges, the package will download and organize the financial data in the tidy/long format, with many user options for parsing the data.
 
 
 ## Changes from `BatchGetSymbols`
 
 - New and more intuitive function names: BatchGetSymbols() -->  yf_get_data()
+- All input variables are now snake case (e.g. first.date --> first_date)
 - Use of collections for fetching large scale data (function `yf_get_collection()`)
 - No more dependency of quantmod:getSymbols
 - Better status bars
-- Better handling of invalid data
+- Better handling of invalid data in cache
 
 
 ## Warnings

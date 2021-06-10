@@ -1,9 +1,9 @@
-#' Get clean data from yahoo/google
+# Get clean data from yahoo/google
 yf_get_clean_data <- function(ticker,
                               first_date,
                               last_date) {
 
-  cli::cli_alert_info('Fetching data for {ticker}')
+
   # dont push luck with yahoo servers
   # No problem in my testings, so far. You can safely leave it unrestricted
   #Sys.sleep(0.5)
@@ -57,7 +57,6 @@ yf_get_clean_data <- function(ticker,
   df_raw <- df_raw[idx, ]
 
 
-  cli::cli_alert_success('\tGot {nrow(df_raw)} valid rows')
 
   return(df_raw)
 }

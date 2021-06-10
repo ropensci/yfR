@@ -40,7 +40,7 @@ with respect to the benchmark ticker is lower than thresh_bad_data, the function
 
 \item{how_to_aggregate}{Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
 For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
-aggregated values such as price.adjusted.}
+aggregated values such as price_adjusted.}
 
 \item{do_complete_data}{Return a complete/balanced dataset? If TRUE, all missing pairs of ticker-date will be replaced by NA or closest price (see input do_fill_missing_prices). Default = FALSE.}
 
@@ -56,8 +56,8 @@ aggregated values such as price.adjusted.}
 }
 \value{
 A list with the following items: \describe{
-\item{df.control }{A dataframe containing the results of the download process for each asset}
-\item{df.tickers}{A dataframe with the financial data for all valid tickers} }
+\item{df_control }{A dataframe containing the results of the download process for each asset}
+\item{df_tickers}{A dataframe with the financial data for all valid tickers} }
 }
 \description{
 This function downloads financial data from Yahoo Finance. Based on a set of tickers and a time period, the function will download the data for each ticker and return a report of the process, along with the actual data in the long dataframe format.
@@ -77,15 +77,16 @@ a split or dividends event happens in between cache files.
 \examples{
 tickers <- c('FB','MMM')
 
-first_date <- Sys.Date()-30
+first_date <- Sys.Date()-15
 last_date <- Sys.Date()
 
-l.out <- yf_get_data(tickers = tickers,
+l_out <- yf_get_data(tickers = tickers,
                      first_date = first_date,
-                     last_date = last_date, do_cache=FALSE)
+                     last_date = last_date,
+                     do_cache=FALSE)
 
-print(l.out$df.control)
-print(l.out$df.tickers)
+print(l_out$df_control)
+print(l_out$df_tickers)
 }
 \seealso{
 \link[quantmod]{getSymbols}

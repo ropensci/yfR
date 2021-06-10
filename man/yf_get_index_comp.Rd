@@ -18,7 +18,7 @@ yf_get_index_comp(
 \item{cache_folder}{Where to save cache files? (default = file.path(tempdir(), 'BGS_Cache') )}
 }
 \value{
-
+A dataframe with the index compositino (column might vary)
 }
 \description{
 Get current composition of stock indices

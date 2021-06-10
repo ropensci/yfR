@@ -1,8 +1,7 @@
-#' An improved version of function quantmod::getSymbols
+# An improved version of function quantmod::getSymbols
 yf_get_single_ticker <- function(ticker,
                                  i_ticker,
                                  length_tickers,
-                                 src = 'yahoo',
                                  first_date,
                                  last_date,
                                  do_cache = TRUE,
@@ -11,14 +10,12 @@ yf_get_single_ticker <- function(ticker,
                                  be_quiet = FALSE,
                                  thresh_bad_data) {
 
-
   if (!be_quiet) {
-    message(paste0('\n', ticker,
-                   ' | ', src, ' (', i_ticker,'|',
-                   length_tickers,')'), appendLF = FALSE )
+
+    my_msg <- set_cli_msg('({i_ticker}/{length_tickers}) Fetching data for {ticker}')
+    cli::cli_alert_info(my_msg)
+
   }
-
-
 
   # do cache
   if ( (do_cache)) {
@@ -32,7 +29,6 @@ yf_get_single_ticker <- function(ticker,
 
       df_cache_files <- dplyr::tibble(filename = my_cache_files,
                                       ticker = sapply(l_out, function(x) x[1]),
-                                      src =  sapply(l_out, function(x) x[2]),
                                       first_date =  as.Date(sapply(l_out, function(x) x[3])),
                                       last_date =  as.Date(sapply(l_out, function(x) x[4])))
 
@@ -40,34 +36,40 @@ yf_get_single_ticker <- function(ticker,
       # empty df
       df_cache_files <-  dplyr::tibble(filename = '',
                                        ticker = '',
-                                       src =  '',
                                        first_date =  first_date,
                                        last_date =  last_date)
 
     }
 
     # check dates
-    fixed_ticker <-fix.ticker.name(ticker)
+    fixed_ticker <- fix_ticker_name(ticker)
 
     temp_cache <- dplyr::filter(df_cache_files,
-                                ticker == fixed_ticker,
-                                src == src)
+                                ticker == fixed_ticker)
 
     if (nrow(temp_cache) > 1) {
-      stop(paste0('Found more than one file in cache for ', ticker,
-                  '\nYou must manually remove one of \n\n', paste0(temp_cache$filename, collapse = '\n')))
+
+      my_msg <- paste0('Found more than one file in cache for ',  ticker,
+                       '\nYou must manually remove one of \n\n', paste0(temp_cache$filename, collapse = '\n'))
+      stop(my_msg)
+
+      stop()
     }
 
     if (nrow(temp_cache) != 0) {
 
-      df_cache <- dplyr::tibble()
       flag_dates <- TRUE
+      df_cache <- readr::read_rds(temp_cache$filename)
 
       if (!be_quiet) {
-        message(' | Found cache file', appendLF = FALSE )
-      }
 
-      df_cache <- readr::read_rds(temp_cache$filename)
+        this_fd <- as.character(min(df_cache$ref_date))
+        this_ld <- as.character(max(df_cache$ref_date))
+
+        my_msg <- set_cli_msg('found cache file ({this_fd} --> {this_ld})',
+                              level = 1)
+        cli::cli_alert_success(my_msg)
+      }
 
       # check if data matches
 
@@ -79,25 +81,26 @@ yf_get_single_ticker <- function(ticker,
       if (flag_dates) {
 
         if (!be_quiet) {
-          message(' | Need new data', appendLF = FALSE )
+          my_msg <- set_cli_msg('need new data (cache doesnt match query)',
+                                level = 1)
+
+          cli::cli_alert_warning(my_msg)
         }
 
         flag_date_bef <- ((first_date -  temp_cache$first_date) < - max_diff_dates )
         df_out_bef <- data.frame()
         if (flag_date_bef) {
-          df_out_bef <- get.clean.data(ticker,
-                                       src,
-                                       first_date,
-                                       temp_cache$first_date)
+          df_out_bef <- yf_get_clean_data(ticker,
+                                          first_date,
+                                          temp_cache$first_date)
         }
 
         flag_date_aft <- ((last_date -  temp_cache$last_date) > max_diff_dates)
         df_out_aft <- data.frame()
         if (flag_date_aft) {
-          df_out_aft <- get.clean.data(ticker,
-                                       src,
-                                       temp_cache$last_date,
-                                       last_date)
+          df_out_aft <- yf_get_clean_data(ticker,
+                                          temp_cache$last_date,
+                                          last_date)
         }
 
         df_out <- rbind(df_out_bef, df_out_aft)
@@ -117,7 +120,7 @@ yf_get_single_ticker <- function(ticker,
       file.remove(temp_cache$filename)
 
       my_f_out <- paste0(fixed_ticker, '_',
-                         src, '_',
+                         'yfR_',
                          min(c(temp_cache$first_date, first_date)), '_',
                          max(c(temp_cache$last_date, last_date)), '.rds')
 
@@ -131,11 +134,14 @@ yf_get_single_ticker <- function(ticker,
 
     } else {
       if (!be_quiet) {
-        message(' | Not Cached', appendLF = FALSE )
+        my_msg <- set_cli_msg('not cached',
+                              level = 1)
+
+        cli::cli_alert_warning(my_msg)
       }
 
       my_f_out <- paste0(fixed_ticker, '_',
-                         src, '_',
+                         'yfR_',
                          first_date, '_',
                          last_date, '.rds')
 
@@ -146,16 +152,18 @@ yf_get_single_ticker <- function(ticker,
       # only saves if there is data
       if (nrow(df_out) > 1) {
         if (!be_quiet) {
-          message(' | Saving cache', appendLF = FALSE )
+          my_msg <- set_cli_msg('cache saved successfully',
+                                level = 1)
+          cli::cli_alert_success(my_msg)
         }
         readr::write_rds(df_out, file = file.path(cache_folder, my_f_out))
       }
     }
 
   } else {
-    df_out <- get_clean_data(ticker,
-                             first_date,
-                             last_date)
+    df_out <- yf_get_clean_data(ticker,
+                                first_date,
+                                last_date)
   }
 
   # control for ERROr in download
@@ -167,7 +175,9 @@ yf_get_single_ticker <- function(ticker,
 
     df_out <- data.frame()
     if (!be_quiet) {
-      message(' - Error in download..', appendLF = FALSE )
+      my_msg <- set_cli_msg('error in download..',
+                            level = 1)
+      cli::cli_alert_danger(my_msg)
     }
   } else {
 
@@ -189,22 +199,38 @@ yf_get_single_ticker <- function(ticker,
 
     if (!be_quiet) {
       if (threshold_decision == 'KEEP') {
-        message(paste0(' - ', 'Got ', scales::percent(perc_benchmark_dates), ' of valid prices | ',
-                       morale_boost), appendLF = FALSE )
+        this_fd <- as.character(min(df_out$ref_date))
+        this_ld <- as.character(max(df_out$ref_date))
+
+        my_msg <- set_cli_msg('got {nrow(df_out)} valid rows ({this_fd} --> {this_ld})',
+                              level = 1)
+
+        cli::cli_alert_success(my_msg)
+
+        my_msg <- set_cli_msg(paste0('got {scales::percent(perc_benchmark_dates)} ',
+                                     'of valid prices -- {morale_boost}'),
+                              level = 1)
+
+        cli::cli_alert_success(my_msg)
       } else {
-        message(paste0(' - ', 'Got ', scales::percent(perc_benchmark_dates), ' of valid prices | ',
-                       'OUT: not enough data (thresh_bad_data = ', scales::percent(thresh_bad_data), ')'),
-                appendLF = FALSE )
+
+        my_msg <- set_cli_msg(paste0(
+          '**REMOVED** found only {scales::percent(perc_benchmark_dates)} of ',
+          'valid prices (thresh_bad_data = {scales::percent(thresh_bad_data)})'),
+          level = 1)
+
+        cli::cli_alert_danger(my_msg)
 
       }
     }
 
-    df.control <- tibble::tibble(ticker=ticker,
-                                 src = src,
-                                 dl_status,
-                                 n_rows,
-                                 perc_benchmark_dates,
-                                 threshold_decision)
+    if (!be_quiet)
+
+      df.control <- tibble::tibble(ticker=ticker,
+                                   dl_status,
+                                   n_rows,
+                                   perc_benchmark_dates,
+                                   threshold_decision)
 
     l_out <- list(df.tickers = df_out, df.control = df.control)
 

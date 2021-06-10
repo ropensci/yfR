@@ -3,7 +3,7 @@
 #' @param mkt_index the index (e.g. IBOV, SP500, FTSE)
 #' @inheritParams yf_get_data
 #'
-#' @return
+#' @return A dataframe with the index compositino (column might vary)
 #' @export
 #'
 #' @examples
@@ -49,7 +49,7 @@ yf_get_default_cache_folder <- function() {
   return(path_cache)
 }
 
-#' Function to download the current components of the Ibovespa index from B3 website
+# Function to download the current components of the Ibovespa index from B3 website
 yf_get_ibov_stocks <- function(do_cache = TRUE,
                                cache_folder = yf_get_default_cache_folder(),
                                max_tries  = 10){
@@ -148,7 +148,7 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
   return(df_ftse)
 }
 
-#' Function to download the current components of the SP500 index from Wikipedia
+# Function to download the current components of the SP500 index from Wikipedia
 yf_get_sp500_stocks <- function(do_cache = TRUE,
                                 cache_folder = yf_get_default_cache_folder()){
 
