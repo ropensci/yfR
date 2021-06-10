@@ -6,7 +6,7 @@ yf_get_clean_data <- function(ticker,
 
   # dont push luck with yahoo servers
   # No problem in my testings, so far. You can safely leave it unrestricted
-  #Sys.sleep(0.5)
+  # Sys.sleep(0.5)
 
   # set empty df for errors
   df_raw <- dplyr::tibble()
@@ -24,15 +24,15 @@ yf_get_clean_data <- function(ticker,
   # new link:
   # https://stackoverflow.com/questions/44030983/yahoo-finance-url-not-working/44168805
   yf_json_link <- stringr::str_glue(
-    'query2.finance.yahoo.com/v8/finance/chart/{ticker}?symbol={ticker}&',
-    'period1={first_date_unix}&period2={last_date_unix}&interval=1d'
+    "query2.finance.yahoo.com/v8/finance/chart/{ticker}?symbol={ticker}&",
+    "period1={first_date_unix}&period2={last_date_unix}&interval=1d"
   )
 
   yf_json_link <- stringr::str_glue(
-    'https://query2.finance.yahoo.com/v8/finance/chart/PETR3.SA?symbol=PETR3.SA&period1=0&period2=9999999999&interval=1d'
+    "https://query2.finance.yahoo.com/v8/finance/chart/PETR3.SA?symbol=PETR3.SA&period1=0&period2=9999999999&interval=1d"
   )
 
-  l = jsonlite::fromJSON(yf_json_link)
+  l <- jsonlite::fromJSON(yf_json_link)
 
 
 
@@ -47,23 +47,30 @@ yf_get_clean_data <- function(ticker,
   )
 
   suppressWarnings({
-    try({
-      df_raw <- readr::read_csv(yf_csv_link, col_types = my_cols) |>
+    try(
+      {
+        df_raw <- readr::read_csv(yf_csv_link, col_types = my_cols) |>
         dplyr::mutate(ticker = ticker) |>
-        dplyr::rename(ref_date = Date,
-                      price_open = Open,
-                      price_high = High,
-                      price_low = Low,
-                      price_close = Close,
-                      price_adjusted = `Adj Close`,
-                      volume = Volume) |>
+        dplyr::rename(
+          ref_date = Date,
+          price_open = Open,
+          price_high = High,
+          price_low = Low,
+          price_close = Close,
+          price_adjusted = `Adj Close`,
+          volume = Volume
+        ) |>
         dplyr::arrange(ref_date) |> # make sure dates are sorted,
         dplyr::relocate(ticker, ref_date)
-    },  silent = T)
+      },
+      silent = T
+    )
   })
 
   # in case of error, return empty df
-  if (nrow(df_raw) == 0) return(df_raw)
+  if (nrow(df_raw) == 0) {
+    return(df_raw)
+  }
 
   # make sure only unique rows are returned
   df_raw <- unique(df_raw)

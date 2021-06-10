@@ -7,34 +7,35 @@
 #' @export
 #'
 #' @examples
-#' df_sp500 <- yf_get_index_comp('SP500')
+#' df_sp500 <- yf_get_index_comp("SP500")
 yf_get_index_comp <- function(mkt_index,
                               do_cache = TRUE,
                               cache_folder = yf_get_default_cache_folder()) {
-
   available_indices <- yf_get_available_indices()
   if (!any(mkt_index %in% available_indices)) {
-    stop(stringr::str_glue('Index {mkt_index} is no available within the options: ',
-                           ' {paste0(available_indices, collapse = ", ")}'))
+    stop(stringr::str_glue(
+      "Index {mkt_index} is no available within the options: ",
+      ' {paste0(available_indices, collapse = ", ")}'
+    ))
   }
 
-  if (mkt_index == 'IBOV') {
-    df_index <- yf_get_ibov_stocks(do_cache = do_cache,
-                                   cache_folder = cache_folder,
-                                   max_tries  = 10)
-
+  if (mkt_index == "IBOV") {
+    df_index <- yf_get_ibov_stocks(
+      do_cache = do_cache,
+      cache_folder = cache_folder,
+      max_tries = 10
+    )
   }
 
-  if (mkt_index == 'SP500') {
+  if (mkt_index == "SP500") {
     df_index <- yf_get_sp500_stocks()
   }
 
-  if (mkt_index == 'FTSE') {
+  if (mkt_index == "FTSE") {
     df_index <- yf_get_ftse_stocks()
   }
 
   return(df_index)
-
 }
 
 
@@ -50,24 +51,25 @@ yf_get_index_comp <- function(mkt_index,
 #'
 #' av_indices <- yf_get_available_indices()
 yf_get_available_indices <- function() {
-  available_indices <- c('SP500', 'IBOV', 'FTSE')
+  available_indices <- c("SP500", "IBOV", "FTSE")
 
   return(available_indices)
 }
 
 # returns the default folder for caching (used in various functions)
 yf_get_default_cache_folder <- function() {
-  path_cache <- file.path(tempdir(), 'yf_cache')
+  path_cache <- file.path(tempdir(), "yf_cache")
   return(path_cache)
 }
 
 # Function to download the current components of the Ibovespa index from B3 website
 yf_get_ibov_stocks <- function(do_cache = TRUE,
                                cache_folder = yf_get_default_cache_folder(),
-                               max_tries  = 10){
-
-  cache_file <- file.path(cache_folder,
-                          paste0('Ibov_Composition_', Sys.Date(), '.rds') )
+                               max_tries = 10) {
+  cache_file <- file.path(
+    cache_folder,
+    paste0("Ibov_Composition_", Sys.Date(), ".rds")
+  )
   # get list of ibovespa's tickers from wbsite
 
   if (do_cache) {
@@ -81,46 +83,51 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
   }
 
   for (i_try in seq(max_tries)) {
-    myUrl <- 'http://bvmf.bmfbovespa.com.br/indices/ResumoCarteiraTeorica.aspx?Indice=IBOV&idioma=pt-br'
-    #df_ibov_comp <- XML::readHTMLTable(myUrl)[[1]]
+    myUrl <- "http://bvmf.bmfbovespa.com.br/indices/ResumoCarteiraTeorica.aspx?Indice=IBOV&idioma=pt-br"
+    # df_ibov_comp <- XML::readHTMLTable(myUrl)[[1]]
     df_ibov_comp <- as.data.frame(XML::readHTMLTable(myUrl))
 
     Sys.sleep(0.5)
 
     if (nrow(df_ibov_comp) > 0) break()
-
   }
 
-  names(df_ibov_comp) <- c('ticker', 'company', 'type_stock',
-                           'quantity', 'percentage_participation')
+  names(df_ibov_comp) <- c(
+    "ticker", "company", "type_stock",
+    "quantity", "percentage_participation"
+  )
 
-  df_ibov_comp$quantity <- as.numeric(stringr::str_replace_all(df_ibov_comp$quantity,
-                                                               stringr::fixed('.'), ''))
-  df_ibov_comp$percentage_participation <- as.numeric(stringr::str_replace_all(df_ibov_comp$percentage_participation,
-                                                                               stringr::fixed(','), '.'))
+  df_ibov_comp$quantity <- as.numeric(stringr::str_replace_all(
+    df_ibov_comp$quantity,
+    stringr::fixed("."), ""
+  ))
+  df_ibov_comp$percentage_participation <- as.numeric(stringr::str_replace_all(
+    df_ibov_comp$percentage_participation,
+    stringr::fixed(","), "."
+  ))
 
   df_ibov_comp$ref.date <- Sys.Date()
   df_ibov_comp$ticker <- as.character(df_ibov_comp$ticker)
-  df_ibov_comp$index <- 'IBOV'
+  df_ibov_comp$index <- "IBOV"
 
   if (do_cache) {
-
     if (!dir.exists(cache_folder)) dir.create(cache_folder)
 
     readr::write_rds(df_ibov_comp, cache_file)
   }
 
-  yf_get_message_index('Ibovespa', nrow(df_ibov_comp))
+  yf_get_message_index("Ibovespa", nrow(df_ibov_comp))
 
   return(df_ibov_comp)
 }
 
 
 yf_get_ftse_stocks <- function(do_cache = TRUE,
-                             cache_folder = yf_get_default_cache_folder()){
-
-  cache_file <- file.path(cache_folder,
-                          paste0('yf_ftse100_Composition_', Sys.Date(), '.rds') )
+                               cache_folder = yf_get_default_cache_folder()) {
+  cache_file <- file.path(
+    cache_folder,
+    paste0("yf_ftse100_Composition_", Sys.Date(), ".rds")
+  )
 
   if (do_cache) {
     # check if file exists
@@ -132,40 +139,42 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
     }
   }
 
-  my_url <- 'https://en.wikipedia.org/wiki/FTSE_100_Index'
+  my_url <- "https://en.wikipedia.org/wiki/FTSE_100_Index"
 
   my_xpath <- '//*[@id="mw-content-text"]/div/table[2]' # old xpath
   my_xpath <- '//*[@id="constituents"]'
   df_ftse <- my_url |>
-    rvest::read_html() |>
-    rvest::html_nodes(xpath = my_xpath) |>
-    rvest::html_table()
+  rvest::read_html() |>
+  rvest::html_nodes(xpath = my_xpath) |>
+  rvest::html_table()
 
   df_ftse <- df_ftse[[1]]
 
   df_ftse <- df_ftse |>
-    dplyr::rename(ticker = EPIC,
-           company = Company,
-           sector = names(df_ftse)[3])
+  dplyr::rename(
+    ticker = EPIC,
+    company = Company,
+    sector = names(df_ftse)[3]
+  )
 
   if (do_cache) {
-
     if (!dir.exists(cache_folder)) dir.create(cache_folder)
 
     readr::write_rds(df_ftse, cache_file)
   }
 
-  yf_get_message_index('FTSE', nrow(df_ftse))
+  yf_get_message_index("FTSE", nrow(df_ftse))
 
   return(df_ftse)
 }
 
 # Function to download the current components of the SP500 index from Wikipedia
 yf_get_sp500_stocks <- function(do_cache = TRUE,
-                                cache_folder = yf_get_default_cache_folder()){
-
-  cache_file <- file.path(cache_folder,
-                          paste0('SP500_Composition_', Sys.Date(), '.rds') )
+                                cache_folder = yf_get_default_cache_folder()) {
+  cache_file <- file.path(
+    cache_folder,
+    paste0("SP500_Composition_", Sys.Date(), ".rds")
+  )
 
   if (do_cache) {
     # check if file exists
@@ -177,36 +186,37 @@ yf_get_sp500_stocks <- function(do_cache = TRUE,
     }
   }
 
-  my_url <- 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+  my_url <- "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 
   read_html <- 0 # fix for global variable nagging from BUILD
   my_xpath <- '//*[@id="constituents"]'
   df_sp500 <- my_url |>
-    rvest::read_html() |>
-    rvest::html_nodes(xpath = my_xpath) |>
-    rvest::html_table(fill = TRUE)
+  rvest::read_html() |>
+  rvest::html_nodes(xpath = my_xpath) |>
+  rvest::html_table(fill = TRUE)
 
   df_sp500 <- df_sp500[[1]]
 
   df_sp500 <- df_sp500  |>
-    dplyr::rename(ticker = Symbol,
-                  company = Security,
-                  sector = `GICS Sector`) |>
-    dplyr::select(ticker, company, sector)
+  dplyr::rename(
+    ticker = Symbol,
+    company = Security,
+    sector = `GICS Sector`
+  ) |>
+  dplyr::select(ticker, company, sector)
 
 
   if (do_cache) {
     if (!dir.exists(cache_folder)) dir.create(cache_folder)
 
     readr::write_rds(df_sp500, cache_file)
-
   }
 
-  yf_get_message_index('SP500', nrow(df_sp500))
+  yf_get_message_index("SP500", nrow(df_sp500))
   return(df_sp500)
 }
 
 yf_get_message_index <- function(index_in, my_n) {
-  cli::cli_alert_success('Got {index_in} composition with {my_n} rows')
+  cli::cli_alert_success("Got {index_in} composition with {my_n} rows")
   return(invisible(TRUE))
 }
