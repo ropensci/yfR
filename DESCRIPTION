@@ -1,4 +1,4 @@
-Package: yf
+Package: yfR
 Title: Downloads and Organizes Financial Data from Yahoo Finance
 Version: 0.5
 Authors@R: person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre"))
@@ -7,7 +7,8 @@ Date: 2021-06-30
 Depends:
     R (>= 4.0), rvest, dplyr
 Imports: stringr, curl, quantmod, XML, tidyr, 
-    lubridate, scales, furrr, purrr, future, tibble, zoo, crayon
+    lubridate, scales, furrr, purrr, future, tibble, zoo, crayon,
+    cli, readr
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
