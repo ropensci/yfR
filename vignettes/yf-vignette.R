@@ -3,52 +3,41 @@
 knitr::opts_chunk$set(eval=FALSE)
 
 
-## ----example1, eval=FALSE-----------------------------------------------------
-#  if (!require(BatchGetSymbols)) install.packages('BatchGetSymbols')
-#  
-#  library(BatchGetSymbols)
-#  
-#  # set dates
-#  first.date <- Sys.Date() - 60
-#  last.date <- Sys.Date()
-#  freq.data <- 'daily'
-#  # set tickers
-#  tickers <- c('FB','MMM','PETR4.SA','abcdef')
-#  
-#  l.out <- BatchGetSymbols(tickers = tickers,
-#                           first.date = first.date,
-#                           last.date = last.date,
-#                           freq.data = freq.data,
-#                           cache.folder = file.path(tempdir(),
-#                                                    'BGS_Cache') ) # cache in tempdir()
-#  
+## ----example1, eval=TRUE, results='hide'--------------------------------------
+if (!require(yfR)) install.packages('yfR')
+
+library(yfR)
+
+# set dates
+first_date <- Sys.Date() - 60
+last_date <- Sys.Date()
+freq_data <- 'daily'
+# set tickers
+tickers <- c('FB','MMM','PETR4.SA')
+
+df_yf <- yf_get_data(tickers = tickers, 
+                         first_date = first_date,
+                         last_date = last_date, 
+                         freq_data = freq_data) # cache in tempdir()
+
 
 ## ----example2-----------------------------------------------------------------
-#  print(l.out$df.control)
-#  
+#  str(df_yf)
 
 ## ----plot.prices, fig.width=7, fig.height=2.5---------------------------------
 #  library(ggplot2)
 #  
-#  p <- ggplot(l.out$df.tickers, aes(x = ref.date, y = price.close))
-#  p <- p + geom_line()
-#  p <- p + facet_wrap(~ticker, scales = 'free_y')
+#  p <- ggplot(df_yf, aes(x = ref_date, y = price_close)) +
+#    geom_line() + facet_wrap(~ticker, scales = 'free_y')
+#  
 #  print(p)
 
 ## ----example3,eval=FALSE------------------------------------------------------
-#  library(BatchGetSymbols)
+#  library(yfR)
 #  
-#  first.date <- Sys.Date()-365
-#  last.date <- Sys.Date()
+#  first_date <- Sys.Date()-365
+#  last_date <- Sys.Date()
 #  
-#  df.SP500 <- GetSP500Stocks()
-#  tickers <- df.SP500$Tickers
-#  
-#  l.out <- BatchGetSymbols(tickers = tickers,
-#                           first.date = first.date,
-#                           last.date = last.date)
-#  
-#  print(l.out$df.control)
-#  print(l.out$df.tickers)
+#  df_sp500 <- yf_get_collection('SP500')
 #  
 

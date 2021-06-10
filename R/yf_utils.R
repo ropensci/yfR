@@ -35,39 +35,17 @@ date_to_unix <- function(date_in) {
 }
 
 
-# Transforms a dataframe in the long format to a list of dataframes in the wide format
-reshape_wide <- function(df_in) {
 
-  cols_to_keep <- c('ref_date', 'ticker')
-
-  my_cols <- setdiff(names(df_in), cols_to_keep)
-
-  fct_format_wide <- function(name_in, df_in) {
-
-    temp_df <- df_in[, c('ref_date', 'ticker', name_in)]
-
-    ticker <- NULL # fix for CHECK: "no visible binding..."
-    temp_df_wide <- tidyr::spread(temp_df, ticker, name_in)
-    return(temp_df_wide)
-
-  }
-
-  l_out <- lapply(my_cols, fct_format_wide, df_in = df_in)
-  names(l_out) <- my_cols
-
-  return(l_out)
-
-}
 
 
 # Function to calculate returns from a price and ticker vector
 calc_ret <- function(P,
                      tickers = rep('ticker', length(P)),
-                     type.return = 'arit') {
+                     type_return = 'arit') {
 
-  my.length <- length(P)
+  my_length <- length(P)
 
-  ret <- switch(type.return,
+  ret <- switch(type_return,
                 'arit' = P/dplyr::lag(P) - 1,
                 'log' = log(P/dplyr::lag(P)) )
 
@@ -80,9 +58,8 @@ calc_ret <- function(P,
 # Replaces NA values in dataframe for closest price
 df_fill_na = function(df_in) {
 
-
   # find NAs or volume == 0
-  idx_na <- which(is.na(df_in$price.adjusted) |
+  idx_na <- which(is.na(df_in$price_adjusted) |
                     df_in$volume == 0)
 
   if (length(idx_na) ==0) return(df_in)
@@ -97,15 +74,16 @@ df_fill_na = function(df_in) {
   cols_to_adjust <- cols_to_adjust[cols_to_adjust %in% names(df_in)]
 
   # function for finding closest price
-  fct_find_min_dist <- function(x, vec.comp) {
+  fct_find_min_dist <- function(x, vec_comp) {
 
-    if (x < min(vec.comp)) return(min(vec.comp))
+    if (x < min(vec_comp)) return(min(vec_comp))
 
-    my.dist <- x - vec.comp
-    my.dist <- my.dist[my.dist > 0]
-    idx <- which.min(my.dist)[1]
+    my_dist <- x - vec_comp
+    my_dist <- my_dist[my_dist > 0]
 
-    return(vec.comp[idx])
+    idx <- which.min(my_dist)[1]
+
+    return(vec_comp[idx])
 
   }
 
@@ -114,7 +92,7 @@ df_fill_na = function(df_in) {
     # adjust for NA by replacing values
     idx_to_use <- sapply(idx_na,
                          fct_find_min_dist,
-                         vec.comp = idx_not_na)
+                         vec_comp = idx_not_na)
 
     df_in[idx_na, i_col] <- unlist(df_in[idx_to_use, i_col])
 
@@ -132,14 +110,12 @@ df_fill_na = function(df_in) {
 .onAttach <- function(libname,pkgname) {
 
   do_color <- crayon::make_style("#FF4141")
-  this_pkg <- 'BatchGetSymbols'
+  this_pkg <- 'yfR'
 
   if (interactive()) {
     msg <- paste0('\nWant to learn more about ',
-                  do_color(this_pkg), ' and other R packages for Finance and Economics?',
-                  '\nThe second edition (2020) of ',
-                  do_color('Analyzing Financial and Economic Data with R'), ' is available at\n',
-                  do_color('https://www.msperlin.com/afedR/') )
+                  do_color(this_pkg), ' (formerly BatchGetSymbols) and other R packages for Finance and Economics?',
+                  ' Check out my book at ', do_color('https://www.msperlin.com/afedR/') )
   } else {
     msg <- ''
   }

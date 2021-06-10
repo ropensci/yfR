@@ -6,10 +6,7 @@
 #'
 #' @section Warning:
 #'
-#' Do notice that since 2019, adjusted prices are no longer available from google finance.
-#' When using this source, the function will output NA values for this column.
-#'
-#' Also, be aware that when using cache system in a local folder (and not the default tempdir()), the aggregate prices series might not match if
+#' Be aware that when using cache system in a local folder (and not the default tempdir()), the aggregate prices series might not match if
 #' a split or dividends event happens in between cache files.
 #'
 #' @param tickers A vector of tickers. If not sure whether the ticker is available, check the websites of google and yahoo finance. The source for downloading
@@ -30,13 +27,9 @@
 #' @param cache_folder Where to save cache files? (default = file.path(tempdir(), 'BGS_Cache') )
 #' @param do_parallel Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.
 #' @param be_quiet Logical for printing statements (default = FALSE)
-#' @return A list with the following items: \describe{
-#' \item{df_control }{A dataframe containing the results of the download process for each asset}
-#' \item{df_tickers}{A dataframe with the financial data for all valid tickers} }
+#' @return A dataframe with stock prices.
 #' @export
 #' @import dplyr
-#'
-#' @seealso \link[quantmod]{getSymbols}
 #'
 #' @examples
 #' tickers <- c('FB','MMM')
@@ -44,13 +37,12 @@
 #' first_date <- Sys.Date()-15
 #' last_date <- Sys.Date()
 #'
-#' l_out <- yf_get_data(tickers = tickers,
+#' df_yf <- yf_get_data(tickers = tickers,
 #'                      first_date = first_date,
 #'                      last_date = last_date,
 #'                      do_cache=FALSE)
 #'
-#' print(l_out$df_control)
-#' print(l_out$df_tickers)
+#' print(df_yf)
 yf_get_data <- function(tickers,
                             first_date = Sys.Date()-30,
                             last_date = Sys.Date(),
@@ -221,10 +213,11 @@ yf_get_data <- function(tickers,
 
   # do data manipulations
   if (do_complete_data) {
-    ticker <- ref_date <- NULL # for cran check: "no visible binding for global..."
+
     df_tickers <- tidyr::complete(df_tickers, ticker, ref_date)
 
-    l_out <- lapply(split(df_tickers, f = df_tickers$ticker),
+    l_out <- lapply(split(df_tickers,
+                          f = df_tickers$ticker),
                     df_fill_na)
 
     df_tickers <- dplyr::bind_rows(l_out)
@@ -266,39 +259,35 @@ yf_get_data <- function(tickers,
                                   breaks = week_vec,
                                   right = FALSE)
 
-    # set NULL vars for CRAN check: "no visible binding..."
-    time_groups <- volume <- price_open <- price_close <- price_adjusted <- NULL
-    price_high <- price_low <- NULL
-
     if (how_to_aggregate == 'first') {
 
       df_tickers <- df_tickers |>
         group_by(time_groups, ticker) |>
         summarise(ref_date = min(ref_date),
-                  price_open = first(price.open),
-                  price_high = max(price.high),
-                  price_low = min(price.low),
+                  price_open = first(price_open),
+                  price_high = max(price_high),
+                  price_low = min(price_low),
                   price_close = first(price_close),
                   price_adjusted = first(price_adjusted),
                   volume = sum(volume, na.rm = TRUE)) |>
         ungroup() |>
-        #select(-time_groups) %>%
+        #select(-time_groups) |>
         arrange(ticker, ref_date)
 
 
     } else if (how_to_aggregate == 'last') {
 
-      df_tickers <- df_tickers %>%
-        group_by(time_groups, ticker) %>%
+      df_tickers <- df_tickers |>
+        group_by(time_groups, ticker) |>
         summarise(ref_date = min(ref_date),
                   volume = sum(volume, na.rm = TRUE),
                   price_open = first(price_open),
                   price_high = max(price_high),
                   price_low = min(price_low),
                   price_close = last(price_close),
-                  price_adjusted = last(price_adjusted) ) %>%
-        ungroup() %>%
-        #select(-time_groups) %>%
+                  price_adjusted = last(price_adjusted) ) |>
+        ungroup() |>
+        #select(-time_groups) |>
         arrange(ticker, ref_date)
     }
 
@@ -308,10 +297,10 @@ yf_get_data <- function(tickers,
 
 
   # calculate returns
-  df_tickers$ret.adjusted.prices <- calc_ret(df_tickers$price_adjusted,
+  df_tickers$ret_adjusted_prices <- calc_ret(df_tickers$price_adjusted,
                                              df_tickers$ticker,
                                              type_return)
-  df_tickers$ret.closing.prices  <- calc_ret(df_tickers$price_close,
+  df_tickers$ret_closing_prices  <- calc_ret(df_tickers$price_close,
                                              df_tickers$ticker,
                                              type_return)
 
@@ -339,8 +328,12 @@ yf_get_data <- function(tickers,
                               'for the current session with tempdir(), which is the default option.') )
   }
 
+  # setup final output
+  df_out <- df_tickers
+  attributes(df_out)$df_control <- df_control
+
   # enable dplyr group message
   options(dplyr.summarise.inform = TRUE)
 
-  return(my_l)
+  return(df_out)
 }

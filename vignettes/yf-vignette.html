@@ -12,7 +12,7 @@
 
 <meta name="author" content="Marcelo Perlin" />
 
-<meta name="date" content="2021-06-08" />
+<meta name="date" content="2021-06-10" />
 
 <title>Using yf to download financial data for several tickers</title>
 
@@ -141,75 +141,101 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Using yf to download financial data for several tickers</h1>
 <h4 class="author">Marcelo Perlin</h4>
-<h4 class="date">2021-06-08</h4>
+<h4 class="date">2021-06-10</h4>
 
 
 
 <div id="motivation" class="section level2">
 <h2>Motivation</h2>
-<p>One of the great things of working in finance is that financial datasets from capital markets are freely available from sources such as Yahoo Finance. This is an excelent feature for building up to date content for classes and conducting academic research.</p>
-<p>In the past I have used function GetSymbols from the CRAN package <a href="https://cran.r-project.org/package=quantmod">quantmod</a> in order to download end of day trade data for several stocks in the financial market. The problem in using GetSymbols is that it does not aggregate or clean the financial data for several tickers. In the usage of GetSymbols, each stock will have its own <code>xts</code> object with different column names and this makes it harder to store data from several tickers in a single dataframe.</p>
-<p>Package BatchGetSymbols is my solution to this problem. Based on a list of tickers and a time period, BatchGetSymbols will download price data from yahoo finance and organize it so that you don’t need to worry about cleaning it yourself.</p>
+<p><code>yfR</code> is the second and backwards-incompatible version of <a href="https://CRAN.R-project.org/package=BatchGetSymbols">BatchGetSymbols</a>, a R package for large-scale download of financial data from Yahoo Finance. Based on a set of tickers and date ranges, the package will download and organize the financial data in the tidy/long format, with many user options for parsing the data.</p>
+</div>
+<div id="changes-from-batchgetsymbols" class="section level2">
+<h2>Changes from <code>BatchGetSymbols</code></h2>
+<ul>
+<li>New and more intuitive function names: BatchGetSymbols() –&gt; yf_get_data()</li>
+<li>All input variables are now snake case (e.g. first_date –&gt; first_date)</li>
+<li>Use of collections for fetching large scale data (function <code>yf_get_collection()</code>)</li>
+<li>No more dependency of quantmod:getSymbols</li>
+<li>Improved status message with cli</li>
+<li>Output is a dataframe (and not a list). The “df_control” dataframe is now an attribute of “df_tickers”</li>
+<li>Better handling of invalid data in cache</li>
+</ul>
+</div>
+<div id="warnings" class="section level2">
+<h2>Warnings</h2>
+<ul>
+<li><p>Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock <strong>indices</strong> is fine and I can match it with other data sources. But, adjusted stock prices for <strong>individual assets</strong> is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources. My advice is to never use the data of individual stocks in production.</p></li>
+<li><p>Since version 2.6, the cache system is session-persistent by default, meaning that whenever you restart your R session, you lose all your cached data. This is a safety feature for mismatching prices due to corporate events.</p></li>
+</ul>
 </div>
 <div id="main-features" class="section level2">
 <h2>Main features:</h2>
 <ul>
-<li>Organizes data in a tabular format, returning prices and returns</li>
-<li>A cache system was implemented in version 2.0, meaning that the data is saved locally and only missings portions of the data are downloaded, if needed.</li>
-<li>All dates are compared to a benchmark ticker such as SP500. You can choose to ignore ticker with a high number of missing dates.</li>
-<li>User can choose a complete/balanced dataset output. The package uses a benchmark ticker for date comparison (e.g. SP500 - ^GSPC). Days with missing prices and traded volume equal to zero are found and prices are either set to NA or replaced by closest available value.</li>
-<li>Allows the choice for the wide format, with tickers as columns</li>
+<li>Organizes data in a tabular/long or wide format, returning prices and returns (arithmetic or logarithmic)</li>
+<li>A session-persistent smart cache system is available by default. This means that the YF data is saved locally and only missing portions are downloaded, if needed.</li>
+<li>All dates are compared to a benchmark ticker such as SP500 and, whenever an individual asset does not have a sufficient number of dates, the software drops it from the output. This means you can choose to ignore tickers with high number of missing dates.</li>
+<li>A customized function called <code>yf_convert_to_wide()</code> can transform the long table into a wide format (tickers as columns).</li>
 <li>Users can choose the frequency of the resulting dataset (daily, weekly, monthly, yearly)</li>
+<li>Parallel computing is available, speeding up the data importation process</li>
 </ul>
 </div>
 <div id="a-simple-example" class="section level2">
 <h2>A simple example</h2>
 <p>As a simple exercise, let’s download data for three stocks, facebook (FB), 3M (MMM), PETR4.SA (PETROBRAS) and abcdef, a ticker I just made up. We will use the last 60 days as the time period. This example will show the simple interface of the package and how it handles invalid tickers.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(BatchGetSymbols)) <span class="fu">install.packages</span>(<span class="st">&#39;BatchGetSymbols&#39;</span>)</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(yfR)) <span class="fu">install.packages</span>(<span class="st">&#39;yfR&#39;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BatchGetSymbols)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yfR)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># set dates</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>first.date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>() <span class="sc">-</span> <span class="dv">60</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>last.date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>freq.data <span class="ot">&lt;-</span> <span class="st">&#39;daily&#39;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>first_date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>() <span class="sc">-</span> <span class="dv">60</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>last_date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>freq_data <span class="ot">&lt;-</span> <span class="st">&#39;daily&#39;</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># set tickers</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>tickers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;FB&#39;</span>,<span class="st">&#39;MMM&#39;</span>,<span class="st">&#39;PETR4.SA&#39;</span>,<span class="st">&#39;abcdef&#39;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>tickers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;FB&#39;</span>,<span class="st">&#39;MMM&#39;</span>,<span class="st">&#39;PETR4.SA&#39;</span>)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>l.out <span class="ot">&lt;-</span> <span class="fu">BatchGetSymbols</span>(<span class="at">tickers =</span> tickers, </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">first.date =</span> first.date,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">last.date =</span> last.date, </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                         <span class="at">freq.data =</span> freq.data,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">cache.folder =</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                                                  <span class="st">&#39;BGS_Cache&#39;</span>) ) <span class="co"># cache in tempdir()</span></span></code></pre></div>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df_yf <span class="ot">&lt;-</span> <span class="fu">yf_get_data</span>(<span class="at">tickers =</span> tickers, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">first_date =</span> first_date,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">last_date =</span> last_date, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                         <span class="at">freq_data =</span> freq_data) <span class="co"># cache in tempdir()</span></span></code></pre></div>
+<pre><code>## </code></pre>
+<pre><code>## ── Running yfR for 3 stocks | 2021-04-11 --&gt; 2021-06-10 (60 days) ──</code></pre>
+<pre><code>## </code></pre>
+<pre><code>## ℹ Downloading data for benchmark ticker ^GSPC</code></pre>
+<pre><code>## ℹ (1/3) Fetching data for FB</code></pre>
+<pre><code>## !    - not cached</code></pre>
+<pre><code>## ✓    - cache saved successfully</code></pre>
+<pre><code>## ✓    - got 42 valid rows (2021-04-12 --&gt; 2021-06-09)</code></pre>
+<pre><code>## ✓    - got 100% of valid prices -- Youre doing good!</code></pre>
+<pre><code>## ℹ (2/3) Fetching data for MMM</code></pre>
+<pre><code>## !    - not cached</code></pre>
+<pre><code>## ✓    - cache saved successfully</code></pre>
+<pre><code>## ✓    - got 42 valid rows (2021-04-12 --&gt; 2021-06-09)</code></pre>
+<pre><code>## ✓    - got 100% of valid prices -- Well done msperlin!</code></pre>
+<pre><code>## ℹ (3/3) Fetching data for PETR4.SA</code></pre>
+<pre><code>## !    - not cached</code></pre>
+<pre><code>## ✓    - cache saved successfully</code></pre>
+<pre><code>## ✓    - got 41 valid rows (2021-04-12 --&gt; 2021-06-09)</code></pre>
+<pre><code>## ✓    - got 95% of valid prices -- Good stuff!</code></pre>
 <p>After downloading the data, we can check the success of the process for each ticker. Notice that the last ticker does not exist in yahoo finance and therefore results in an error. All information regarding the download process is provided in the dataframe df.control:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l.out<span class="sc">$</span>df.control)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_yf)</span></code></pre></div>
 <p>Moreover, we can plot the daily closing prices using ggplot2:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(l.out<span class="sc">$</span>df.tickers, <span class="fu">aes</span>(<span class="at">x =</span> ref.date, <span class="at">y =</span> price.close))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_line</span>()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>ticker, <span class="at">scales =</span> <span class="st">&#39;free_y&#39;</span>) </span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_yf, <span class="fu">aes</span>(<span class="at">x =</span> ref_date, <span class="at">y =</span> price_close)) <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>ticker, <span class="at">scales =</span> <span class="st">&#39;free_y&#39;</span>) </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p)</span></code></pre></div>
 </div>
 <div id="downloading-data-for-all-tickers-in-the-sp500-index" class="section level2">
 <h2>Downloading data for all tickers in the SP500 index</h2>
 <p>The package was designed for large scale download of financial data. An example is downloading all stocks in the current composition of the SP500 stock index. The package also includes a function that downloads the current composition of the SP500 index from the internet. By using this function along with BatchGetSymbols, we can easily import end-of-day data for all assets in the index.</p>
 <p>In the following code we download data for the SP500 stocks for the last year. The code is not executed in this vignette given its time duration, but you can just copy and paste on its own R script in order to check the results. In my computer it takes around 5 minutes to download the whole dataset.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BatchGetSymbols)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>first.date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()<span class="sc">-</span><span class="dv">365</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>last.date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df.SP500 <span class="ot">&lt;-</span> <span class="fu">GetSP500Stocks</span>()</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>tickers <span class="ot">&lt;-</span> df.SP500<span class="sc">$</span>Tickers</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>l.out <span class="ot">&lt;-</span> <span class="fu">BatchGetSymbols</span>(<span class="at">tickers =</span> tickers,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">first.date =</span> first.date,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">last.date =</span> last.date)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l.out<span class="sc">$</span>df.control)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(l.out<span class="sc">$</span>df.tickers)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yfR)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>first_date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()<span class="sc">-</span><span class="dv">365</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>last_date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>df_sp500 <span class="ot">&lt;-</span> <span class="fu">yf_get_collection</span>(<span class="st">&#39;SP500&#39;</span>)</span></code></pre></div>
 </div>
 
 

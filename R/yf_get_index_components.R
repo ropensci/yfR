@@ -37,6 +37,18 @@ yf_get_index_comp <- function(mkt_index,
 
 }
 
+
+#' Get available indices in package
+#'
+#' This funtion will return all available market indices that are registered
+#' in the package.
+#'
+#' @return A vector of mkt indices
+#' @export
+#'
+#' @examples
+#'
+#' av_indices <- yf_get_available_indices()
 yf_get_available_indices <- function() {
   available_indices <- c('SP500', 'IBOV', 'FTSE')
 

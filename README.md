@@ -2,46 +2,50 @@
 
 [![](https://cranlogs.r-pkg.org/badges/BatchGetSymbols)](https://CRAN.R-project.org/yfR)
 
-`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), a R package for large-scale download of financial data from Yahoo Finance. Based on a set of tickers and date ranges, the package will download and organize the financial data in the tidy/long format, with many user options for parsing the data.
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
+
+`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), a R package for large-scale download of financial data from Yahoo Finance. It make it easier to fetch organized stock prices from the repository. 
 
 
 ## Changes from `BatchGetSymbols`
 
-- New and more intuitive function names: BatchGetSymbols() -->  yf_get_data()
+- New and consistent function names: BatchGetSymbols() -->  yf_get_data()
 - All input variables are now snake case (e.g. first.date --> first_date)
 - Use of collections for fetching large scale data (function `yf_get_collection()`)
-- No more dependency of quantmod:getSymbols
-- Better status bars
+- No more dependency of quantmod::getSymbols
+- Improved status message with cli messages
+- Output is a dataframe of prices (and not a list). From previous version in BatchGetSymbols, output  "df_control" dataframe is now an attribute of "df_tickers"
 - Better handling of invalid data in cache
 
 
 ## Warnings
 
-- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources. My advice is to never use the data of individual stocks in production. 
+- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources, specially for long time periods with lots of corporate events. My advice is to never use the data of individual stocks in production. 
 
-- Since version 2.6, the cache system is session-persistent by default, meaning that whenever you restart your R session, you lose all your cached data. This is a safety feature for mismatching prices due to corporate events.
+- Since version 2.6 of BatchGetSymbols, from which this package was based, the cache system is session-persistent by default, meaning that whenever you restart your R session, you lose all your cached data. This is a safety feature for mismatching prices due to corporate events.
+
 
 ## Main features:
 
 - Organizes data in a tabular/long or wide format, returning prices and returns (arithmetic or logarithmic)
-- A session-persistent cache system was implemented. This means that the data is saved locally and only missing portions of the data are downloaded, if needed.
+- A session-persistent smart cache system is available by default. This means that the YF data is saved locally and only missing portions are downloaded, if needed.
 - All dates are compared to a benchmark ticker such as SP500 and, whenever an individual asset does not have a sufficient number of dates, the software drops it from the output. This means you can choose to ignore tickers with high number of missing dates.
-- Allows the choice for the wide format, with tickers as columns
+- A customized function called `yf_convert_to_wide()` can transform the long  table into a wide format (tickers as columns). 
 - Users can choose the frequency of the resulting dataset (daily, weekly, monthly, yearly)
-- Option for parallel computing, speeding up the data importation process
-
+- Parallel computing is available, speeding up the data importation process
 
 
 ## Installation
 
 ```
 # CRAN (not yet available)
-#install.packages('yf')
+#install.packages('yfR')
 
 # Github (dev version)
-devtools::install_github('msperlin/yf')
+devtools::install_github('msperlin/yfR')
 ```
 
 ## A simple example
 
-See [vignette](https://CRAN.R-project.org/package=yf).
+See [vignette](https://CRAN.R-project.org/package=yfR).

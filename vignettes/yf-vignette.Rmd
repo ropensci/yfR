@@ -18,44 +18,56 @@ knitr::opts_chunk$set(eval=FALSE)
 ```
 
 
-One of the great things of working in finance is that financial datasets from capital markets are freely available from sources such as Yahoo Finance. This is an excelent feature for building up to date content for classes and conducting academic research. 
+`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), a R package for large-scale download of financial data from Yahoo Finance. Based on a set of tickers and date ranges, the package will download and organize the financial data in the tidy/long format, with many user options for parsing the data. 
 
-In the past I have used function GetSymbols from the CRAN package [quantmod](https://cran.r-project.org/package=quantmod) in order to download end of day trade data for several stocks in the financial market. The problem in using GetSymbols is that it does not aggregate or clean the financial data for several tickers. In the usage of GetSymbols, each stock will have its own `xts` object with different column names and this makes it harder to store data from several tickers in a single dataframe. 
 
-Package BatchGetSymbols is my solution to this problem. Based on a list of tickers and a time period, BatchGetSymbols will download price data from yahoo finance and organize it so that you don't need to worry about cleaning it yourself. 
+## Changes from `BatchGetSymbols`
+
+- New and more intuitive function names: BatchGetSymbols() -->  yf_get_data()
+- All input variables are now snake case (e.g. first_date --> first_date)
+- Use of collections for fetching large scale data (function `yf_get_collection()`)
+- No more dependency of quantmod:getSymbols
+- Improved status message with cli
+- Output is a dataframe (and not a list). The "df_control" dataframe is now an attribute of "df_tickers"
+- Better handling of invalid data in cache
+
+
+## Warnings
+
+- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources. My advice is to never use the data of individual stocks in production. 
+
+- Since version 2.6, the cache system is session-persistent by default, meaning that whenever you restart your R session, you lose all your cached data. This is a safety feature for mismatching prices due to corporate events.
 
 ## Main features:
 
-- Organizes data in a tabular format, returning prices and returns
-- A cache system was implemented in version 2.0, meaning that the data is saved locally and only missings portions of the data are downloaded, if needed. 
-- All dates are compared to a benchmark ticker such as SP500. You can choose to ignore ticker with a high number of missing dates.
-- User can choose a complete/balanced dataset output. The package uses a benchmark ticker for date comparison (e.g. SP500 - ^GSPC). Days with missing prices and traded volume equal to zero are found and prices are either set to NA or replaced by closest available value.
-- Allows the choice for the wide format, with tickers as columns
+- Organizes data in a tabular/long or wide format, returning prices and returns (arithmetic or logarithmic)
+- A session-persistent smart cache system is available by default. This means that the YF data is saved locally and only missing portions are downloaded, if needed.
+- All dates are compared to a benchmark ticker such as SP500 and, whenever an individual asset does not have a sufficient number of dates, the software drops it from the output. This means you can choose to ignore tickers with high number of missing dates.
+- A customized function called `yf_convert_to_wide()` can transform the long  table into a wide format (tickers as columns). 
 - Users can choose the frequency of the resulting dataset (daily, weekly, monthly, yearly)
+- Parallel computing is available, speeding up the data importation process
 
 
 ## A simple example
 
 As a simple exercise, let's download data for three stocks, facebook (FB), 3M (MMM), PETR4.SA (PETROBRAS) and abcdef, a ticker I just made up. We will use the last 60 days as the time period. This example will show the simple interface of the package and how it handles invalid tickers.
 
-```{r example1, eval=FALSE}
-if (!require(BatchGetSymbols)) install.packages('BatchGetSymbols')
+```{r example1, eval=TRUE, results='hide'}
+if (!require(yfR)) install.packages('yfR')
 
-library(BatchGetSymbols)
+library(yfR)
 
 # set dates
-first.date <- Sys.Date() - 60
-last.date <- Sys.Date()
-freq.data <- 'daily'
+first_date <- Sys.Date() - 60
+last_date <- Sys.Date()
+freq_data <- 'daily'
 # set tickers
-tickers <- c('FB','MMM','PETR4.SA','abcdef')
+tickers <- c('FB','MMM','PETR4.SA')
 
-l.out <- BatchGetSymbols(tickers = tickers, 
-                         first.date = first.date,
-                         last.date = last.date, 
-                         freq.data = freq.data,
-                         cache.folder = file.path(tempdir(), 
-                                                  'BGS_Cache') ) # cache in tempdir()
+df_yf <- yf_get_data(tickers = tickers, 
+                         first_date = first_date,
+                         last_date = last_date, 
+                         freq_data = freq_data) # cache in tempdir()
 
 ```
 
@@ -63,8 +75,7 @@ l.out <- BatchGetSymbols(tickers = tickers,
 After downloading the data, we can check the success of the process for each ticker. Notice that the last ticker does not exist in yahoo finance and therefore results in an error. All information regarding the download process is provided in the dataframe df.control:
 
 ```{r example2}
-print(l.out$df.control)
-
+str(df_yf)
 ```
 
 Moreover, we can plot the daily closing prices using ggplot2:
@@ -73,9 +84,9 @@ Moreover, we can plot the daily closing prices using ggplot2:
 ```{r plot.prices, fig.width=7, fig.height=2.5}
 library(ggplot2)
  
-p <- ggplot(l.out$df.tickers, aes(x = ref.date, y = price.close))
-p <- p + geom_line()
-p <- p + facet_wrap(~ticker, scales = 'free_y') 
+p <- ggplot(df_yf, aes(x = ref_date, y = price_close)) + 
+  geom_line() + facet_wrap(~ticker, scales = 'free_y') 
+
 print(p)
 ```
 
@@ -88,19 +99,44 @@ The package was designed for large scale download of financial data. An example 
 In the following code we download data for the SP500 stocks for the last year. The code is not executed in this vignette given its time duration, but you can just copy and paste on its own R script in order to check the results. In my computer it takes around 5 minutes to download the whole dataset.
 
 ```{r example3,eval=FALSE}
-library(BatchGetSymbols)
+library(yfR)
 
-first.date <- Sys.Date()-365
-last.date <- Sys.Date()
+first_date <- Sys.Date()-365
+last_date <- Sys.Date()
 
-df.SP500 <- GetSP500Stocks()
-tickers <- df.SP500$Tickers
-
-l.out <- BatchGetSymbols(tickers = tickers,
-                         first.date = first.date,
-                         last.date = last.date)
-
-print(l.out$df.control)
-print(l.out$df.tickers)
+df_sp500 <- yf_get_collection('SP500')
 
 ```
+
+
+## Downloading data for different frequencies
+
+```{r}
+library(yfR)
+library(purrr)
+library(ggplot2)
+library(dplyr)
+
+fct_handler <- function(my_freq) {
+  
+  df_yf <- yf_get_data(tickers = c('GE'), 
+                      first_date = '2015-01-01',
+                      last_date = Sys.Date(), 
+                      do_cache = FALSE,
+                      freq_data = my_freq)
+  
+  df$freq <- my_freq
+
+  return(df)
+}
+
+my_possible_freq <-  c('daily', 'weekly', 'monthly', 'yearly')
+
+df_allfreq <- bind_rows(map(.x = my_possible_freq, .f = fct_handler))
+
+p <- ggplot(df_allfreq, aes(x=ref_date, y = price_adjusted)) + 
+  geom_point() + geom_line() + facet_grid(freq ~ ticker)
+
+print(p)
+```
+
