@@ -24,5 +24,5 @@ A dataframe with the index compositino (column might vary)
 Get current composition of stock indices
 }
 \examples{
-df_sp500 <- yf_get_index_comp('SP500')
+df_sp500 <- yf_get_index_comp("SP500")
 }

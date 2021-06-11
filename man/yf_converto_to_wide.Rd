@@ -17,7 +17,7 @@ Transforms a dataframe in the long format to a list of dataframes in the wide fo
 }
 \examples{
 
-my_f <- system.file( 'extdata/example_data_yfR.rds', package = 'yfR' )
+my_f <- system.file("extdata/example_data_yfR.rds", package = "yfR")
 df_tickers <- readRDS(my_f)
 l_wide <- yf_converto_to_wide(df_tickers)
 l_wide

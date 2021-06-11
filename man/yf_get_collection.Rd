@@ -32,7 +32,7 @@ will downloads all data from Yahoo Finance using \code{\link{yf_get_data}}.
 }
 \examples{
 \dontrun{
-df_yf <- yf_get_collection('IBOV')
+df_yf <- yf_get_collection("IBOV")
 }
 
 }

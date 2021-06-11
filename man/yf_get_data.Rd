@@ -55,9 +55,7 @@ aggregated values such as price_adjusted.}
 \item{be_quiet}{Logical for printing statements (default = FALSE)}
 }
 \value{
-A list with the following items: \describe{
-\item{df_control }{A dataframe containing the results of the download process for each asset}
-\item{df_tickers}{A dataframe with the financial data for all valid tickers} }
+A dataframe with stock prices.
 }
 \description{
 This function downloads financial data from Yahoo Finance. Based on a set of tickers and a time period, the function will download the data for each ticker and return a report of the process, along with the actual data in the long dataframe format.
@@ -67,27 +65,22 @@ A caching system is also available, making it very fast.
 \section{Warning}{
 
 
-Do notice that since 2019, adjusted prices are no longer available from google finance.
-When using this source, the function will output NA values for this column.
-
-Also, be aware that when using cache system in a local folder (and not the default tempdir()), the aggregate prices series might not match if
+Be aware that when using cache system in a local folder (and not the default tempdir()), the aggregate prices series might not match if
 a split or dividends event happens in between cache files.
 }
 
 \examples{
-tickers <- c('FB','MMM')
+tickers <- c("FB", "MMM")
 
-first_date <- Sys.Date()-15
+first_date <- Sys.Date() - 15
 last_date <- Sys.Date()
 
-l_out <- yf_get_data(tickers = tickers,
-                     first_date = first_date,
-                     last_date = last_date,
-                     do_cache=FALSE)
+df_yf <- yf_get_data(
+  tickers = tickers,
+  first_date = first_date,
+  last_date = last_date,
+  do_cache = FALSE
+)
 
-print(l_out$df_control)
-print(l_out$df_tickers)
-}
-\seealso{
-\link[quantmod]{getSymbols}
+print(df_yf)
 }
