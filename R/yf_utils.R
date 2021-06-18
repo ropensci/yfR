@@ -39,8 +39,11 @@ date_to_unix <- function(date_in) {
 }
 
 
+unix_to_date <- function(unix_date_in) {
+  out <- as.Date(as.POSIXct(unix_date_in, origin="1970-01-01"))
 
-
+  return(out)
+}
 
 # Function to calculate returns from a price and ticker vector
 calc_ret <- function(P,

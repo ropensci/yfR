@@ -10,7 +10,7 @@ Depends:
     R (>= 4.0)
 Imports: stringr, curl, XML, tidyr, 
     lubridate, scales, furrr, purrr, future, tibble, zoo, crayon,
-    cli, readr, rvest, dplyr
+    cli, readr, rvest, dplyr, jsonlite, quantmod
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
