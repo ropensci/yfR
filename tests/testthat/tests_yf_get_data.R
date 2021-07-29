@@ -1,10 +1,9 @@
 library(testthat)
 library(yfR)
 
-
 test_that(desc = "Test of yf_get_data() - is df?", {
 
-  skip_if(!curl::has_internet())
+  skip_if_offline()
 
   my_tickers <- c("^GSPC")
 
@@ -21,7 +20,7 @@ test_that(desc = "Test of yf_get_data() - is df?", {
 
 test_that(desc = "Test of yf_get_data() - nrow > 0", {
 
-  skip_if(!curl::has_internet())
+  skip_if_offline()
 
   my_tickers <- c("^BVSP")
 

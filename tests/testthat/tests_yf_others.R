@@ -3,7 +3,7 @@ library(yfR)
 
 test_that(desc = "Test of yf_convert_to_wide()", {
 
-  skip_if(!curl::has_internet())
+  skip_if_offline()
 
   my_tickers <- c("^GSPC", "^BVSP")
 

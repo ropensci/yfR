@@ -12,30 +12,27 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 # Motivation
 
 `yfR` is the second and backwards-incompatible version of
-[BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), a
-R package for large-scale download of financial data from Yahoo Finance.
-It make it easier to fetch tidy data of stock prices from the
-repository.
+[BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols).
+It provides access to daily stock prices from [Yahoo
+Finance](https://finance.yahoo.com/), a vast repository with data around
+the globe. Moreover, *yfR* allows large scales downloads of data, using
+a local caching system for speeding up the process.
 
 ## Features
 
--   Fetchs daily/weekly/monthly/annual stock prices and returns from
-    yahoo finance;
--   Organizes data in a tabular/long or wide format, returning prices
-    and returns (arithmetic or logarithmic)
+-   Fetchs daily/weekly/monthly/annual stock prices (and returns) from
+    yahoo finance and returns a dataframe in the long format;
 -   A session-persistent smart cache system is available by default.
-    This means that the YF data is saved locally and only missing
-    portions are downloaded, if needed.
+    This means that the data is saved locally and only missing portions
+    are downloaded, if needed.
 -   All dates are compared to a benchmark ticker such as SP500 and,
     whenever an individual asset does not have a sufficient number of
     dates, the software drops it from the output. This means you can
     choose to ignore tickers with high number of missing dates.
 -   A customized function called `yf_convert_to_wide()` can transform
-    the long table into a wide format (tickers as columns).
--   Users can choose the frequency of the resulting dataset (daily,
-    weekly, monthly, yearly)
+    the long dataframe into a wide format (tickers as columns).
 -   Parallel computing is available, speeding up the data importation
-    process
+    process.
 
 ## Warnings
 
@@ -46,13 +43,8 @@ repository.
     messy as stock events such as splits or dividends are not properly
     registered. I was never able to match it with other data sources,
     specially for long time periods with lots of corporate events. My
-    advice is to never use the data of individual stocks in production.
-
--   Since version 2.6 of BatchGetSymbols, from which this package was
-    based, the cache system is session-persistent by default, meaning
-    that whenever you restart your R session, you lose all your cached
-    data. This is a safety feature for mismatching prices due to
-    corporate events.
+    advice is to never use the data of individual stocks in production
+    (research papers or academic documents – thesis and dissertations).
 
 ## Installation
 
@@ -70,7 +62,7 @@ repository.
 library(yfR)
 #> 
 
-my_ticker <- '^BVSP'
+my_ticker <- 'FB'
 first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 
@@ -78,32 +70,32 @@ df_yf <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2021-05-19 --> 2021-06-18 (30 days) ──
+#> ── Running yfR for 1 stocks | 2021-06-29 --> 2021-07-29 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for ^BVSP
+#> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 20 valid rows (2021-05-19 --> 2021-06-16)
-#> ✓    - got 95% of valid prices -- Good stuff!
+#> ✓    - got 21 valid rows (2021-06-29 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Youre doing good!
 
 str(df_yf)
-#> tibble [20 × 10] (S3: tbl_df/tbl/data.frame)
-#>  $ ticker             : chr [1:20] "^BVSP" "^BVSP" "^BVSP" "^BVSP" ...
-#>  $ ref_date           : Date[1:20], format: "2021-05-19" "2021-05-20" ...
-#>  $ price_open         : num [1:20] 122976 122636 122701 122592 124032 ...
-#>  $ price_high         : num [1:20] 123013 122734 122799 124167 124696 ...
-#>  $ price_low          : num [1:20] 121595 122136 121760 122526 122701 ...
-#>  $ price_close        : num [1:20] 122636 122701 122592 124032 122988 ...
-#>  $ volume             : num [1:20] 8825300 7906400 9493600 8186300 8914500 ...
-#>  $ price_adjusted     : num [1:20] 122636 122701 122592 124032 122988 ...
-#>  $ ret_adjusted_prices: num [1:20] NA 0.00053 -0.000888 0.011746 -0.008417 ...
-#>  $ ret_closing_prices : num [1:20] NA 0.00053 -0.000888 0.011746 -0.008417 ...
+#> tibble [21 × 10] (S3: tbl_df/tbl/data.frame)
+#>  $ ticker             : chr [1:21] "FB" "FB" "FB" "FB" ...
+#>  $ ref_date           : Date[1:21], format: "2021-06-29" "2021-06-30" ...
+#>  $ price_open         : num [1:21] 356 352 347 355 356 ...
+#>  $ price_high         : num [1:21] 357 353 355 356 359 ...
+#>  $ price_low          : num [1:21] 349 347 346 353 349 ...
+#>  $ price_close        : num [1:21] 352 348 354 355 353 ...
+#>  $ volume             : num [1:21] 21417300 15107500 17137000 11521300 13488500 ...
+#>  $ price_adjusted     : num [1:21] 352 348 354 355 353 ...
+#>  $ ret_adjusted_prices: num [1:21] NA -0.011879 0.019211 0.000875 -0.005413 ...
+#>  $ ret_closing_prices : num [1:21] NA -0.011879 0.019211 0.000875 -0.005413 ...
 #>  - attr(*, "df_control")= tibble [1 × 5] (S3: tbl_df/tbl/data.frame)
-#>   ..$ ticker              : chr "^BVSP"
+#>   ..$ ticker              : chr "FB"
 #>   ..$ dl_status           : chr "OK"
-#>   ..$ n_rows              : int 20
-#>   ..$ perc_benchmark_dates: num 0.95
+#>   ..$ n_rows              : int 21
+#>   ..$ perc_benchmark_dates: num 1
 #>   ..$ threshold_decision  : chr "KEEP"
 ```
 
@@ -121,41 +113,41 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 3 stocks | 2021-03-10 --> 2021-06-18 (100 days) ──
+#> ── Running yfR for 3 stocks | 2021-04-20 --> 2021-07-29 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/3) Fetching data for FB
-#> !    - not cached
-#> ✓    - cache saved successfully
-#> ✓    - got 69 valid rows (2021-03-10 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- Good stuff!
+#> ✓    - found cache file (2021-06-29 --> 2021-07-28)
+#> !    - need new data (cache doesnt match query)
+#> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ (2/3) Fetching data for GM
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 69 valid rows (2021-03-10 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Time for some tea?
 #> ℹ (3/3) Fetching data for MMM
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 69 valid rows (2021-03-10 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
+#> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- All OK!
 
 str(df_yf_multiple)
-#> tibble [207 × 10] (S3: tbl_df/tbl/data.frame)
-#>  $ ticker             : chr [1:207] "FB" "FB" "FB" "FB" ...
-#>  $ ref_date           : Date[1:207], format: "2021-03-10" "2021-03-11" ...
-#>  $ price_open         : num [1:207] 269 268 269 269 276 ...
-#>  $ price_high         : num [1:207] 269 278 270 276 282 ...
-#>  $ price_low          : num [1:207] 263 268 264 268 275 ...
-#>  $ price_close        : num [1:207] 265 274 268 274 279 ...
-#>  $ volume             : num [1:207] 14210300 21834000 20600200 16844800 22437700 ...
-#>  $ price_adjusted     : num [1:207] 265 274 268 274 279 ...
-#>  $ ret_adjusted_prices: num [1:207] NA 0.0339 -0.02 0.0199 0.0202 ...
-#>  $ ret_closing_prices : num [1:207] NA 0.0339 -0.02 0.0199 0.0202 ...
+#> tibble [210 × 10] (S3: tbl_df/tbl/data.frame)
+#>  $ ticker             : chr [1:210] "FB" "FB" "FB" "FB" ...
+#>  $ ref_date           : Date[1:210], format: "2021-04-20" "2021-04-21" ...
+#>  $ price_open         : num [1:210] 302 302 301 299 303 ...
+#>  $ price_high         : num [1:210] 305 302 303 303 306 ...
+#>  $ price_low          : num [1:210] 297 297 296 297 302 ...
+#>  $ price_close        : num [1:210] 303 301 297 301 303 ...
+#>  $ volume             : num [1:210] 16796400 14863500 16375400 17536800 16172600 ...
+#>  $ price_adjusted     : num [1:210] 303 301 297 301 303 ...
+#>  $ ret_adjusted_prices: num [1:210] NA -0.0039 -0.01642 0.01555 0.00634 ...
+#>  $ ret_closing_prices : num [1:210] NA -0.0039 -0.01642 0.01555 0.00634 ...
 #>  - attr(*, "df_control")= tibble [3 × 5] (S3: tbl_df/tbl/data.frame)
 #>   ..$ ticker              : chr [1:3] "FB" "GM" "MMM"
 #>   ..$ dl_status           : chr [1:3] "OK" "OK" "OK"
-#>   ..$ n_rows              : int [1:3] 69 69 69
+#>   ..$ n_rows              : int [1:3] 70 70 70
 #>   ..$ perc_benchmark_dates: num [1:3] 1 1 1
 #>   ..$ threshold_decision  : chr [1:3] "KEEP" "KEEP" "KEEP"
 
@@ -170,7 +162,7 @@ p
 
 ### Fetching collections of prices
 
-Collections are just a bundle of ticker pre-organized in the package.
+Collections are just a bundle of tickers pre-organized in the package.
 For example, collection `SP500` represents the current composition of
 the SP500 index.
 
@@ -206,14 +198,14 @@ df_dailly <- yf_get_data(tickers = my_ticker,
                          freq_data = 'daily') |>
   mutate(freq = 'daily')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-06-18 (4186 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-07-29 (4227 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 2883 valid rows (2010-01-04 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Good stuff!
   
   
 df_weekly <- yf_get_data(tickers = my_ticker, 
@@ -221,39 +213,39 @@ df_weekly <- yf_get_data(tickers = my_ticker,
                          freq_data = 'weekly') |>
   mutate(freq = 'weekly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-06-18 (4186 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-07-29 (4227 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
-#> ✓    - found cache file (2010-01-04 --> 2021-06-16)
-#> ✓    - got 2883 valid rows (2010-01-04 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - found cache file (2010-01-04 --> 2021-07-28)
+#> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Got it!
 
 df_monthly <- yf_get_data(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'monthly') |>
   mutate(freq = 'monthly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-06-18 (4186 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-07-29 (4227 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
-#> ✓    - found cache file (2010-01-04 --> 2021-06-16)
-#> ✓    - got 2883 valid rows (2010-01-04 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- All OK!
+#> ✓    - found cache file (2010-01-04 --> 2021-07-28)
+#> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Good stuff!
 
 df_yearly <- yf_get_data(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'yearly') |>
   mutate(freq = 'yearly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-06-18 (4186 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2021-07-29 (4227 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
-#> ✓    - found cache file (2010-01-04 --> 2021-06-16)
-#> ✓    - got 2883 valid rows (2010-01-04 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - found cache file (2010-01-04 --> 2021-07-28)
+#> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Time for some tea?
 
 df_allfreq <- bind_rows(
   list(df_dailly, df_weekly, df_monthly, df_yearly)
@@ -294,21 +286,21 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 3 stocks | 2021-03-10 --> 2021-06-18 (100 days) ──
+#> ── Running yfR for 3 stocks | 2021-04-20 --> 2021-07-29 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/3) Fetching data for FB
-#> ✓    - found cache file (2021-03-10 --> 2021-06-16)
-#> ✓    - got 69 valid rows (2021-03-10 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - found cache file (2021-04-20 --> 2021-07-28)
+#> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ (2/3) Fetching data for GM
-#> ✓    - found cache file (2021-03-10 --> 2021-06-16)
-#> ✓    - got 69 valid rows (2021-03-10 --> 2021-06-16)
+#> ✓    - found cache file (2021-04-20 --> 2021-07-28)
+#> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
 #> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ (3/3) Fetching data for MMM
-#> ✓    - found cache file (2021-03-10 --> 2021-06-16)
-#> ✓    - got 69 valid rows (2021-03-10 --> 2021-06-16)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - found cache file (2021-04-20 --> 2021-07-28)
+#> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
+#> ✓    - got 100% of valid prices -- Time for some tea?
 
 l_wide <- yf_converto_to_wide(df_yf_multiple)
 
@@ -321,7 +313,7 @@ knitr::kable(prices_wide)
 <thead>
 <tr>
 <th style="text-align:left;">
-ref\_date
+ref_date
 </th>
 <th style="text-align:right;">
 FB
@@ -335,398 +327,6 @@ MMM
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-2021-03-10
-</td>
-<td style="text-align:right;">
-264.90
-</td>
-<td style="text-align:right;">
-56.83
-</td>
-<td style="text-align:right;">
-183.1621
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-11
-</td>
-<td style="text-align:right;">
-273.88
-</td>
-<td style="text-align:right;">
-56.33
-</td>
-<td style="text-align:right;">
-183.2217
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-12
-</td>
-<td style="text-align:right;">
-268.40
-</td>
-<td style="text-align:right;">
-59.26
-</td>
-<td style="text-align:right;">
-183.5692
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-15
-</td>
-<td style="text-align:right;">
-273.75
-</td>
-<td style="text-align:right;">
-57.94
-</td>
-<td style="text-align:right;">
-188.0958
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-16
-</td>
-<td style="text-align:right;">
-279.28
-</td>
-<td style="text-align:right;">
-57.12
-</td>
-<td style="text-align:right;">
-185.4851
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-17
-</td>
-<td style="text-align:right;">
-284.01
-</td>
-<td style="text-align:right;">
-60.05
-</td>
-<td style="text-align:right;">
-186.9245
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-18
-</td>
-<td style="text-align:right;">
-278.62
-</td>
-<td style="text-align:right;">
-59.27
-</td>
-<td style="text-align:right;">
-189.6047
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-19
-</td>
-<td style="text-align:right;">
-290.11
-</td>
-<td style="text-align:right;">
-59.82
-</td>
-<td style="text-align:right;">
-187.3315
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-22
-</td>
-<td style="text-align:right;">
-293.54
-</td>
-<td style="text-align:right;">
-58.10
-</td>
-<td style="text-align:right;">
-188.0859
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-23
-</td>
-<td style="text-align:right;">
-290.63
-</td>
-<td style="text-align:right;">
-56.16
-</td>
-<td style="text-align:right;">
-186.9542
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-24
-</td>
-<td style="text-align:right;">
-282.14
-</td>
-<td style="text-align:right;">
-55.81
-</td>
-<td style="text-align:right;">
-189.2970
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-25
-</td>
-<td style="text-align:right;">
-278.74
-</td>
-<td style="text-align:right;">
-56.60
-</td>
-<td style="text-align:right;">
-191.6894
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-26
-</td>
-<td style="text-align:right;">
-283.02
-</td>
-<td style="text-align:right;">
-56.52
-</td>
-<td style="text-align:right;">
-193.4564
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-29
-</td>
-<td style="text-align:right;">
-290.82
-</td>
-<td style="text-align:right;">
-55.94
-</td>
-<td style="text-align:right;">
-194.3101
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-30
-</td>
-<td style="text-align:right;">
-288.00
-</td>
-<td style="text-align:right;">
-58.51
-</td>
-<td style="text-align:right;">
-193.2182
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-03-31
-</td>
-<td style="text-align:right;">
-294.53
-</td>
-<td style="text-align:right;">
-57.46
-</td>
-<td style="text-align:right;">
-191.2725
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-01
-</td>
-<td style="text-align:right;">
-298.66
-</td>
-<td style="text-align:right;">
-57.80
-</td>
-<td style="text-align:right;">
-191.2923
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-05
-</td>
-<td style="text-align:right;">
-308.91
-</td>
-<td style="text-align:right;">
-61.04
-</td>
-<td style="text-align:right;">
-193.5457
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-06
-</td>
-<td style="text-align:right;">
-306.26
-</td>
-<td style="text-align:right;">
-61.94
-</td>
-<td style="text-align:right;">
-193.4167
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-07
-</td>
-<td style="text-align:right;">
-313.09
-</td>
-<td style="text-align:right;">
-60.83
-</td>
-<td style="text-align:right;">
-193.5259
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-08
-</td>
-<td style="text-align:right;">
-313.02
-</td>
-<td style="text-align:right;">
-60.09
-</td>
-<td style="text-align:right;">
-194.2903
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-09
-</td>
-<td style="text-align:right;">
-312.46
-</td>
-<td style="text-align:right;">
-60.16
-</td>
-<td style="text-align:right;">
-196.5536
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-12
-</td>
-<td style="text-align:right;">
-311.54
-</td>
-<td style="text-align:right;">
-59.66
-</td>
-<td style="text-align:right;">
-196.3848
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-13
-</td>
-<td style="text-align:right;">
-309.76
-</td>
-<td style="text-align:right;">
-58.49
-</td>
-<td style="text-align:right;">
-195.0348
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-14
-</td>
-<td style="text-align:right;">
-302.82
-</td>
-<td style="text-align:right;">
-58.48
-</td>
-<td style="text-align:right;">
-195.3127
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-15
-</td>
-<td style="text-align:right;">
-307.82
-</td>
-<td style="text-align:right;">
-58.61
-</td>
-<td style="text-align:right;">
-196.0374
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-16
-</td>
-<td style="text-align:right;">
-306.18
-</td>
-<td style="text-align:right;">
-58.71
-</td>
-<td style="text-align:right;">
-197.1294
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-04-19
-</td>
-<td style="text-align:right;">
-302.24
-</td>
-<td style="text-align:right;">
-57.88
-</td>
-<td style="text-align:right;">
-197.1393
-</td>
-</tr>
 <tr>
 <td style="text-align:left;">
 2021-04-20
@@ -1299,6 +899,412 @@ MMM
 </td>
 <td style="text-align:right;">
 196.9100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-17
+</td>
+<td style="text-align:right;">
+336.51
+</td>
+<td style="text-align:right;">
+60.08
+</td>
+<td style="text-align:right;">
+195.1400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-18
+</td>
+<td style="text-align:right;">
+329.66
+</td>
+<td style="text-align:right;">
+58.76
+</td>
+<td style="text-align:right;">
+191.6000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-21
+</td>
+<td style="text-align:right;">
+332.29
+</td>
+<td style="text-align:right;">
+59.30
+</td>
+<td style="text-align:right;">
+195.2100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-22
+</td>
+<td style="text-align:right;">
+339.03
+</td>
+<td style="text-align:right;">
+59.24
+</td>
+<td style="text-align:right;">
+195.1400
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-23
+</td>
+<td style="text-align:right;">
+340.59
+</td>
+<td style="text-align:right;">
+60.12
+</td>
+<td style="text-align:right;">
+192.3600
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-24
+</td>
+<td style="text-align:right;">
+343.18
+</td>
+<td style="text-align:right;">
+60.04
+</td>
+<td style="text-align:right;">
+193.2600
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-25
+</td>
+<td style="text-align:right;">
+341.37
+</td>
+<td style="text-align:right;">
+60.30
+</td>
+<td style="text-align:right;">
+194.7500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-28
+</td>
+<td style="text-align:right;">
+355.64
+</td>
+<td style="text-align:right;">
+58.64
+</td>
+<td style="text-align:right;">
+196.5000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-29
+</td>
+<td style="text-align:right;">
+351.89
+</td>
+<td style="text-align:right;">
+58.83
+</td>
+<td style="text-align:right;">
+196.0300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-06-30
+</td>
+<td style="text-align:right;">
+347.71
+</td>
+<td style="text-align:right;">
+59.17
+</td>
+<td style="text-align:right;">
+198.6300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-01
+</td>
+<td style="text-align:right;">
+354.39
+</td>
+<td style="text-align:right;">
+59.11
+</td>
+<td style="text-align:right;">
+199.0900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-02
+</td>
+<td style="text-align:right;">
+354.70
+</td>
+<td style="text-align:right;">
+58.96
+</td>
+<td style="text-align:right;">
+199.8900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-06
+</td>
+<td style="text-align:right;">
+352.78
+</td>
+<td style="text-align:right;">
+57.46
+</td>
+<td style="text-align:right;">
+196.8900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-07
+</td>
+<td style="text-align:right;">
+350.49
+</td>
+<td style="text-align:right;">
+56.59
+</td>
+<td style="text-align:right;">
+199.8600
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-08
+</td>
+<td style="text-align:right;">
+345.65
+</td>
+<td style="text-align:right;">
+56.06
+</td>
+<td style="text-align:right;">
+198.2700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-09
+</td>
+<td style="text-align:right;">
+350.42
+</td>
+<td style="text-align:right;">
+58.76
+</td>
+<td style="text-align:right;">
+201.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-12
+</td>
+<td style="text-align:right;">
+353.16
+</td>
+<td style="text-align:right;">
+58.97
+</td>
+<td style="text-align:right;">
+199.9800
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-13
+</td>
+<td style="text-align:right;">
+352.09
+</td>
+<td style="text-align:right;">
+58.73
+</td>
+<td style="text-align:right;">
+199.6000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-14
+</td>
+<td style="text-align:right;">
+347.63
+</td>
+<td style="text-align:right;">
+58.00
+</td>
+<td style="text-align:right;">
+202.8300
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-15
+</td>
+<td style="text-align:right;">
+344.46
+</td>
+<td style="text-align:right;">
+56.95
+</td>
+<td style="text-align:right;">
+202.5900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-16
+</td>
+<td style="text-align:right;">
+341.16
+</td>
+<td style="text-align:right;">
+55.46
+</td>
+<td style="text-align:right;">
+199.3700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-19
+</td>
+<td style="text-align:right;">
+336.95
+</td>
+<td style="text-align:right;">
+54.18
+</td>
+<td style="text-align:right;">
+197.5600
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-20
+</td>
+<td style="text-align:right;">
+341.66
+</td>
+<td style="text-align:right;">
+56.15
+</td>
+<td style="text-align:right;">
+200.8200
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-21
+</td>
+<td style="text-align:right;">
+346.23
+</td>
+<td style="text-align:right;">
+57.05
+</td>
+<td style="text-align:right;">
+200.7700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-22
+</td>
+<td style="text-align:right;">
+351.19
+</td>
+<td style="text-align:right;">
+55.64
+</td>
+<td style="text-align:right;">
+199.0700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-23
+</td>
+<td style="text-align:right;">
+369.79
+</td>
+<td style="text-align:right;">
+54.94
+</td>
+<td style="text-align:right;">
+200.4900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-26
+</td>
+<td style="text-align:right;">
+372.46
+</td>
+<td style="text-align:right;">
+55.77
+</td>
+<td style="text-align:right;">
+201.6700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-27
+</td>
+<td style="text-align:right;">
+367.81
+</td>
+<td style="text-align:right;">
+55.00
+</td>
+<td style="text-align:right;">
+200.4700
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2021-07-28
+</td>
+<td style="text-align:right;">
+373.28
+</td>
+<td style="text-align:right;">
+55.49
+</td>
+<td style="text-align:right;">
+198.2800
 </td>
 </tr>
 </tbody>
