@@ -144,3 +144,15 @@ set_cli_msg <- function(msg_in, level = 0) {
   msg_in <- paste0(tab_in, msg_in)
   return(msg_in)
 }
+
+#' Returns the default folder for caching
+#'
+#' @return path of default cache folder
+#' @export
+#'
+#' @examples
+#' yf_get_default_cache_folder
+yf_get_default_cache_folder <- function() {
+  path_cache <- file.path(tempdir(), "yf_cache")
+  return(path_cache)
+}

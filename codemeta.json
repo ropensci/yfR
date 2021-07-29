@@ -153,18 +153,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "scales",
-      "name": "scales",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=scales"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "furrr",
       "name": "furrr",
       "provider": {
@@ -282,12 +270,24 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "quantmod",
+      "name": "quantmod",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=quantmod"
     }
   ],
   "codeRepository": "https://github.com/msperlin/yfR",
   "releaseNotes": "https://github.com/msperlin/yfR/blob/master/NEWS.md",
   "readme": "https://github.com/msperlin/yfR/blob/main/README.md",
-  "fileSize": "180.169KB",
+  "fileSize": "249.268KB",
   "issueTracker": "https://github.com/msperlin/yfR/issues",
   "developmentStatus": "https://www.repostatus.org/#active"
 }

@@ -15,13 +15,13 @@ yf_get_collection(
 \arguments{
 \item{collection}{A collection to fetch data (e.g. "SP500", "IBOV", "FTSE" )}
 
-\item{first_date}{The first date to download data (date or char as YYYY-MM-DD)}
+\item{first_date}{The first date of query (Date or character as YYYY-MM-DD)}
 
-\item{last_date}{The last date to download data (date or char as YYYY-MM-DD)}
+\item{last_date}{The last date of query (Date or character as YYYY-MM-DD)}
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 
-\item{cache_folder}{Where to save cache files? (default = file.path(tempdir(), 'BGS_Cache') )}
+\item{cache_folder}{Where to save cache files? (default = yfR::yf_get_default_cache_folder() )}
 }
 \value{
 A dataframe with financial prices from collection

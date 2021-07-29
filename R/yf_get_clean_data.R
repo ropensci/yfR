@@ -109,7 +109,7 @@ yf_get_clean_data <- function(ticker,
   # fix df_raw
   ref_date <- zoo::index(df_raw)
   df_raw <- dplyr::as_tibble(df_raw) |>
-    mutate(ref_date = ref_date,
+    dplyr::mutate(ref_date = ref_date,
            ticker = ticker) |>
     dplyr::as_tibble(df_raw[!duplicated(zoo::index(df_raw))])
 

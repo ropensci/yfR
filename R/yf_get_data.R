@@ -1,21 +1,19 @@
-#' Function to download financial data
+#' Main function to download financial data from Yahoo Finance
 #'
-#' This function downloads financial data from Yahoo Finance. Based on a set of tickers and a time period, the function will download the data for each ticker and return a report of the process, along with the actual data in the long dataframe format.
-#' The main advantage of the function is that it automatically recognizes the source of the dataset from the ticker and structures the resulting data from different sources in the long format.
-#' A caching system is also available, making it very fast.
+#' Based primarly on a set of tickers and time period, this function will download stock price data from Yahoo Finance
+#' for each ticker and return a report of the process, along with the actual data in the long (default) dataframe format.
 #'
 #' @section Warning:
 #'
 #' Be aware that when using cache system in a local folder (and not the default tempdir()), the aggregate prices series might not match if
 #' a split or dividends event happens in between cache files.
 #'
-#' @param tickers A vector of tickers. If not sure whether the ticker is available, check the websites of google and yahoo finance. The source for downloading
-#'  the data can either be Google or Yahoo. The function automatically selects the source webpage based on the input ticker.
-#' @param first_date The first date to download data (date or char as YYYY-MM-DD)
-#' @param last_date The last date to download data (date or char as YYYY-MM-DD)
+#' @param tickers A vector of tickers. If not sure whether the ticker is available, search for it in yahoo finance <https://finance.yahoo.com/>.
+#' @param first_date The first date of query (Date or character as YYYY-MM-DD)
+#' @param last_date The last date of query (Date or character as YYYY-MM-DD)
 #' @param bench_ticker The ticker of the benchmark asset used to compare dates. My suggestion is to use the main stock index of the market from where the data is coming from (default = ^GSPC (SP500, US market))
-#' @param type_return Type of price return to calculate: 'arit' (default) - aritmetic, 'log' - log returns.
-#' @param freq_data Frequency of financial data ('daily', 'weekly', 'monthly', 'yearly')
+#' @param type_return Type of price return to calculate: 'arit' - aritmetic (default), 'log' - log returns.
+#' @param freq_data Frequency of financial data: 'daily' (default), 'weekly', 'monthly', 'yearly'
 #' @param how_to_aggregate Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
 #'  For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
 #'  aggregated values such as price_adjusted.
@@ -24,12 +22,13 @@
 #' @param do_complete_data Return a complete/balanced dataset? If TRUE, all missing pairs of ticker-date will be replaced by NA or closest price (see input do_fill_missing_prices). Default = FALSE.
 #' @param do_fill_missing_prices Finds all missing prices and replaces them by their closest price with preference for the previous price. This ensures a balanced dataset for all assets, without any NA. Default = TRUE.
 #' @param do_cache Use cache system? (default = TRUE)
-#' @param cache_folder Where to save cache files? (default = file.path(tempdir(), 'BGS_Cache') )
+#' @param cache_folder Where to save cache files? (default = yfR::yf_get_default_cache_folder() )
 #' @param do_parallel Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.
 #' @param be_quiet Logical for printing statements (default = FALSE)
+#'
 #' @return A dataframe with stock prices.
+#'
 #' @export
-#' @import dplyr
 #'
 #' @examples
 #' tickers <- c("FB", "MMM")
@@ -283,8 +282,8 @@ yf_get_data <- function(tickers,
 
     if (how_to_aggregate == "first") {
       df_tickers <- df_tickers |>
-      group_by(time_groups, ticker) |>
-      summarise(
+      dplyr::group_by(time_groups, ticker) |>
+      dplyr::summarise(
         ref_date = min(ref_date),
         price_open = first(price_open),
         price_high = max(price_high),
@@ -293,13 +292,15 @@ yf_get_data <- function(tickers,
         price_adjusted = first(price_adjusted),
         volume = sum(volume, na.rm = TRUE)
       ) |>
-      ungroup() |>
+        dplyr::ungroup() |>
       # select(-time_groups) |>
-      arrange(ticker, ref_date)
+        dplyr::arrange(ticker, ref_date)
+
     } else if (how_to_aggregate == "last") {
+
       df_tickers <- df_tickers |>
-      group_by(time_groups, ticker) |>
-      summarise(
+      dplyr::group_by(time_groups, ticker) |>
+      dplyr::summarise(
         ref_date = min(ref_date),
         volume = sum(volume, na.rm = TRUE),
         price_open = first(price_open),
@@ -308,9 +309,10 @@ yf_get_data <- function(tickers,
         price_close = last(price_close),
         price_adjusted = last(price_adjusted)
       ) |>
-      ungroup() |>
+        dplyr::ungroup() |>
       # select(-time_groups) |>
-      arrange(ticker, ref_date)
+        dplyr::arrange(ticker, ref_date)
+
     }
 
 
@@ -324,6 +326,7 @@ yf_get_data <- function(tickers,
     df_tickers$ticker,
     type_return
   )
+
   df_tickers$ret_closing_prices <- calc_ret(
     df_tickers$price_close,
     df_tickers$ticker,

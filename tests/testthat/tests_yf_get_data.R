@@ -34,4 +34,3 @@ test_that(desc = "Test of yf_get_data() - nrow > 0", {
   expect_true(nrow(df) > 0)
 
 })
-

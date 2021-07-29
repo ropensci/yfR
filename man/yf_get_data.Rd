@@ -2,7 +2,7 @@
 % Please edit documentation in R/yf_get_data.R
 \name{yf_get_data}
 \alias{yf_get_data}
-\title{Function to download financial data}
+\title{Main function to download financial data from Yahoo Finance}
 \usage{
 yf_get_data(
   tickers,
@@ -22,21 +22,20 @@ yf_get_data(
 )
 }
 \arguments{
-\item{tickers}{A vector of tickers. If not sure whether the ticker is available, check the websites of google and yahoo finance. The source for downloading
-the data can either be Google or Yahoo. The function automatically selects the source webpage based on the input ticker.}
+\item{tickers}{A vector of tickers. If not sure whether the ticker is available, search for it in yahoo finance <https://finance.yahoo.com/>.}
 
-\item{first_date}{The first date to download data (date or char as YYYY-MM-DD)}
+\item{first_date}{The first date of query (Date or character as YYYY-MM-DD)}
 
-\item{last_date}{The last date to download data (date or char as YYYY-MM-DD)}
+\item{last_date}{The last date of query (Date or character as YYYY-MM-DD)}
 
 \item{thresh_bad_data}{A percentage threshold for defining bad data. The dates of the benchmark ticker are compared to each asset. If the percentage of non-missing dates
 with respect to the benchmark ticker is lower than thresh_bad_data, the function will ignore the asset (default = 0.75)}
 
 \item{bench_ticker}{The ticker of the benchmark asset used to compare dates. My suggestion is to use the main stock index of the market from where the data is coming from (default = ^GSPC (SP500, US market))}
 
-\item{type_return}{Type of price return to calculate: 'arit' (default) - aritmetic, 'log' - log returns.}
+\item{type_return}{Type of price return to calculate: 'arit' - aritmetic (default), 'log' - log returns.}
 
-\item{freq_data}{Frequency of financial data ('daily', 'weekly', 'monthly', 'yearly')}
+\item{freq_data}{Frequency of financial data: 'daily' (default), 'weekly', 'monthly', 'yearly'}
 
 \item{how_to_aggregate}{Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
 For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
@@ -48,7 +47,7 @@ aggregated values such as price_adjusted.}
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 
-\item{cache_folder}{Where to save cache files? (default = file.path(tempdir(), 'BGS_Cache') )}
+\item{cache_folder}{Where to save cache files? (default = yfR::yf_get_default_cache_folder() )}
 
 \item{do_parallel}{Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.}
 
@@ -58,9 +57,8 @@ aggregated values such as price_adjusted.}
 A dataframe with stock prices.
 }
 \description{
-This function downloads financial data from Yahoo Finance. Based on a set of tickers and a time period, the function will download the data for each ticker and return a report of the process, along with the actual data in the long dataframe format.
-The main advantage of the function is that it automatically recognizes the source of the dataset from the ticker and structures the resulting data from different sources in the long format.
-A caching system is also available, making it very fast.
+Based primarly on a set of tickers and time period, this function will download stock price data from Yahoo Finance
+for each ticker and return a report of the process, along with the actual data in the long (default) dataframe format.
 }
 \section{Warning}{
 

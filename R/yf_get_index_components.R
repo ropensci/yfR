@@ -56,11 +56,7 @@ yf_get_available_indices <- function() {
   return(available_indices)
 }
 
-# returns the default folder for caching (used in various functions)
-yf_get_default_cache_folder <- function() {
-  path_cache <- file.path(tempdir(), "yf_cache")
-  return(path_cache)
-}
+
 
 # Function to download the current components of the Ibovespa index from B3 website
 yf_get_ibov_stocks <- function(do_cache = TRUE,

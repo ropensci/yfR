@@ -8,6 +8,6 @@ my_globals <- c(
   "price_close", "price_adjusted", "volume",
   "EPIC", "Company", "Symbol", "Security",
   "GICS Sector", "ticker", "company", "sector",
-  "time_groups", ""
+  "time_groups", "first", "last"
 )
 utils::globalVariables(my_globals)
