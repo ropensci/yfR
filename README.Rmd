@@ -53,7 +53,7 @@ devtools::install_github('msperlin/yfR')
 
 ### Fetching a single stock price
 
-```{r}
+```{r, results='hold'}
 library(yfR)
 
 my_ticker <- 'FB'

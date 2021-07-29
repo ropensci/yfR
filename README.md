@@ -77,7 +77,7 @@ df_yf <- yf_get_data(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 21 valid rows (2021-06-29 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- Nice!
+#> ✓    - got 100% of valid prices -- Good stuff!
 
 str(df_yf)
 #> tibble [21 × 10] (S3: tbl_df/tbl/data.frame)
@@ -120,17 +120,17 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
 #> ✓    - found cache file (2021-06-29 --> 2021-07-28)
 #> !    - need new data (cache doesnt match query)
 #> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 100% of valid prices -- Youre doing good!
 #> ℹ (2/3) Fetching data for GM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 100% of valid prices -- Youre doing good!
 #> ℹ (3/3) Fetching data for MMM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - got 100% of valid prices -- Good stuff!
 
 str(df_yf_multiple)
 
@@ -206,7 +206,7 @@ df_dailly <- yf_get_data(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - got 100% of valid prices -- Good job msperlin!
   
   
 df_weekly <- yf_get_data(tickers = my_ticker, 
@@ -220,7 +220,7 @@ df_weekly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2021-07-28)
 #> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 100% of valid prices -- Time for some tea?
 
 df_monthly <- yf_get_data(tickers = my_ticker, 
                          first_date, last_date, 
@@ -233,7 +233,7 @@ df_monthly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2021-07-28)
 #> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
+#> ✓    - got 100% of valid prices -- Nice!
 
 df_yearly <- yf_get_data(tickers = my_ticker, 
                          first_date, last_date, 
@@ -246,7 +246,7 @@ df_yearly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2021-07-28)
 #> ✓    - got 2912 valid rows (2010-01-04 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- Good stuff!
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 
 df_allfreq <- bind_rows(
   list(df_dailly, df_weekly, df_monthly, df_yearly)
@@ -293,15 +293,15 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/3) Fetching data for FB
 #> ✓    - found cache file (2021-04-20 --> 2021-07-28)
 #> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ (2/3) Fetching data for GM
 #> ✓    - found cache file (2021-04-20 --> 2021-07-28)
 #> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- All OK!
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ (3/3) Fetching data for MMM
 #> ✓    - found cache file (2021-04-20 --> 2021-07-28)
 #> ✓    - got 70 valid rows (2021-04-20 --> 2021-07-28)
-#> ✓    - got 100% of valid prices -- All OK!
+#> ✓    - got 100% of valid prices -- Nice!
 
 l_wide <- yf_converto_to_wide(df_yf_multiple)
 
