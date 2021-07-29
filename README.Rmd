@@ -6,7 +6,8 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
+  collapse = TRUE, 
+  results = 'hold',
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -52,7 +53,7 @@ devtools::install_github('msperlin/yfR')
 
 ### Fetching a single stock price
 
-```{r}
+```{r, results='hold'}
 library(yfR)
 
 my_ticker <- 'FB'
@@ -173,6 +174,6 @@ l_wide <- yf_converto_to_wide(df_yf_multiple)
 
 prices_wide <- l_wide$price_adjusted
 
-knitr::kable(prices_wide)
+knitr::kable(head(prices_wide)) 
 ```
 
