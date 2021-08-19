@@ -1,7 +1,7 @@
 #' Main function to download financial data from Yahoo Finance
 #'
 #' Based primarly on a set of tickers and time period, this function will download stock price data from Yahoo Finance
-#' for each ticker and return a report of the process, along with the actual data in the long (default) dataframe format.
+#' using \link[quantmod]{getSymbols}. It organizes the data in the long format and outputs a "stacked" dataframe.
 #'
 #' @section Warning:
 #'
@@ -24,7 +24,7 @@
 #' @param do_cache Use cache system? (default = TRUE)
 #' @param cache_folder Where to save cache files? (default = yfR::yf_get_default_cache_folder() )
 #' @param do_parallel Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.
-#' @param be_quiet Logical for printing statements (default = FALSE)
+#' @param be_quiet Flag for not printing statements (default = FALSE)
 #'
 #' @return A dataframe with stock prices.
 #'
@@ -97,15 +97,15 @@ yf_get_data <- function(tickers,
   last_date <- as.Date(last_date)
 
   if (class(first_date) != "Date") {
-    stop("ERROR: Input first_date should be of class Date")
+    stop("ERROR: cant change class of first_date to 'Date'")
   }
 
   if (class(last_date) != "Date") {
-    stop("ERROR: Input first_date should be of class Date")
+    stop("ERROR: cant change class of last_date to 'Date'")
   }
 
   if (last_date <= first_date) {
-    stop("The last_date is lower (less recent) or equal to first_date. Check your dates!")
+    stop("The last_date is lower (less recent) or equal to first_date. Please check your dates!")
   }
 
   # check tickers
@@ -138,13 +138,15 @@ yf_get_data <- function(tickers,
     )
     cli::cli_h2(my_msg)
 
-    my_msg <- set_cli_msg("Downloading data for benchmark ticker {bench_ticker}",
+    my_msg <- set_cli_msg(
+      "Downloading data for benchmark ticker {bench_ticker}",
       level = 0
     )
 
     cli::cli_alert_info(my_msg)
   }
 
+  # get benchmark ticker data
   df_bench <- yf_get_single_ticker(
     ticker = bench_ticker,
     i_ticker = 1,
@@ -157,7 +159,6 @@ yf_get_data <- function(tickers,
   )
 
   # run fetching function for all tickers
-
   l_args <- list(
     ticker = tickers,
     i_ticker = seq_along(tickers),
@@ -181,22 +182,20 @@ yf_get_data <- function(tickers,
     # find number of used cores
     formals_parallel <- formals(future::plan())
     used_workers <- formals_parallel$workers
-
     available_cores <- future::availableCores()
 
     if (!be_quiet) {
-      message(paste0(
-        "\nRunning parallel BatchGetSymbols with ",
-        used_workers, " cores (",
-        available_cores, " available)"
-      ), appendLF = FALSE)
-      message("\n\n", appendLF = FALSE)
-    }
 
+      cli::cli_h3(
+      'Running parallel BatchGetSymbols with ',
+      '{used_workers} cores ({available_cores} available)')
+
+    }
 
     # test if plan() was called
     msg <- utils::capture.output(future::plan())
 
+    # "sequential is the default plan
     flag <- stringr::str_detect(msg[1], "sequential")
 
     if (flag) {
@@ -205,17 +204,17 @@ yf_get_data <- function(tickers,
         "A suggestion, write the following lines:\n\n",
         "future::plan(future::multisession, workers = floor(parallel::detectCores()/2))",
         "\n\n",
-        "The last line should be placed just before calling BatchGetSymbols. ",
+        "The last line should be placed just before calling get_yf_data. ",
         "Notice it will use half of your available cores so that your OS has some room to breathe."
       ))
     }
-
 
     my_l <- furrr::future_pmap(
       .l = l_args,
       .f = yf_get_single_ticker,
       .progress = TRUE
     )
+
   }
 
   df_tickers <- dplyr::bind_rows(purrr::map(my_l, 1))
@@ -242,13 +241,14 @@ yf_get_data <- function(tickers,
 
   # change frequency of data
   if (freq_data != "daily") {
+
     str_freq <- switch(freq_data,
       "weekly" = "1 week",
       "monthly" = "1 month",
       "yearly" = "1 year"
     )
 
-    # find the first monday (see issue #19)
+    # find the first monday (see issue #19 in BatchGetsymbols)
     # https://github.com/msperlin/BatchGetSymbols/issues/19
     temp_dates <- seq(as.Date(paste0(lubridate::year(min(df_tickers$ref_date)), "-01-01")),
       as.Date(paste0(lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")),
@@ -260,19 +260,21 @@ yf_get_data <- function(tickers,
     first_monday <- temp_dates[first_idx]
 
     if (freq_data == "weekly") {
+
       # make sure it starts on a monday
       week_vec <- seq(first_monday,
         as.Date(paste0(lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")),
         by = str_freq
       )
     } else {
+
       # every other case
       week_vec <- seq(as.Date(paste0(lubridate::year(min(df_tickers$ref_date)), "-01-01")),
         as.Date(paste0(lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")),
         by = str_freq
       )
-    }
 
+    }
 
     df_tickers$time_groups <- cut(
       x = df_tickers$ref_date,
@@ -293,7 +295,6 @@ yf_get_data <- function(tickers,
         volume = sum(volume, na.rm = TRUE)
       ) |>
         dplyr::ungroup() |>
-      # select(-time_groups) |>
         dplyr::arrange(ticker, ref_date)
 
     } else if (how_to_aggregate == "last") {
@@ -310,15 +311,12 @@ yf_get_data <- function(tickers,
         price_adjusted = last(price_adjusted)
       ) |>
         dplyr::ungroup() |>
-      # select(-time_groups) |>
         dplyr::arrange(ticker, ref_date)
 
     }
 
-
     df_tickers$time_groups <- NULL
   }
-
 
   # calculate returns
   df_tickers$ret_adjusted_prices <- calc_ret(

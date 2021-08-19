@@ -1,6 +1,6 @@
-#' Transforms a dataframe in the long format to a list of dataframes in the wide format
+#' Transforms a long (stacked) dataframe into a list of wide dataframes
 #'
-#' @param df_in Dataframe in the long format (probably the output of yf_get_data())
+#' @param df_in dataframe in the long format (probably the output of yf_get_data())
 #'
 #' @return A list with dataframes in the wide format (each element is a different column)
 #' @export
@@ -17,10 +17,12 @@ yf_converto_to_wide <- function(df_in) {
   my_cols <- setdiff(names(df_in), cols_to_keep)
 
   fct_format_wide <- function(name_in, df_in) {
+
     temp_df <- df_in[, c("ref_date", "ticker", name_in)]
 
     temp_df_wide <- tidyr::spread(temp_df, ticker, name_in)
     return(temp_df_wide)
+
   }
 
   l_out <- lapply(my_cols, fct_format_wide, df_in = df_in)

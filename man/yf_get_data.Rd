@@ -51,14 +51,14 @@ aggregated values such as price_adjusted.}
 
 \item{do_parallel}{Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.}
 
-\item{be_quiet}{Logical for printing statements (default = FALSE)}
+\item{be_quiet}{Flag for not printing statements (default = FALSE)}
 }
 \value{
 A dataframe with stock prices.
 }
 \description{
 Based primarly on a set of tickers and time period, this function will download stock price data from Yahoo Finance
-for each ticker and return a report of the process, along with the actual data in the long (default) dataframe format.
+using \link[quantmod]{getSymbols}. It organizes the data in the long format and outputs a "stacked" dataframe.
 }
 \section{Warning}{
 

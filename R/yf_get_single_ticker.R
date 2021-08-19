@@ -1,4 +1,4 @@
-# An improved version of function quantmod::getSymbols
+# function to import a single ticker
 yf_get_single_ticker <- function(ticker,
                                  i_ticker,
                                  length_tickers,
@@ -183,7 +183,7 @@ yf_get_single_ticker <- function(ticker,
     )
   }
 
-  # control for ERROr in download
+  # control for ERROR in download
   if (nrow(df_out) == 0) {
     dl_status <- "NOT OK"
     n_rows <- 0
