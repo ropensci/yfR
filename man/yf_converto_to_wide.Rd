@@ -2,18 +2,18 @@
 % Please edit documentation in R/yf_convert_to_wide.R
 \name{yf_converto_to_wide}
 \alias{yf_converto_to_wide}
-\title{Transforms a dataframe in the long format to a list of dataframes in the wide format}
+\title{Transforms a long (stacked) dataframe into a list of wide dataframes}
 \usage{
 yf_converto_to_wide(df_in)
 }
 \arguments{
-\item{df_in}{Dataframe in the long format (probably the output of yf_get_data())}
+\item{df_in}{dataframe in the long format (probably the output of yf_get_data())}
 }
 \value{
 A list with dataframes in the wide format (each element is a different column)
 }
 \description{
-Transforms a dataframe in the long format to a list of dataframes in the wide format
+Transforms a long (stacked) dataframe into a list of wide dataframes
 }
 \examples{
 

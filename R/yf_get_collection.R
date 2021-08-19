@@ -1,7 +1,7 @@
-#' Downloads collection of data from Yahoo Finance
+#' Downloads a collection of data from Yahoo Finance
 #'
-#' This function will use a preestablished collection data, such as index components and
-#' will downloads all data from Yahoo Finance using \code{\link{yf_get_data}}.
+#' This function will use a set collection of YF data, such as index components and
+#' will download all data from Yahoo Finance using \code{\link{yf_get_data}}.
 #'
 #' @param collection A collection to fetch data (e.g. "SP500", "IBOV", "FTSE" )
 #' @inheritParams yf_get_data
@@ -19,6 +19,7 @@ yf_get_collection <- function(collection,
                               last_date = Sys.Date(),
                               do_cache = TRUE,
                               cache_folder = yf_get_default_cache_folder()) {
+
   av_collections <- yf_get_available_collections()
   if (!collection %in% av_collections) {
     stop(

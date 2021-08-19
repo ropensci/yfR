@@ -6,9 +6,11 @@ fix_ticker_name <- function(ticker_in) {
   return(ticker_in)
 }
 
-# a morale phrase
+# returns a morale phrase (used in cli messages)
 get_morale_boost <- function() {
+
   my_user <- Sys.getenv("USER")
+
   morale_boost <- c(
     rep(c(
       "All OK!",
@@ -38,8 +40,8 @@ date_to_unix <- function(date_in) {
   return(out)
 }
 
-
 unix_to_date <- function(unix_date_in) {
+
   out <- as.Date(as.POSIXct(unix_date_in, origin="1970-01-01"))
 
   return(out)

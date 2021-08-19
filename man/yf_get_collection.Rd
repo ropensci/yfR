@@ -2,7 +2,7 @@
 % Please edit documentation in R/yf_get_collection.R
 \name{yf_get_collection}
 \alias{yf_get_collection}
-\title{Downloads collection of data from Yahoo Finance}
+\title{Downloads a collection of data from Yahoo Finance}
 \usage{
 yf_get_collection(
   collection,
@@ -27,8 +27,8 @@ yf_get_collection(
 A dataframe with financial prices from collection
 }
 \description{
-This function will use a preestablished collection data, such as index components and
-will downloads all data from Yahoo Finance using \code{\link{yf_get_data}}.
+This function will use a set collection of YF data, such as index components and
+will download all data from Yahoo Finance using \code{\link{yf_get_data}}.
 }
 \examples{
 \dontrun{
