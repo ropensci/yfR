@@ -21,7 +21,6 @@ test_that(desc = "Test of yf_get_collection() - nrow > 0?", {
 
   my_collection <- "IBOV"
 
-
   df <- yf_get_collection(collection = my_collection,
                           first_date = Sys.Date() - 10,
                           last_date = Sys.Date())

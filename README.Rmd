@@ -22,20 +22,38 @@ knitr::opts_chunk$set(
 
 # Motivation
 
-`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols). It provides access to daily stock prices from [Yahoo Finance](https://finance.yahoo.com/), a vast repository with data around the globe. Moreover, *yfR* allows large scales downloads of data, using a local caching system for speeding up the process.
+`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols). In a nutshell, it provides access to daily stock prices from [Yahoo Finance](https://finance.yahoo.com/), a vast repository with financial data around the globe. Moreover, *yfR* allows large scales downloads of data, using a local caching system for speeding up the process.
 
 ## Features
 
 - Fetchs daily/weekly/monthly/annual stock prices (and returns) from yahoo finance and returns a dataframe in the long format;
+
+- A new feature called "collection" allows for easier download of multiple tickers from a particular market/index;
+
 - A session-persistent smart cache system is available by default. This means that the data is saved locally and only missing portions are downloaded, if needed.
+
 - All dates are compared to a benchmark ticker such as SP500 and, whenever an individual asset does not have a sufficient number of dates, the software drops it from the output. This means you can choose to ignore tickers with high number of missing dates.
+
 - A customized function called `yf_convert_to_wide()` can transform the long dataframe into a wide format (tickers as columns). 
+
 - Parallel computing is available, speeding up the data importation process.
+
+## Differences from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)
+
+- All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::get_yf_data` is `first_date`, and not `first.date` (originally from `BatchGetSymbols::BatchGetSymbols`)
+
+- All function have been renamed for a common API notation. For example, `BatchGetSymbols::BatchGetSymbols` is now `yfR::get_yf_data`.
+
+- The output is always a tibble with the price data (and not a list). If one wants the tibble with a summary of the importing process, it is available as an attribute of the output (see function `base::attributes`)
+
+- A new feature called "collection", which allows for easy download of a collection of tickers. For example, you can download price data for all components of the SP500 by simply calling `yfR::yf_get_collection("SP500")`.
+
+- New status messages using package `cli`
 
 
 ## Warnings
 
-- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources, specially for long time periods with lots of corporate events. My advice is to never use the data of individual stocks in production (research papers or academic documents -- thesis and dissertations). 
+- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources, specially for long time periods with lots of corporate events. My advice is to **never use the yahoo finance data of individual stocks in production** (research papers or academic documents -- thesis and dissertations). 
 
 
 ## Installation
@@ -56,14 +74,17 @@ devtools::install_github('msperlin/yfR')
 ```{r, results='hold'}
 library(yfR)
 
+# set options for algorithm
 my_ticker <- 'FB'
 first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 
+# fetch data
 df_yf <- yf_get_data(tickers = my_ticker, 
                      first_date = first_date,
                      last_date = last_date)
 
+# output is a tibble with data
 str(df_yf)
 ```
 
