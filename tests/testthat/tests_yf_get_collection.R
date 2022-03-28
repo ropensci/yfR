@@ -1,30 +1,47 @@
 library(testthat)
 library(yfR)
 
-test_that(desc = 'Test of yf_get_available_indices', {
+# test data in all indices
+available_indices <- yf_get_available_indices()
 
-  available <- yf_get_available_indices()
-  expect_true(length(available) > 0)
+for (i_index in available_indices) {
 
-})
+  test_that(
+    stringr::str_glue("Test of yf_get_index_comp() for {i_index}"), {
 
-yf_get_available_collections <- function() {
-  available_indices <- yf_get_available_indices()
+      skip_if_offline()
+      skip_on_cran() # too heavy for cran
 
-  return(available_indices)
+      expect_true(tibble::is_tibble(yf_get_index_comp(i_index)))
+
+      }
+  )
+
+  Sys.sleep(1)
+
 }
 
-test_that(desc = "Test of yf_get_collection() - nrow > 0?", {
 
-  skip_if_offline()
-  skip_on_cran() # too heavy for cran
+# parallel test for collections
+n_workers <- floor(parallel::detectCores()/2)
+future::plan(future::multisession, workers = n_workers)
+available_collections <- yf_get_available_collections()
 
-  my_collection <- "IBOV"
+for (i_collection in available_collections) {
 
-  df <- yf_get_collection(collection = my_collection,
-                          first_date = Sys.Date() - 10,
-                          last_date = Sys.Date())
+  test_that(desc = "Test of yf_get_collection() for {i_collection}", {
 
-  expect_true(nrow(df) > 0)
+    skip_if_offline()
+    skip_on_cran() # too heavy for cran
 
-})
+    df <- yf_get_collection(collection = i_collection,
+                            first_date = Sys.Date() - 30,
+                            last_date = Sys.Date(),
+                            do_parallel = TRUE)
+
+    expect_true(nrow(df) > 0)
+
+  })
+
+}
+

@@ -6,12 +6,6 @@
 \usage{
 yf_get_default_cache_folder()
 }
-\value{
-path of default cache folder
-}
 \description{
 Returns the default folder for caching
-}
-\examples{
-yf_get_default_cache_folder
 }

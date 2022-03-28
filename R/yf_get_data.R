@@ -16,11 +16,10 @@
 #' @param freq_data Frequency of financial data: 'daily' (default), 'weekly', 'monthly', 'yearly'
 #' @param how_to_aggregate Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
 #'  For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
-#'  aggregated values such as price_adjusted.
+#'  aggregated values such as price_adjusted. (Default = "last")
 #' @param thresh_bad_data A percentage threshold for defining bad data. The dates of the benchmark ticker are compared to each asset. If the percentage of non-missing dates
 #'  with respect to the benchmark ticker is lower than thresh_bad_data, the function will ignore the asset (default = 0.75)
 #' @param do_complete_data Return a complete/balanced dataset? If TRUE, all missing pairs of ticker-date will be replaced by NA or closest price (see input do_fill_missing_prices). Default = FALSE.
-#' @param do_fill_missing_prices Finds all missing prices and replaces them by their closest price with preference for the previous price. This ensures a balanced dataset for all assets, without any NA. Default = TRUE.
 #' @param do_cache Use cache system? (default = TRUE)
 #' @param cache_folder Where to save cache files? (default = yfR::yf_get_default_cache_folder() )
 #' @param do_parallel Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.
@@ -31,6 +30,8 @@
 #' @export
 #'
 #' @examples
+#'
+#' \dontrun{
 #' tickers <- c("FB", "MMM")
 #'
 #' first_date <- Sys.Date() - 15
@@ -44,6 +45,7 @@
 #' )
 #'
 #' print(df_yf)
+#' }
 yf_get_data <- function(tickers,
                         first_date = Sys.Date() - 30,
                         last_date = Sys.Date(),
@@ -53,7 +55,6 @@ yf_get_data <- function(tickers,
                         freq_data = "daily",
                         how_to_aggregate = "last",
                         do_complete_data = FALSE,
-                        do_fill_missing_prices = TRUE,
                         do_cache = TRUE,
                         cache_folder = yf_get_default_cache_folder(),
                         do_parallel = FALSE,
@@ -179,16 +180,18 @@ yf_get_data <- function(tickers,
     )
   } else {
 
-    # find number of used cores
-    formals_parallel <- formals(future::plan())
-    used_workers <- formals_parallel$workers
+    # 20220328 DOES not work (cant find way to fetch used workds from plan())
+
+    #formals_parallel <- formals(future::plan())
+    #used_workers <- formals_parallel$workers
+
+    # available cores in R session
     available_cores <- future::availableCores()
 
     if (!be_quiet) {
 
       cli::cli_h3(
-      'Running parallel BatchGetSymbols with ',
-      '{used_workers} cores ({available_cores} available)')
+      'Running yfR with parallel backend ({available_cores} cores available)')
 
     }
 
@@ -212,11 +215,19 @@ yf_get_data <- function(tickers,
     my_l <- furrr::future_pmap(
       .l = l_args,
       .f = yf_get_single_ticker,
-      .progress = TRUE
+      .progress = TRUE,
+      # fixes warnings about seed
+      .options = furrr::furrr_options(seed = TRUE)
     )
 
   }
 
+  # remove any element that is not a list
+  l_classes <- sapply(my_l, class)
+  idx <- l_classes != "list"
+  my_l[idx] <- NULL
+
+  cli::cli_alert_info('Binding price data')
   df_tickers <- dplyr::bind_rows(purrr::map(my_l, 1))
   df_control <- dplyr::bind_rows(purrr::map(my_l, 2))
 
@@ -227,16 +238,26 @@ yf_get_data <- function(tickers,
 
   # do data manipulations
   if (do_complete_data) {
-    df_tickers <- tidyr::complete(df_tickers, ticker, ref_date)
 
-    l_out <- lapply(
-      split(df_tickers,
-        f = df_tickers$ticker
-      ),
-      df_fill_na
-    )
+    cli::cli_alert_info("\nCompleting data points (do_complete_data = TRUE)")
 
-    df_tickers <- dplyr::bind_rows(l_out)
+    # makes sure each data point is ticker/ref_date is available in output
+    # missing are set as NA
+    df_tickers <- df_tickers |>
+      dplyr::group_by(ticker, ref_date) |>
+      tidyr::complete()
+
+    # REMOVED in 20220328: let user decide what to do with NA
+    # older version did set closest price as substitute for all NA prices
+
+    # l_out <- lapply(
+    #   split(df_tickers,
+    #     f = df_tickers$ticker
+    #   ),
+    #   df_fill_na
+    # )
+    #
+    # df_tickers <- dplyr::bind_rows(l_out)
   }
 
   # change frequency of data
@@ -283,6 +304,7 @@ yf_get_data <- function(tickers,
     )
 
     if (how_to_aggregate == "first") {
+
       df_tickers <- df_tickers |>
       dplyr::group_by(time_groups, ticker) |>
       dplyr::summarise(
@@ -344,7 +366,7 @@ yf_get_data <- function(tickers,
     df_tickers = df_tickers
   )
 
-  # check if cach folder is tempdir()
+  # check if cache folder is tempdir()
   flag <- stringr::str_detect(cache_folder,
     pattern = stringr::fixed(tempdir())
   )

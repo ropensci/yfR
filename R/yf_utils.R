@@ -82,8 +82,6 @@ df_fill_na <- function(df_in) {
     "price_close", "price_adjusted"
   )
 
-  print(unique(df_in$ticker))
-
   cols_to_adjust <- cols_to_adjust[cols_to_adjust %in% names(df_in)]
 
   # function for finding closest price
@@ -148,12 +146,6 @@ set_cli_msg <- function(msg_in, level = 0) {
 }
 
 #' Returns the default folder for caching
-#'
-#' @return path of default cache folder
-#' @export
-#'
-#' @examples
-#' yf_get_default_cache_folder
 yf_get_default_cache_folder <- function() {
   path_cache <- file.path(tempdir(), "yf_cache")
   return(path_cache)

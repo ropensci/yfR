@@ -1,3 +1,3 @@
-## Version 0.5 (2021-06-30)
+## Version 0.0.1 (2022-03-28)
 
 - First version, ported from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)

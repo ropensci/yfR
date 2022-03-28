@@ -20,12 +20,26 @@ yf_converto_to_wide <- function(df_in) {
 
     temp_df <- df_in[, c("ref_date", "ticker", name_in)]
 
-    temp_df_wide <- tidyr::spread(temp_df, ticker, name_in)
+    # make sure data points are unique
+    # always fetch first ocurrence
+    temp_df <- unique(temp_df)
+
+
+
+
+    temp_df_wide <- tidyr::pivot_wider(
+      data = temp_df,
+      names_from = ticker,
+      values_from = tidyr::all_of(name_in)
+      )
+
     return(temp_df_wide)
 
   }
 
-  l_out <- lapply(my_cols, fct_format_wide, df_in = df_in)
+  l_out <- lapply(my_cols,
+                  fct_format_wide,
+                  df_in = df_in)
   names(l_out) <- my_cols
 
   return(l_out)

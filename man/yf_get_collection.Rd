@@ -8,6 +8,7 @@ yf_get_collection(
   collection,
   first_date = Sys.Date() - 15,
   last_date = Sys.Date(),
+  do_parallel = FALSE,
   do_cache = TRUE,
   cache_folder = yf_get_default_cache_folder()
 )
@@ -18,6 +19,8 @@ yf_get_collection(
 \item{first_date}{The first date of query (Date or character as YYYY-MM-DD)}
 
 \item{last_date}{The last date of query (Date or character as YYYY-MM-DD)}
+
+\item{do_parallel}{Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.}
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 

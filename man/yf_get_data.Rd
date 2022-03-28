@@ -14,7 +14,6 @@ yf_get_data(
   freq_data = "daily",
   how_to_aggregate = "last",
   do_complete_data = FALSE,
-  do_fill_missing_prices = TRUE,
   do_cache = TRUE,
   cache_folder = yf_get_default_cache_folder(),
   do_parallel = FALSE,
@@ -39,11 +38,9 @@ with respect to the benchmark ticker is lower than thresh_bad_data, the function
 
 \item{how_to_aggregate}{Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
 For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
-aggregated values such as price_adjusted.}
+aggregated values such as price_adjusted. (Default = "last")}
 
 \item{do_complete_data}{Return a complete/balanced dataset? If TRUE, all missing pairs of ticker-date will be replaced by NA or closest price (see input do_fill_missing_prices). Default = FALSE.}
-
-\item{do_fill_missing_prices}{Finds all missing prices and replaces them by their closest price with preference for the previous price. This ensures a balanced dataset for all assets, without any NA. Default = TRUE.}
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 

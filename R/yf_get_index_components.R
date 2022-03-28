@@ -21,11 +21,13 @@ yf_get_index_comp <- function(mkt_index,
   }
 
   if (mkt_index == "IBOV") {
+
     df_index <- yf_get_ibov_stocks(
       do_cache = do_cache,
       cache_folder = cache_folder,
       max_tries = 10
     )
+
   } else if (mkt_index == "SP500") {
 
     df_index <- yf_get_sp500_stocks()
@@ -79,32 +81,29 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
   }
 
   for (i_try in seq(max_tries)) {
-    myUrl <- "http://bvmf.bmfbovespa.com.br/indices/ResumoCarteiraTeorica.aspx?Indice=IBOV&idioma=pt-br"
-    # df_ibov_comp <- XML::readHTMLTable(myUrl)[[1]]
-    df_ibov_comp <- as.data.frame(XML::readHTMLTable(myUrl))
+    my_url <- 'https://en.wikipedia.org/wiki/List_of_companies_listed_on_B3'
+
+    df_ibov_comp <- rvest::read_html(my_url) |>
+      rvest::html_table()
+
+    df_ibov_comp <- df_ibov_comp[[1]]
 
     Sys.sleep(0.5)
 
     if (nrow(df_ibov_comp) > 0) break()
   }
 
-  names(df_ibov_comp) <- c(
-    "ticker", "company", "type_stock",
-    "quantity", "percentage_participation"
-  )
-
-  df_ibov_comp$quantity <- as.numeric(stringr::str_replace_all(
-    df_ibov_comp$quantity,
-    stringr::fixed("."), ""
-  ))
-  df_ibov_comp$percentage_participation <- as.numeric(stringr::str_replace_all(
-    df_ibov_comp$percentage_participation,
-    stringr::fixed(","), "."
-  ))
-
-  df_ibov_comp$ref.date <- Sys.Date()
-  df_ibov_comp$ticker <- as.character(df_ibov_comp$ticker)
-  df_ibov_comp$index <- "IBOV"
+  df_ibov_comp <- df_ibov_comp |>
+    dplyr::rename(ticker = Ticker,
+                  company = Company,
+                  industry = Industry) |>
+    dplyr::mutate(type_stock = NA,
+                  quantity = NA,
+                  percentage_participation = NA,
+                  ref_date = Sys.Date(),
+                  index = "IBOV",
+                  index_ticker = "^BVSP") |>
+    dplyr::select(-Headquarters)
 
   if (do_cache) {
     if (!dir.exists(cache_folder)) dir.create(cache_folder)
@@ -140,18 +139,22 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
   my_xpath <- '//*[@id="mw-content-text"]/div/table[2]' # old xpath
   my_xpath <- '//*[@id="constituents"]'
   df_ftse <- my_url |>
-  rvest::read_html() |>
-  rvest::html_nodes(xpath = my_xpath) |>
-  rvest::html_table()
+    rvest::read_html() |>
+    rvest::html_nodes(xpath = my_xpath) |>
+    rvest::html_table()
 
   df_ftse <- df_ftse[[1]]
 
   df_ftse <- df_ftse |>
-  dplyr::rename(
-    ticker = EPIC,
-    company = Company,
-    sector = names(df_ftse)[3]
-  )
+    dplyr::rename(
+      ticker = EPIC,
+      company = Company,
+      sector = names(df_ftse)[3]
+    ) |>
+    dplyr::mutate(
+      index = "FTSE",
+      index_ticker = "^FTSE"
+    )
 
   if (do_cache) {
     if (!dir.exists(cache_folder)) dir.create(cache_folder)
@@ -187,19 +190,23 @@ yf_get_sp500_stocks <- function(do_cache = TRUE,
   read_html <- 0 # fix for global variable nagging from BUILD
   my_xpath <- '//*[@id="constituents"]'
   df_sp500 <- my_url |>
-  rvest::read_html() |>
-  rvest::html_nodes(xpath = my_xpath) |>
-  rvest::html_table(fill = TRUE)
+    rvest::read_html() |>
+    rvest::html_nodes(xpath = my_xpath) |>
+    rvest::html_table(fill = TRUE)
 
   df_sp500 <- df_sp500[[1]]
 
   df_sp500 <- df_sp500  |>
-  dplyr::rename(
-    ticker = Symbol,
-    company = Security,
-    sector = `GICS Sector`
-  ) |>
-  dplyr::select(ticker, company, sector)
+    dplyr::rename(
+      ticker = Symbol,
+      company = Security,
+      sector = `GICS Sector`
+    ) |>
+    dplyr::select(ticker, company, sector) |>
+    dplyr::mutate(
+      index = "SP500",
+      index_ticker = "^GSPC"
+    )
 
 
   if (do_cache) {

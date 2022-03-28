@@ -77,6 +77,12 @@ yf_get_clean_data <- function(ticker,
     dplyr::arrange(ref_date) |> # make sure dates are sorted,
     dplyr::relocate(ticker, ref_date) # relocate columns
 
+  # make sure each date point only appear once
+  # sometimes, yf outputs two data points for the same date (not sure why)
+  df_raw <- df_raw |>
+    dplyr::group_by(ref_date, ticker) |>
+    dplyr::filter(dplyr::row_number()==1)
+
   # make sure only unique rows are returned
   df_raw <- unique(df_raw)
 
