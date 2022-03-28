@@ -3,14 +3,14 @@ Title: Downloads and Organizes Financial Data from Yahoo Finance
 Version: 0.0.1
 Authors@R: person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre"))
 Description: Makes it easy to download financial data from Yahoo Finance <https://finance.yahoo.com/>, 
- a vast repository of stock price data accross multiple financial exchanges. The package offers a local caching system
+ a vast repository of stock price data across multiple financial exchanges. The package offers a local caching system
  and support for parallel computation.
 Date: 2022-03-28
 URL: https://github.com/msperlin/yfR
 BugReports: https://github.com/msperlin/yfR/issues
 Depends:
     R (>= 4.1)
-Imports: stringr, curl, XML, tidyr, 
+Imports: stringr, curl, tidyr, 
     lubridate, furrr, purrr, future, tibble, zoo, crayon,
     cli, readr, rvest, dplyr, quantmod
 License: GPL-2

@@ -22,25 +22,30 @@ knitr::opts_chunk$set(
 
 # Motivation
 
-`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols). In a nutshell, it provides access to daily stock prices from [Yahoo Finance](https://finance.yahoo.com/), a vast repository with financial data around the globe. Moreover, *yfR* allows large scales downloads of data, using a local caching system for speeding up the process.
+`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols). In a nutshell, it provides access to daily stock prices from [Yahoo Finance](https://finance.yahoo.com/), a vast repository with financial data around the globe. Moreover, *yfR* allows large scale download of data using a local caching system and parallel computing for speeding up the process.
+
 
 ## Features
 
-- Fetchs daily/weekly/monthly/annual stock prices (and returns) from yahoo finance and returns a dataframe in the long format;
+- Fetchs daily/weekly/monthly/annual stock prices (and returns) from yahoo finance and returns a dataframe in the long format (stacked data);
 
-- A new feature called "collection" allows for easier download of multiple tickers from a particular market/index;
+- A new feature called "collections" facilitates download of multiple tickers from a particular market/index. You can, for example, download data for all stocks in the SP500 index with a simple call to `yf_get_collection()`;
 
 - A session-persistent smart cache system is available by default. This means that the data is saved locally and only missing portions are downloaded, if needed.
 
 - All dates are compared to a benchmark ticker such as SP500 and, whenever an individual asset does not have a sufficient number of dates, the software drops it from the output. This means you can choose to ignore tickers with high number of missing dates.
 
-- A customized function called `yf_convert_to_wide()` can transform the long dataframe into a wide format (tickers as columns). 
+- A customized function called `yf_convert_to_wide()` can transform the long dataframe into a wide format (tickers as columns). The output is a list where each element is a different target variable (prices, returns, volumes).
 
 - Parallel computing is available, speeding up the data importation process.
 
 ## Differences from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)
 
-- All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::get_yf_data` is `first_date`, and not `first.date` (originally from `BatchGetSymbols::BatchGetSymbols`)
+Package `BatchgetSymbols` was developed in 2016, with bad choices from my part. As I learned more about R, my code became better and easier to maintain. However, it is impossible to keep compatibility with the changes I wanted to make, which is why I created a new package. 
+
+Here are the main differences from one to the other: 
+
+- All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::get_yf_data` is `first_date`, and not `first.date` (see arguments in `BatchGetSymbols::BatchGetSymbols`)
 
 - All function have been renamed for a common API notation. For example, `BatchGetSymbols::BatchGetSymbols` is now `yfR::get_yf_data`.
 
@@ -48,7 +53,7 @@ knitr::opts_chunk$set(
 
 - A new feature called "collection", which allows for easy download of a collection of tickers. For example, you can download price data for all components of the SP500 by simply calling `yfR::yf_get_collection("SP500")`.
 
-- New status messages using package `cli`
+- New and prettier status messages using package `cli`
 
 
 ## Warnings
