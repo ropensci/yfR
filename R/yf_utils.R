@@ -1,4 +1,5 @@
-# Fix name of ticker
+#' Fix name of ticker
+#' @noRd
 fix_ticker_name <- function(ticker_in) {
   ticker_in <- stringr::str_replace_all(ticker_in, stringr::fixed("."), "")
   ticker_in <- stringr::str_replace_all(ticker_in, stringr::fixed("^"), "")
@@ -6,7 +7,8 @@ fix_ticker_name <- function(ticker_in) {
   return(ticker_in)
 }
 
-# returns a morale phrase (used in cli messages)
+#' returns a morale phrase (used in cli messages)
+#' @noRd
 get_morale_boost <- function() {
 
   my_user <- Sys.getenv("USER")
@@ -30,7 +32,8 @@ get_morale_boost <- function() {
   return(stringr::str_glue(sample(morale_boost, 1)))
 }
 
-# converts date to unix (to yf query)
+#' Converts string date to unix date (used in yf query)
+#' @noRd
 date_to_unix <- function(date_in) {
   out <- as.numeric(
     as.POSIXct(as.Date(date_in,
@@ -40,6 +43,8 @@ date_to_unix <- function(date_in) {
   return(out)
 }
 
+#' Converses unix date to string date
+#' @noRd
 unix_to_date <- function(unix_date_in) {
 
   out <- as.Date(as.POSIXct(unix_date_in, origin="1970-01-01"))
@@ -47,7 +52,8 @@ unix_to_date <- function(unix_date_in) {
   return(out)
 }
 
-# Function to calculate returns from a price and ticker vector
+#' Function to calculate returns from a price and ticker vector
+#' @noRd
 calc_ret <- function(P,
                      tickers = rep("ticker", length(P)),
                      type_return = "arit") {
@@ -64,7 +70,8 @@ calc_ret <- function(P,
   return(ret)
 }
 
-# Replaces NA values in dataframe for closest price
+#' Replaces NA values in dataframe for closest price
+#' @noRd
 df_fill_na <- function(df_in) {
 
   # find NAs or volume == 0
@@ -101,7 +108,7 @@ df_fill_na <- function(df_in) {
   for (i_col in cols_to_adjust) {
 
     # adjust for NA by replacing values
-    idx_to_use <- sapply(idx_na,
+    idx_to_use <- purrr::map_int(idx_na,
       fct_find_min_dist,
       vec_comp = idx_not_na
     )
@@ -116,24 +123,28 @@ df_fill_na <- function(df_in) {
 }
 
 
+# 20220328 - removed startup message due to ropensci practices
+# https://devguide.ropensci.org/building.html
 
-.onAttach <- function(libname, pkgname) {
-  do_color <- crayon::make_style("#FF4141")
-  this_pkg <- "yfR"
+# .onAttach <- function(libname, pkgname) {
+#   do_color <- crayon::make_style("#FF4141")
+#   this_pkg <- "yfR"
+#
+#   if (interactive()) {
+#     msg <- paste0(
+#       "\nWant to learn more about ",
+#       do_color(this_pkg), " (formerly BatchGetSymbols) and other R packages for Finance and Economics?",
+#       " Check out my book at ", do_color("https://www.msperlin.com/afedR/")
+#     )
+#   } else {
+#     msg <- ""
+#   }
+#
+#   packageStartupMessage(msg)
+# }
 
-  if (interactive()) {
-    msg <- paste0(
-      "\nWant to learn more about ",
-      do_color(this_pkg), " (formerly BatchGetSymbols) and other R packages for Finance and Economics?",
-      " Check out my book at ", do_color("https://www.msperlin.com/afedR/")
-    )
-  } else {
-    msg <- ""
-  }
-
-  packageStartupMessage(msg)
-}
-
+#' Function for building cli messages
+#' @noRd
 set_cli_msg <- function(msg_in, level = 0) {
   tab_in <- paste0(rep("\t", level), collapse = "")
 
@@ -147,6 +158,8 @@ set_cli_msg <- function(msg_in, level = 0) {
 
 #' Returns the default folder for caching
 yf_get_default_cache_folder <- function() {
+
   path_cache <- file.path(tempdir(), "yf_cache")
+
   return(path_cache)
 }

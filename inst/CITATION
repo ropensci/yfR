@@ -1,0 +1,13 @@
+citHeader("To cite yfR in publications use:")
+
+citEntry(
+  entry    = "Manual",
+  title    = "yfR: Downloads and Organizes Financial Data from Yahoo Finance",
+  author = "Marcelo Perlin",
+  year = "2021",
+  note = "R package version 0.0.1",
+  url = "https://github.com/msperlin/yfR",
+  textVersion = "Makes it easy to download financial data from Yahoo Finance <https://finance.yahoo.com/>,
+ a vast repository of stock price data across multiple financial exchanges. The package offers a local caching system
+ and support for parallel computation."
+)

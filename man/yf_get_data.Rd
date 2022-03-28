@@ -65,6 +65,8 @@ a split or dividends event happens in between cache files.
 }
 
 \examples{
+
+\dontrun{
 tickers <- c("FB", "MMM")
 
 first_date <- Sys.Date() - 15
@@ -78,4 +80,5 @@ df_yf <- yf_get_data(
 )
 
 print(df_yf)
+}
 }

@@ -15,8 +15,6 @@ knitr::opts_chunk$set(
 ```
 
 <!-- badges: start -->
-[![](https://cranlogs.r-pkg.org/badges/yfR)](https://CRAN.R-project.org/yfR)
-
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
@@ -43,7 +41,7 @@ knitr::opts_chunk$set(
 
 Package `BatchgetSymbols` was developed in 2016, with bad choices from my part. As I learned more about R, my code became better and easier to maintain. However, it is impossible to keep compatibility with the changes I wanted to make, which is why I created a new package. 
 
-Here are the main differences from one to the other: 
+Here are the main differences between `yfR` (new) and `BatchGetSymbols` (old): 
 
 - All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::get_yf_data` is `first_date`, and not `first.date` (see arguments in `BatchGetSymbols::BatchGetSymbols`)
 

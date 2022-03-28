@@ -60,7 +60,8 @@ yf_get_available_indices <- function() {
 }
 
 
-# Function to download the current components of the Ibovespa index from B3 website
+#' Function to download the current components of the
+#' Ibovespa index from B3 website
 yf_get_ibov_stocks <- function(do_cache = TRUE,
                                cache_folder = yf_get_default_cache_folder(),
                                max_tries = 10) {
@@ -116,7 +117,9 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
   return(df_ibov_comp)
 }
 
-# Function to download the current components of the FTSE100 index from Wikipedia
+#' Function to download the current components of the
+#' FTSE100 index from Wikipedia
+#' @noRd
 yf_get_ftse_stocks <- function(do_cache = TRUE,
                                cache_folder = yf_get_default_cache_folder()) {
   cache_file <- file.path(
@@ -167,7 +170,8 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
   return(df_ftse)
 }
 
-# Function to download the current components of the SP500 index from Wikipedia
+#' Function to download the current components of the SP500 index from Wikipedia
+#' @noRd
 yf_get_sp500_stocks <- function(do_cache = TRUE,
                                 cache_folder = yf_get_default_cache_folder()) {
   cache_file <- file.path(
@@ -219,6 +223,8 @@ yf_get_sp500_stocks <- function(do_cache = TRUE,
   return(df_sp500)
 }
 
+#' Builds index message
+#' @noRd
 yf_get_message_index <- function(index_in, my_n) {
   cli::cli_alert_success("Got {index_in} composition with {my_n} rows")
   return(invisible(TRUE))

@@ -1,4 +1,5 @@
-# function to import a single ticker
+#' function to import a single ticker
+#' @noRd
 yf_get_single_ticker <- function(ticker,
                                  i_ticker,
                                  length_tickers,
@@ -28,9 +29,9 @@ yf_get_single_ticker <- function(ticker,
 
       df_cache_files <- dplyr::tibble(
         filename = my_cache_files,
-        ticker = sapply(l_out, function(x) x[1]),
-        first_date = as.Date(sapply(l_out, function(x) x[3])),
-        last_date = as.Date(sapply(l_out, function(x) x[4]))
+        ticker = purrr::map_chr(l_out, function(x) x[1]),
+        first_date = as.Date(purrr::map_chr(l_out, function(x) x[3])),
+        last_date = as.Date(purrr::map_chr(l_out, function(x) x[4]))
       )
     } else {
       # empty df

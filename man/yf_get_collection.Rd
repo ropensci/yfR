@@ -14,7 +14,8 @@ yf_get_collection(
 )
 }
 \arguments{
-\item{collection}{A collection to fetch data (e.g. "SP500", "IBOV", "FTSE" )}
+\item{collection}{A collection to fetch data (e.g. "SP500", "IBOV", "FTSE" ).
+See function \code{\link{yf_get_available_collections}} for finding all available collections}
 
 \item{first_date}{The first date of query (Date or character as YYYY-MM-DD)}
 
@@ -34,6 +35,7 @@ This function will use a set collection of YF data, such as index components and
 will download all data from Yahoo Finance using \code{\link{yf_get_data}}.
 }
 \examples{
+
 \dontrun{
 df_yf <- yf_get_collection("IBOV")
 }

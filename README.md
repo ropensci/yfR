@@ -2,8 +2,6 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-[![](https://cranlogs.r-pkg.org/badges/yfR)](https://CRAN.R-project.org/yfR)
-
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -54,7 +52,8 @@ my part. As I learned more about R, my code became better and easier to
 maintain. However, it is impossible to keep compatibility with the
 changes I wanted to make, which is why I created a new package.
 
-Here are the main differences from one to the other:
+Here are the main differences between `yfR` (new) and `BatchGetSymbols`
+(old):
 
 -   All input arguments are now formatted as “snake_case” and not
     “dot.case”. For example, the argument for the first date of data
@@ -123,7 +122,7 @@ df_yf <- yf_get_data(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 20 valid rows (2022-02-28 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ Binding price data
 
 # output is a tibble with data
@@ -163,17 +162,17 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
 #> ✓    - found cache file (2022-02-28 --> 2022-03-25)
 #> !    - need new data (cache doesnt match query)
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ (2/3) Fetching data for GM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ (3/3) Fetching data for MMM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Good stuff!
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ Binding price data
 
 
@@ -231,7 +230,7 @@ df_dailly <- yf_get_data(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ Binding price data
   
   
@@ -246,7 +245,7 @@ df_weekly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-25)
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
 
 df_monthly <- yf_get_data(tickers = my_ticker, 
@@ -260,7 +259,7 @@ df_monthly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-25)
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 df_yearly <- yf_get_data(tickers = my_ticker, 
@@ -274,7 +273,7 @@ df_yearly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-25)
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Youre doing good!
+#> ✓    - got 100% of valid prices -- Good stuff!
 #> ℹ Binding price data
 
 df_allfreq <- bind_rows(
@@ -326,7 +325,7 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
 #> ℹ (2/3) Fetching data for GM
 #> ✓    - found cache file (2021-12-20 --> 2022-03-25)
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ (3/3) Fetching data for MMM
 #> ✓    - found cache file (2021-12-20 --> 2022-03-25)
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)

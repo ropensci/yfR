@@ -3,3 +3,6 @@
 ^codemeta\.json$
 ^README\.Rmd$
 .github
+Contributing.md
+docs
+pkgdown

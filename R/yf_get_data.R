@@ -223,7 +223,7 @@ yf_get_data <- function(tickers,
   }
 
   # remove any element that is not a list
-  l_classes <- sapply(my_l, class)
+  l_classes <- purrr::map_chr(my_l, class)
   idx <- l_classes != "list"
   my_l[idx] <- NULL
 

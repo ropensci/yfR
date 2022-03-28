@@ -1,4 +1,5 @@
-# Get clean data from yahoo/google using quantmod::getSymbols
+#' Get clean data from yahoo/google using quantmod::getSymbols
+#' @noRd
 yf_get_clean_data <- function(ticker,
                               first_date,
                               last_date) {
@@ -19,9 +20,9 @@ yf_get_clean_data <- function(ticker,
                                          src = 'yahoo',
                                          from = first_date,
                                          to = last_date,
-                                         auto.assign = F)
+                                         auto.assign = FALSE)
         },
-          silent = T)
+          silent = TRUE)
 
     }) })
 

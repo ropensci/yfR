@@ -11,4 +11,5 @@ my_globals <- c(
   "time_groups", "first", "last",
   "Ticker", "Industry", "Headquarters"
 )
+
 utils::globalVariables(my_globals)
