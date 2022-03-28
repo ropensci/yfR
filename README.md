@@ -15,16 +15,20 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols).
 In a nutshell, it provides access to daily stock prices from [Yahoo
 Finance](https://finance.yahoo.com/), a vast repository with financial
-data around the globe. Moreover, *yfR* allows large scales downloads of
-data, using a local caching system for speeding up the process.
+data around the globe. Moreover, *yfR* allows large scale download of
+data using a local caching system and parallel computing for speeding up
+the process.
 
 ## Features
 
 -   Fetchs daily/weekly/monthly/annual stock prices (and returns) from
-    yahoo finance and returns a dataframe in the long format;
+    yahoo finance and returns a dataframe in the long format (stacked
+    data);
 
--   A new feature called “collection” allows for easier download of
-    multiple tickers from a particular market/index;
+-   A new feature called “collections” facilitates download of multiple
+    tickers from a particular market/index. You can, for example,
+    download data for all stocks in the SP500 index with a simple call
+    to `yf_get_collection()`;
 
 -   A session-persistent smart cache system is available by default.
     This means that the data is saved locally and only missing portions
@@ -36,17 +40,26 @@ data, using a local caching system for speeding up the process.
     choose to ignore tickers with high number of missing dates.
 
 -   A customized function called `yf_convert_to_wide()` can transform
-    the long dataframe into a wide format (tickers as columns).
+    the long dataframe into a wide format (tickers as columns). The
+    output is a list where each element is a different target variable
+    (prices, returns, volumes).
 
 -   Parallel computing is available, speeding up the data importation
     process.
 
 ## Differences from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)
 
+Package `BatchgetSymbols` was developed in 2016, with bad choices from
+my part. As I learned more about R, my code became better and easier to
+maintain. However, it is impossible to keep compatibility with the
+changes I wanted to make, which is why I created a new package.
+
+Here are the main differences from one to the other:
+
 -   All input arguments are now formatted as “snake_case” and not
     “dot.case”. For example, the argument for the first date of data
     importation in `yfR::get_yf_data` is `first_date`, and not
-    `first.date` (originally from `BatchGetSymbols::BatchGetSymbols`)
+    `first.date` (see arguments in `BatchGetSymbols::BatchGetSymbols`)
 
 -   All function have been renamed for a common API notation. For
     example, `BatchGetSymbols::BatchGetSymbols` is now
@@ -62,7 +75,7 @@ data, using a local caching system for speeding up the process.
     for all components of the SP500 by simply calling
     `yfR::yf_get_collection("SP500")`.
 
--   New status messages using package `cli`
+-   New and prettier status messages using package `cli`
 
 ## Warnings
 
@@ -114,50 +127,19 @@ df_yf <- yf_get_data(tickers = my_ticker,
 #> ℹ Binding price data
 
 # output is a tibble with data
-str(df_yf)
-#> grouped_df [20 × 10] (S3: grouped_df/tbl_df/tbl/data.frame)
-#>  $ ticker             : chr [1:20] "FB" "FB" "FB" "FB" ...
-#>  $ ref_date           : Date[1:20], format: "2022-02-28" "2022-03-01" ...
-#>  $ price_open         : num [1:20] 208 210 205 209 202 ...
-#>  $ price_high         : num [1:20] 213 212 209 209 206 ...
-#>  $ price_low          : num [1:20] 207 202 202 201 199 ...
-#>  $ price_close        : num [1:20] 211 203 208 203 200 ...
-#>  $ volume             : num [1:20] 34239800 27094900 29452100 27263500 32130900 ...
-#>  $ price_adjusted     : num [1:20] 211 203 208 203 200 ...
-#>  $ ret_adjusted_prices: num [1:20] NA -0.0357 0.0227 -0.0247 -0.0143 ...
-#>  $ ret_closing_prices : num [1:20] NA -0.0357 0.0227 -0.0247 -0.0143 ...
-#>  - attr(*, "groups")= tibble [20 × 3] (S3: tbl_df/tbl/data.frame)
-#>   ..$ ref_date: Date[1:20], format: "2022-02-28" "2022-03-01" ...
-#>   ..$ ticker  : chr [1:20] "FB" "FB" "FB" "FB" ...
-#>   ..$ .rows   : list<int> [1:20] 
-#>   .. ..$ : int 1
-#>   .. ..$ : int 2
-#>   .. ..$ : int 3
-#>   .. ..$ : int 4
-#>   .. ..$ : int 5
-#>   .. ..$ : int 6
-#>   .. ..$ : int 7
-#>   .. ..$ : int 8
-#>   .. ..$ : int 9
-#>   .. ..$ : int 10
-#>   .. ..$ : int 11
-#>   .. ..$ : int 12
-#>   .. ..$ : int 13
-#>   .. ..$ : int 14
-#>   .. ..$ : int 15
-#>   .. ..$ : int 16
-#>   .. ..$ : int 17
-#>   .. ..$ : int 18
-#>   .. ..$ : int 19
-#>   .. ..$ : int 20
-#>   .. ..@ ptype: int(0) 
-#>   ..- attr(*, ".drop")= logi TRUE
-#>  - attr(*, "df_control")= tibble [1 × 5] (S3: tbl_df/tbl/data.frame)
-#>   ..$ ticker              : chr "FB"
-#>   ..$ dl_status           : chr "OK"
-#>   ..$ n_rows              : int 20
-#>   ..$ perc_benchmark_dates: num 1
-#>   ..$ threshold_decision  : chr "KEEP"
+head(df_yf)
+#> # A tibble: 6 × 10
+#> # Groups:   ref_date, ticker [6]
+#>   ticker ref_date   price_open price_high price_low price_close   volume
+#>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
+#> 1 FB     2022-02-28       208.       213.      207.        211. 34239800
+#> 2 FB     2022-03-01       210.       212.      202.        203. 27094900
+#> 3 FB     2022-03-02       205.       209.      202.        208. 29452100
+#> 4 FB     2022-03-03       209.       209.      201.        203. 27263500
+#> 5 FB     2022-03-04       202.       206.      199.        200. 32130900
+#> 6 FB     2022-03-07       201.       201.      187.        187. 38560600
+#> # … with 3 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
+#> #   ret_closing_prices <dbl>
 ```
 
 ### Fetching many stock prices
@@ -181,7 +163,7 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
 #> ✓    - found cache file (2022-02-28 --> 2022-03-25)
 #> !    - need new data (cache doesnt match query)
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ (2/3) Fetching data for GM
 #> !    - not cached
 #> ✓    - cache saved successfully
@@ -191,10 +173,9 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
+#> ✓    - got 100% of valid prices -- Good stuff!
 #> ℹ Binding price data
 
-str(df_yf_multiple)
 
 p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
                        color = ticker)) + 
@@ -204,130 +185,6 @@ p
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
-
-    #> grouped_df [201 × 10] (S3: grouped_df/tbl_df/tbl/data.frame)
-    #>  $ ticker             : chr [1:201] "FB" "FB" "FB" "FB" ...
-    #>  $ ref_date           : Date[1:201], format: "2021-12-20" "2021-12-21" ...
-    #>  $ price_open         : num [1:201] 330 326 334 330 339 ...
-    #>  $ price_high         : num [1:201] 330 336 335 337 348 ...
-    #>  $ price_low          : num [1:201] 323 324 328 328 338 ...
-    #>  $ price_close        : num [1:201] 325 334 330 335 346 ...
-    #>  $ volume             : num [1:201] 17901800 16116800 16764600 13987700 17795000 ...
-    #>  $ price_adjusted     : num [1:201] 325 334 330 335 346 ...
-    #>  $ ret_adjusted_prices: num [1:201] NA 0.0269 -0.0112 0.0145 0.0326 ...
-    #>  $ ret_closing_prices : num [1:201] NA 0.0269 -0.0112 0.0145 0.0326 ...
-    #>  - attr(*, "groups")= tibble [201 × 3] (S3: tbl_df/tbl/data.frame)
-    #>   ..$ ref_date: Date[1:201], format: "2021-12-20" "2021-12-20" ...
-    #>   ..$ ticker  : chr [1:201] "FB" "GM" "MMM" "FB" ...
-    #>   ..$ .rows   : list<int> [1:201] 
-    #>   .. ..$ : int 1
-    #>   .. ..$ : int 68
-    #>   .. ..$ : int 135
-    #>   .. ..$ : int 2
-    #>   .. ..$ : int 69
-    #>   .. ..$ : int 136
-    #>   .. ..$ : int 3
-    #>   .. ..$ : int 70
-    #>   .. ..$ : int 137
-    #>   .. ..$ : int 4
-    #>   .. ..$ : int 71
-    #>   .. ..$ : int 138
-    #>   .. ..$ : int 5
-    #>   .. ..$ : int 72
-    #>   .. ..$ : int 139
-    #>   .. ..$ : int 6
-    #>   .. ..$ : int 73
-    #>   .. ..$ : int 140
-    #>   .. ..$ : int 7
-    #>   .. ..$ : int 74
-    #>   .. ..$ : int 141
-    #>   .. ..$ : int 8
-    #>   .. ..$ : int 75
-    #>   .. ..$ : int 142
-    #>   .. ..$ : int 9
-    #>   .. ..$ : int 76
-    #>   .. ..$ : int 143
-    #>   .. ..$ : int 10
-    #>   .. ..$ : int 77
-    #>   .. ..$ : int 144
-    #>   .. ..$ : int 11
-    #>   .. ..$ : int 78
-    #>   .. ..$ : int 145
-    #>   .. ..$ : int 12
-    #>   .. ..$ : int 79
-    #>   .. ..$ : int 146
-    #>   .. ..$ : int 13
-    #>   .. ..$ : int 80
-    #>   .. ..$ : int 147
-    #>   .. ..$ : int 14
-    #>   .. ..$ : int 81
-    #>   .. ..$ : int 148
-    #>   .. ..$ : int 15
-    #>   .. ..$ : int 82
-    #>   .. ..$ : int 149
-    #>   .. ..$ : int 16
-    #>   .. ..$ : int 83
-    #>   .. ..$ : int 150
-    #>   .. ..$ : int 17
-    #>   .. ..$ : int 84
-    #>   .. ..$ : int 151
-    #>   .. ..$ : int 18
-    #>   .. ..$ : int 85
-    #>   .. ..$ : int 152
-    #>   .. ..$ : int 19
-    #>   .. ..$ : int 86
-    #>   .. ..$ : int 153
-    #>   .. ..$ : int 20
-    #>   .. ..$ : int 87
-    #>   .. ..$ : int 154
-    #>   .. ..$ : int 21
-    #>   .. ..$ : int 88
-    #>   .. ..$ : int 155
-    #>   .. ..$ : int 22
-    #>   .. ..$ : int 89
-    #>   .. ..$ : int 156
-    #>   .. ..$ : int 23
-    #>   .. ..$ : int 90
-    #>   .. ..$ : int 157
-    #>   .. ..$ : int 24
-    #>   .. ..$ : int 91
-    #>   .. ..$ : int 158
-    #>   .. ..$ : int 25
-    #>   .. ..$ : int 92
-    #>   .. ..$ : int 159
-    #>   .. ..$ : int 26
-    #>   .. ..$ : int 93
-    #>   .. ..$ : int 160
-    #>   .. ..$ : int 27
-    #>   .. ..$ : int 94
-    #>   .. ..$ : int 161
-    #>   .. ..$ : int 28
-    #>   .. ..$ : int 95
-    #>   .. ..$ : int 162
-    #>   .. ..$ : int 29
-    #>   .. ..$ : int 96
-    #>   .. ..$ : int 163
-    #>   .. ..$ : int 30
-    #>   .. ..$ : int 97
-    #>   .. ..$ : int 164
-    #>   .. ..$ : int 31
-    #>   .. ..$ : int 98
-    #>   .. ..$ : int 165
-    #>   .. ..$ : int 32
-    #>   .. ..$ : int 99
-    #>   .. ..$ : int 166
-    #>   .. ..$ : int 33
-    #>   .. ..$ : int 100
-    #>   .. ..$ : int 167
-    #>   .. .. [list output truncated]
-    #>   .. ..@ ptype: int(0) 
-    #>   ..- attr(*, ".drop")= logi TRUE
-    #>  - attr(*, "df_control")= tibble [3 × 5] (S3: tbl_df/tbl/data.frame)
-    #>   ..$ ticker              : chr [1:3] "FB" "GM" "MMM"
-    #>   ..$ dl_status           : chr [1:3] "OK" "OK" "OK"
-    #>   ..$ n_rows              : int [1:3] 67 67 67
-    #>   ..$ perc_benchmark_dates: num [1:3] 1 1 1
-    #>   ..$ threshold_decision  : chr [1:3] "KEEP" "KEEP" "KEEP"
 
 ### Fetching collections of prices
 
@@ -340,7 +197,7 @@ library(yfR)
 
 df_yf <- yf_get_collection("SP500")
 
-str(df_yf)
+head(df_yf)
 ```
 
 ### Fetching daily/weekly/monthly/yearly price data
@@ -374,7 +231,7 @@ df_dailly <- yf_get_data(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- All OK!
+#> ✓    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
   
   
@@ -389,7 +246,7 @@ df_weekly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-25)
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 df_monthly <- yf_get_data(tickers = my_ticker, 
@@ -403,7 +260,7 @@ df_monthly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-25)
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Nice!
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ Binding price data
 
 df_yearly <- yf_get_data(tickers = my_ticker, 
@@ -417,7 +274,7 @@ df_yearly <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/1) Fetching data for GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-25)
 #> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- All OK!
+#> ✓    - got 100% of valid prices -- Youre doing good!
 #> ℹ Binding price data
 
 df_allfreq <- bind_rows(
@@ -465,15 +322,15 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
 #> ℹ (1/3) Fetching data for FB
 #> ✓    - found cache file (2021-12-20 --> 2022-03-25)
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ (2/3) Fetching data for GM
 #> ✓    - found cache file (2021-12-20 --> 2022-03-25)
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- All OK!
+#> ✓    - got 100% of valid prices -- Well done msperlin!
 #> ℹ (3/3) Fetching data for MMM
 #> ✓    - found cache file (2021-12-20 --> 2022-03-25)
 #> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 l_wide <- yf_converto_to_wide(df_yf_multiple)

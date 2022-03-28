@@ -90,7 +90,7 @@ df_yf <- yf_get_data(tickers = my_ticker,
                      last_date = last_date)
 
 # output is a tibble with data
-str(df_yf)
+head(df_yf)
 ```
 
 ### Fetching many stock prices
@@ -107,7 +107,6 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 
-str(df_yf_multiple)
 
 p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
                        color = ticker)) + 
@@ -127,7 +126,7 @@ library(yfR)
 
 df_yf <- yf_get_collection("SP500")
 
-str(df_yf)
+head(df_yf)
 ```
 
 
