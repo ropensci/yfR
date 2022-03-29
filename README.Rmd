@@ -39,7 +39,7 @@ knitr::opts_chunk$set(
 
 ## Differences from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)
 
-Package `BatchgetSymbols` was developed in 2016, with bad choices from my part. As I learned more about R, my code became better and easier to maintain. However, it is impossible to keep compatibility with the changes I wanted to make, which is why I created a new package. 
+Package `BatchgetSymbols` was developed back in 2016, with many bad choices from my part. Since then, I learned more about R and its ecosystem, resulting in better and more maintainable code. However, it is impossible to keep compatibility with the changes I wanted to make, which is why I created the new package `yfR`. 
 
 Here are the main differences between `yfR` (new) and `BatchGetSymbols` (old): 
 
