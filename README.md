@@ -25,6 +25,8 @@ innovation in `yfR` is in the organization of the imported financial
 data and using local caching system and parallel computing for speeding
 up large scale download of datasets from Yahoo Finance.
 
+See full documentation [here](https://github.com/msperlin/yfR).
+
 ## Features
 
 -   Fetchs daily/weekly/monthly/annual stock prices/returns from yahoo
@@ -136,7 +138,7 @@ df_yf <- yf_get(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 22 valid rows (2022-02-28 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Nice!
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ Binding price data
 
 # output is a tibble with data
@@ -176,19 +178,19 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
 #> ✓    - found cache file (2022-02-28 --> 2022-03-29)
 #> !    - need new data (cache doesnt match query)
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ (2/3) Fetching data for ',
 #> 'GM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ (3/3) Fetching data for ',
 #> 'MMM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
+#> ✓    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 
@@ -250,7 +252,7 @@ df_dailly <- yf_get(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Mas bah tche, que coisa linda!
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ Binding price data
 
 
@@ -266,7 +268,7 @@ df_weekly <- yf_get(tickers = my_ticker,
 #> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-29)
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 100% of valid prices -- Good stuff!
 #> ℹ Binding price data
 
 df_monthly <- yf_get(tickers = my_ticker, 
@@ -281,7 +283,7 @@ df_monthly <- yf_get(tickers = my_ticker,
 #> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-29)
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 df_yearly <- yf_get(tickers = my_ticker, 
@@ -296,7 +298,7 @@ df_yearly <- yf_get(tickers = my_ticker,
 #> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-29)
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ Binding price data
 
 df_allfreq <- bind_rows(
@@ -345,17 +347,17 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
 #> 'FB
 #> ✓    - found cache file (2021-12-20 --> 2022-03-29)
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Good stuff!
+#> ✓    - got 100% of valid prices -- Mais contente que cusco de cozinheira!
 #> ℹ (2/3) Fetching data for ',
 #> 'GM
 #> ✓    - found cache file (2021-12-20 --> 2022-03-29)
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 100% of valid prices -- Nice!
 #> ℹ (3/3) Fetching data for ',
 #> 'MMM
 #> ✓    - found cache file (2021-12-20 --> 2022-03-29)
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ Binding price data
 
 l_wide <- yf_convert_to_wide(df_yf_multiple)

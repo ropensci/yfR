@@ -25,6 +25,7 @@ knitr::opts_chunk$set(
 
 Package `yfR` is based on [quantmod](https://www.quantmod.com/) and used its main function for fetching data from Yahoo Finance. The main innovation in `yfR` is in the organization of the imported financial data and using local caching system and parallel computing for speeding up large scale download of datasets from Yahoo Finance.
 
+See full documentation [here](https://github.com/msperlin/yfR).
 
 ## Features
 

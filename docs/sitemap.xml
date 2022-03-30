@@ -25,7 +25,16 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/yf_collection_get.html</loc>
+  </url>
+  <url>
+    <loc>/reference/yf_convert_to_wide.html</loc>
+  </url>
+  <url>
     <loc>/reference/yf_converto_to_wide.html</loc>
+  </url>
+  <url>
+    <loc>/reference/yf_get.html</loc>
   </url>
   <url>
     <loc>/reference/yf_get_available_collections.html</loc>
@@ -37,7 +46,7 @@
     <loc>/reference/yf_get_collection.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get.html</loc>
+    <loc>/reference/yf_get_data.html</loc>
   </url>
   <url>
     <loc>/reference/yf_get_default_cache_folder.html</loc>
