@@ -12,7 +12,7 @@ Depends:
 Imports: stringr, curl, tidyr, 
     lubridate, furrr, purrr, future, tibble, zoo,
     cli, readr, rvest, dplyr, quantmod
-License: GPL-2
+License: MIT + file LICENSE
 LazyData: true
 RoxygenNote: 7.1.2
 Suggests: 
