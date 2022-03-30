@@ -249,17 +249,16 @@ yf_get_single_ticker <- function(ticker,
       }
     }
 
-    if (!be_quiet) {
-      df.control <- tibble::tibble(
+    df_control <- tibble::tibble(
         ticker = ticker,
         dl_status,
         n_rows,
         perc_benchmark_dates,
         threshold_decision
       )
-    }
 
-    l_out <- list(df.tickers = df_out, df.control = df.control)
+    l_out <- list(df_tickers = df_out,
+                  df_control = df_control)
 
     return(l_out)
   }

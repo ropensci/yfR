@@ -17,16 +17,16 @@ yf_get_clean_data <- function(ticker,
     suppressWarnings({
       try({
         df_raw <- quantmod::getSymbols(Symbols = ticker,
-                                         src = 'yahoo',
-                                         from = first_date,
-                                         to = last_date,
-                                         auto.assign = FALSE)
-        },
-          silent = TRUE)
+                                       src = 'yahoo',
+                                       from = first_date,
+                                       to = last_date,
+                                       auto.assign = FALSE)
+      },
+      silent = TRUE)
 
     }) })
 
-   # PREVIOUS code using json
+  # PREVIOUS code using json
 
   # my_cols <- readr::cols(
   #   Date = readr::col_date(format = ""),
@@ -64,14 +64,15 @@ yf_get_clean_data <- function(ticker,
 
   # fix df_raw
   ref_date <- zoo::index(df_raw)
-  df_raw <- dplyr::as_tibble(df_raw) |>
+  df_raw <- as.data.frame(df_raw) |>
     dplyr::mutate(ref_date = ref_date,
-           ticker = ticker) |>
-    dplyr::as_tibble(df_raw[!duplicated(zoo::index(df_raw))])
+                  ticker = ticker)
+  #|>
+   # as.data.frame(df_raw[!duplicated(zoo::index(df_raw))])
 
   colnames(df_raw) <- c('price_open','price_high','price_low',
-                        'price_close','volume','price_adjusted',
-                        'ref_date', 'ticker')
+                     'price_close','volume','price_adjusted',
+                     'ref_date', 'ticker')
 
   # further organization
   df_raw <- df_raw |>

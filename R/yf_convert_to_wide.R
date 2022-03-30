@@ -9,9 +9,9 @@
 #'
 #' my_f <- system.file("extdata/example_data_yfR.rds", package = "yfR")
 #' df_tickers <- readRDS(my_f)
-#' l_wide <- yf_converto_to_wide(df_tickers)
+#' l_wide <- yf_convert_to_wide(df_tickers)
 #' l_wide
-yf_converto_to_wide <- function(df_in) {
+yf_convert_to_wide <- function(df_in) {
   cols_to_keep <- c("ref_date", "ticker")
 
   my_cols <- setdiff(names(df_in), cols_to_keep)

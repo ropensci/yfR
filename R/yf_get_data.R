@@ -247,17 +247,6 @@ yf_get_data <- function(tickers,
       dplyr::group_by(ticker, ref_date) |>
       tidyr::complete()
 
-    # REMOVED in 20220328: let user decide what to do with NA
-    # older version did set closest price as substitute for all NA prices
-
-    # l_out <- lapply(
-    #   split(df_tickers,
-    #     f = df_tickers$ticker
-    #   ),
-    #   df_fill_na
-    # )
-    #
-    # df_tickers <- dplyr::bind_rows(l_out)
   }
 
   # change frequency of data
@@ -309,11 +298,11 @@ yf_get_data <- function(tickers,
       dplyr::group_by(time_groups, ticker) |>
       dplyr::summarise(
         ref_date = min(ref_date),
-        price_open = first(price_open),
+        price_open = dplyr::first(price_open),
         price_high = max(price_high),
         price_low = min(price_low),
-        price_close = first(price_close),
-        price_adjusted = first(price_adjusted),
+        price_close = dplyr::first(price_close),
+        price_adjusted = dplyr::first(price_adjusted),
         volume = sum(volume, na.rm = TRUE)
       ) |>
         dplyr::ungroup() |>
@@ -326,11 +315,11 @@ yf_get_data <- function(tickers,
       dplyr::summarise(
         ref_date = min(ref_date),
         volume = sum(volume, na.rm = TRUE),
-        price_open = first(price_open),
+        price_open = dplyr::last(price_open),
         price_high = max(price_high),
         price_low = min(price_low),
-        price_close = last(price_close),
-        price_adjusted = last(price_adjusted)
+        price_close = dplyr::last(price_close),
+        price_adjusted = dplyr::last(price_adjusted)
       ) |>
         dplyr::ungroup() |>
         dplyr::arrange(ticker, ref_date)
@@ -382,8 +371,10 @@ yf_get_data <- function(tickers,
     ))
   }
 
-  # setup final output
-  df_out <- df_tickers
+  # setup final output (ungrouped tibble)
+  df_out <- df_tickers |>
+    dplyr::ungroup()
+
   attributes(df_out)$df_control <- df_control
 
   # enable dplyr group message

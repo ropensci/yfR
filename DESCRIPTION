@@ -15,8 +15,11 @@ Imports: stringr, curl, tidyr,
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2
-Suggests: knitr,
+Suggests: 
+    knitr,
     rmarkdown,
-    testthat,
-    ggplot2
+    testthat (>= 3.0.0),
+    ggplot2,
+    covr
 VignetteBuilder: knitr
+Config/testthat/edition: 3

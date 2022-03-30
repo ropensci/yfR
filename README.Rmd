@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Codecov test coverage](https://codecov.io/gh/msperlin/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/yfR?branch=main)
 <!-- badges: end -->
 
 # Motivation
@@ -193,7 +194,7 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 
-l_wide <- yf_converto_to_wide(df_yf_multiple)
+l_wide <- yf_convert_to_wide(df_yf_multiple)
 
 prices_wide <- l_wide$price_adjusted
 

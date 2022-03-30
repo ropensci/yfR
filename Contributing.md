@@ -1,6 +1,6 @@
 # Contributing to `yfR`
 
-<!-- This CONTRIBUTING.md is adapted from https://gist.github.com/peterdesmet/e90a1b0dc17af6c12daf6e8b2f044e7c -->
+<!-- This CONTRIBUTING.md is (shamelessly) "adapted" from https://gist.github.com/peterdesmet/e90a1b0dc17af6c12daf6e8b2f044e7c -->
 
 First, thanks for the interest in the package and apraisal for contributing to the codebase of `yfR. 
 

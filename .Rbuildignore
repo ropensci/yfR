@@ -6,3 +6,5 @@
 Contributing.md
 docs
 pkgdown
+^codecov\.yml$
+^\.github$

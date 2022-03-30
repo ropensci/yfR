@@ -70,58 +70,6 @@ calc_ret <- function(P,
   return(ret)
 }
 
-#' Replaces NA values in dataframe for closest price
-#' @noRd
-df_fill_na <- function(df_in) {
-
-  # find NAs or volume == 0
-  idx_na <- which(is.na(df_in$price_adjusted) |
-    df_in$volume == 0)
-
-  if (length(idx_na) == 0) {
-    return(df_in)
-  }
-
-  idx_not_na <- which(!is.na(df_in$price_adjusted))
-
-  cols_to_adjust <- c(
-    "price_open", "price_high", "price_low",
-    "price_close", "price_adjusted"
-  )
-
-  cols_to_adjust <- cols_to_adjust[cols_to_adjust %in% names(df_in)]
-
-  # function for finding closest price
-  fct_find_min_dist <- function(x, vec_comp) {
-    if (x < min(vec_comp)) {
-      return(min(vec_comp))
-    }
-
-    my_dist <- x - vec_comp
-    my_dist <- my_dist[my_dist > 0]
-
-    idx <- which.min(my_dist)[1]
-
-    return(vec_comp[idx])
-  }
-
-  for (i_col in cols_to_adjust) {
-
-    # adjust for NA by replacing values
-    idx_to_use <- purrr::map_int(idx_na,
-      fct_find_min_dist,
-      vec_comp = idx_not_na
-    )
-
-    df_in[idx_na, i_col] <- unlist(df_in[idx_to_use, i_col])
-  }
-
-  # adjust volume for all NAs
-  df_in$volume[idx_na] <- 0
-
-  return(df_in)
-}
-
 
 # 20220328 - removed startup message due to ropensci practices
 # https://devguide.ropensci.org/building.html
@@ -157,6 +105,7 @@ set_cli_msg <- function(msg_in, level = 0) {
 }
 
 #' Returns the default folder for caching
+#' @noRd
 yf_get_default_cache_folder <- function() {
 
   path_cache <- file.path(tempdir(), "yf_cache")
