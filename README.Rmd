@@ -198,6 +198,6 @@ l_wide <- yf_convert_to_wide(df_yf_multiple)
 
 prices_wide <- l_wide$price_adjusted
 
-knitr::kable(head(prices_wide)) 
+head(prices_wide)
 ```
 

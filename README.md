@@ -5,6 +5,8 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Codecov test
+coverage](https://codecov.io/gh/msperlin/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/yfR?branch=main)
 <!-- badges: end -->
 
 # Motivation
@@ -47,10 +49,11 @@ the process.
 
 ## Differences from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)
 
-Package `BatchgetSymbols` was developed in 2016, with bad choices from
-my part. As I learned more about R, my code became better and easier to
-maintain. However, it is impossible to keep compatibility with the
-changes I wanted to make, which is why I created a new package.
+Package `BatchgetSymbols` was developed back in 2016, with many bad
+choices from my part. Since then, I learned more about R and its
+ecosystem, resulting in better and more maintainable code. However, it
+is impossible to keep compatibility with the changes I wanted to make,
+which is why I created the new package `yfR`.
 
 Here are the main differences between `yfR` (new) and `BatchGetSymbols`
 (old):
@@ -103,7 +106,6 @@ Here are the main differences between `yfR` (new) and `BatchGetSymbols`
 
 ``` r
 library(yfR)
-#> 
 
 # set options for algorithm
 my_ticker <- 'FB'
@@ -115,20 +117,19 @@ df_yf <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-02-26 --> 2022-03-28 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-02-28 --> 2022-03-30 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 20 valid rows (2022-02-28 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 22 valid rows (2022-02-28 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Nice!
 #> ℹ Binding price data
 
 # output is a tibble with data
 head(df_yf)
 #> # A tibble: 6 × 10
-#> # Groups:   ref_date, ticker [6]
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
 #> 1 FB     2022-02-28       208.       213.      207.        211. 34239800
@@ -155,24 +156,24 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 3 stocks | 2021-12-18 --> 2022-03-28 (100 days) ──
+#> ── Running yfR for 3 stocks | 2021-12-20 --> 2022-03-30 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/3) Fetching data for FB
-#> ✓    - found cache file (2022-02-28 --> 2022-03-25)
+#> ✓    - found cache file (2022-02-28 --> 2022-03-29)
 #> !    - need new data (cache doesnt match query)
-#> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ (2/3) Fetching data for GM
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ (3/3) Fetching data for MMM
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ Binding price data
 
 
@@ -223,13 +224,13 @@ df_dailly <- yf_get_data(tickers = my_ticker,
                          freq_data = 'daily') |>
   mutate(freq = 'daily')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-28 (4469 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
 #> !    - not cached
 #> ✓    - cache saved successfully
-#> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
+#> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
 #> ✓    - got 100% of valid prices -- Got it!
 #> ℹ Binding price data
   
@@ -239,13 +240,13 @@ df_weekly <- yf_get_data(tickers = my_ticker,
                          freq_data = 'weekly') |>
   mutate(freq = 'weekly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-28 (4469 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
-#> ✓    - found cache file (2010-01-04 --> 2022-03-25)
-#> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - found cache file (2010-01-04 --> 2022-03-29)
+#> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ Binding price data
 
 df_monthly <- yf_get_data(tickers = my_ticker, 
@@ -253,13 +254,13 @@ df_monthly <- yf_get_data(tickers = my_ticker,
                          freq_data = 'monthly') |>
   mutate(freq = 'monthly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-28 (4469 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
-#> ✓    - found cache file (2010-01-04 --> 2022-03-25)
-#> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - found cache file (2010-01-04 --> 2022-03-29)
+#> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ Binding price data
 
 df_yearly <- yf_get_data(tickers = my_ticker, 
@@ -267,13 +268,13 @@ df_yearly <- yf_get_data(tickers = my_ticker,
                          freq_data = 'yearly') |>
   mutate(freq = 'yearly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-28 (4469 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
-#> ✓    - found cache file (2010-01-04 --> 2022-03-25)
-#> ✓    - got 3079 valid rows (2010-01-04 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Good stuff!
+#> ✓    - found cache file (2010-01-04 --> 2022-03-29)
+#> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ Binding price data
 
 df_allfreq <- bind_rows(
@@ -315,131 +316,35 @@ df_yf_multiple <- yf_get_data(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 3 stocks | 2021-12-18 --> 2022-03-28 (100 days) ──
+#> ── Running yfR for 3 stocks | 2021-12-20 --> 2022-03-30 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/3) Fetching data for FB
-#> ✓    - found cache file (2021-12-20 --> 2022-03-25)
-#> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - found cache file (2021-12-20 --> 2022-03-29)
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- All OK!
 #> ℹ (2/3) Fetching data for GM
-#> ✓    - found cache file (2021-12-20 --> 2022-03-25)
-#> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - found cache file (2021-12-20 --> 2022-03-29)
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ (3/3) Fetching data for MMM
-#> ✓    - found cache file (2021-12-20 --> 2022-03-25)
-#> ✓    - got 67 valid rows (2021-12-20 --> 2022-03-25)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - found cache file (2021-12-20 --> 2022-03-29)
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Good stuff!
 #> ℹ Binding price data
 
-l_wide <- yf_converto_to_wide(df_yf_multiple)
+l_wide <- yf_convert_to_wide(df_yf_multiple)
 
 prices_wide <- l_wide$price_adjusted
 
-knitr::kable(head(prices_wide)) 
+head(prices_wide)
+#> # A tibble: 6 × 4
+#>   ref_date      FB    GM   MMM
+#>   <date>     <dbl> <dbl> <dbl>
+#> 1 2021-12-20  325.  54.0  171.
+#> 2 2021-12-21  334.  54.8  171.
+#> 3 2021-12-22  330.  56.1  171.
+#> 4 2021-12-23  335.  56.9  173.
+#> 5 2021-12-27  346.  57.4  175.
+#> 6 2021-12-28  346.  57.1  176.
 ```
-
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-ref_date
-</th>
-<th style="text-align:right;">
-FB
-</th>
-<th style="text-align:right;">
-GM
-</th>
-<th style="text-align:right;">
-MMM
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-2021-12-20
-</td>
-<td style="text-align:right;">
-325.45
-</td>
-<td style="text-align:right;">
-54.04
-</td>
-<td style="text-align:right;">
-170.9872
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-12-21
-</td>
-<td style="text-align:right;">
-334.20
-</td>
-<td style="text-align:right;">
-54.79
-</td>
-<td style="text-align:right;">
-171.2645
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-12-22
-</td>
-<td style="text-align:right;">
-330.45
-</td>
-<td style="text-align:right;">
-56.08
-</td>
-<td style="text-align:right;">
-170.9872
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-12-23
-</td>
-<td style="text-align:right;">
-335.24
-</td>
-<td style="text-align:right;">
-56.91
-</td>
-<td style="text-align:right;">
-173.2948
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-12-27
-</td>
-<td style="text-align:right;">
-346.18
-</td>
-<td style="text-align:right;">
-57.43
-</td>
-<td style="text-align:right;">
-175.0083
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2021-12-28
-</td>
-<td style="text-align:right;">
-346.22
-</td>
-<td style="text-align:right;">
-57.11
-</td>
-<td style="text-align:right;">
-175.9393
-</td>
-</tr>
-</tbody>
-</table>
