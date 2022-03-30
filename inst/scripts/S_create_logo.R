@@ -1,7 +1,7 @@
 library(hexSticker)
 library(yfR)
 
-df_sp500 <- yfR::yf_get_data('^GSPC', first_date = '1950-01-01') |>
+df_sp500 <- yfR::yf_get('^GSPC', first_date = '1950-01-01') |>
   dplyr::ungroup() |>
   dplyr::select(ref_date, price_adjusted)
 

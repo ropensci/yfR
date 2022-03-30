@@ -7,7 +7,7 @@ first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 
 # fetch data
-df_yf <- yf_get_data(tickers = my_ticker, 
+df_yf <- yf_get(tickers = my_ticker, 
                      first_date = first_date,
                      last_date = last_date)
 
@@ -22,7 +22,7 @@ my_ticker <- c('FB', 'GM', 'MMM')
 first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
-df_yf_multiple <- yf_get_data(tickers = my_ticker, 
+df_yf_multiple <- yf_get(tickers = my_ticker, 
                      first_date = first_date,
                      last_date = last_date)
 
@@ -37,7 +37,7 @@ p
 ## ---- eval=FALSE--------------------------------------------------------------
 #  library(yfR)
 #  
-#  df_yf <- yf_get_collection("SP500")
+#  df_yf <- yf_collection_get("SP500")
 #  
 #  head(df_yf)
 
@@ -50,23 +50,23 @@ my_ticker <- 'GE'
 first_date <- '2010-01-01'
 last_date <- Sys.Date()
 
-df_dailly <- yf_get_data(tickers = my_ticker, 
+df_dailly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'daily') |>
   mutate(freq = 'daily')
   
   
-df_weekly <- yf_get_data(tickers = my_ticker, 
+df_weekly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'weekly') |>
   mutate(freq = 'weekly')
 
-df_monthly <- yf_get_data(tickers = my_ticker, 
+df_monthly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'monthly') |>
   mutate(freq = 'monthly')
 
-df_yearly <- yf_get_data(tickers = my_ticker, 
+df_yearly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'yearly') |>
   mutate(freq = 'yearly')
@@ -81,7 +81,9 @@ df_allfreq <- bind_rows(
                                   'yearly'))) # make sure the order in plot is right
 
 p <- ggplot(df_allfreq, aes(x=ref_date, y = price_adjusted)) + 
-  geom_point() + geom_line() + facet_grid(freq ~ ticker) + 
+  geom_point() + 
+  geom_line() + 
+  facet_grid(freq ~ ticker) + 
   theme_minimal() + 
   labs(x = '', y = 'Adjusted Prices')
 
@@ -95,7 +97,7 @@ my_ticker <- c('FB', 'GM', 'MMM')
 first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
-df_yf_multiple <- yf_get_data(tickers = my_ticker, 
+df_yf_multiple <- yf_get(tickers = my_ticker, 
                      first_date = first_date,
                      last_date = last_date)
 

@@ -10,7 +10,7 @@ test_that(desc = "Test of yf_convert_to_wide()", {
 
   my_tickers <- c("^GSPC", "^BVSP")
 
-  df <- yf_get_data(
+  df <- yf_get(
     tickers = my_tickers,
     first_date = Sys.Date() - 30,
     last_date = Sys.Date()

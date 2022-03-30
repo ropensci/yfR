@@ -196,7 +196,7 @@ thesis and dissertations).</li>
 <span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># fetch data</span>
-<span class="va">df_yf</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get_data.html">yf_get_data</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+<span class="va">df_yf</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
                      first_date <span class="op">=</span> <span class="va">first_date</span>,
                      last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -236,7 +236,7 @@ thesis and dissertations).</li>
 <span class="va">first_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">100</span>
 <span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">df_yf_multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get_data.html">yf_get_data</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+<span class="va">df_yf_multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
                      first_date <span class="op">=</span> <span class="va">first_date</span>,
                      last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -301,7 +301,7 @@ current composition of the SP500 index.</p>
 <span class="va">first_date</span> <span class="op">&lt;-</span> <span class="st">'2010-01-01'</span>
 <span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">df_dailly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get_data.html">yf_get_data</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+<span class="va">df_dailly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
                          <span class="va">first_date</span>, <span class="va">last_date</span>, 
                          freq_data <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span> |&gt;
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span>
@@ -317,7 +317,7 @@ current composition of the SP500 index.</p>
 <span class="co">#&gt; ℹ Binding price data</span>
   
   
-<span class="va">df_weekly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get_data.html">yf_get_data</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+<span class="va">df_weekly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
                          <span class="va">first_date</span>, <span class="va">last_date</span>, 
                          freq_data <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span> |&gt;
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span>
@@ -331,7 +331,7 @@ current composition of the SP500 index.</p>
 <span class="co">#&gt; ✓    - got 100% of valid prices -- Time for some tea?</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
-<span class="va">df_monthly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get_data.html">yf_get_data</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+<span class="va">df_monthly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
                          <span class="va">first_date</span>, <span class="va">last_date</span>, 
                          freq_data <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span> |&gt;
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span>
@@ -345,7 +345,7 @@ current composition of the SP500 index.</p>
 <span class="co">#&gt; ✓    - got 100% of valid prices -- Well done msperlin!</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
-<span class="va">df_yearly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get_data.html">yf_get_data</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+<span class="va">df_yearly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
                          <span class="va">first_date</span>, <span class="va">last_date</span>, 
                          freq_data <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span> |&gt;
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span>
@@ -393,7 +393,7 @@ current composition of the SP500 index.</p>
 <span class="va">first_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">100</span>
 <span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">df_yf_multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get_data.html">yf_get_data</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+<span class="va">df_yf_multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
                      first_date <span class="op">=</span> <span class="va">first_date</span>,
                      last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
 <span class="co">#&gt; </span>

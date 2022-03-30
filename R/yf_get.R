@@ -1,28 +1,44 @@
 #' Main function to download financial data from Yahoo Finance
 #'
-#' Based primarly on a set of tickers and time period, this function will download stock price data from Yahoo Finance
-#' using \link[quantmod]{getSymbols}. It organizes the data in the long format and outputs a "stacked" dataframe.
+#' Based primarly on a set of tickers and time period, this function will
+#' download stock price data from Yahoo Finance using
+#' \link[quantmod]{getSymbols}. It organizes the data in the long format and
+#' outputs a "stacked" dataframe.
 #'
 #' @section Warning:
 #'
-#' Be aware that when using cache system in a local folder (and not the default tempdir()), the aggregate prices series might not match if
+#' Be aware that when using cache system in a local folder (and not the default
+#'  tempdir()), the aggregate prices series might not match if
 #' a split or dividends event happens in between cache files.
 #'
-#' @param tickers A vector of tickers. If not sure whether the ticker is available, search for it in yahoo finance <https://finance.yahoo.com/>.
+#' @param tickers A vector of tickers. If not sure whether the ticker is
+#' available, search for it in yahoo finance <https://finance.yahoo.com/>.
 #' @param first_date The first date of query (Date or character as YYYY-MM-DD)
 #' @param last_date The last date of query (Date or character as YYYY-MM-DD)
-#' @param bench_ticker The ticker of the benchmark asset used to compare dates. My suggestion is to use the main stock index of the market from where the data is coming from (default = ^GSPC (SP500, US market))
-#' @param type_return Type of price return to calculate: 'arit' - aritmetic (default), 'log' - log returns.
-#' @param freq_data Frequency of financial data: 'daily' (default), 'weekly', 'monthly', 'yearly'
-#' @param how_to_aggregate Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
-#'  For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
+#' @param bench_ticker The ticker of the benchmark asset used to compare dates.
+#' My suggestion is to use the main stock index of the market from where the
+#' data is coming from (default = ^GSPC (SP500, US market))
+#' @param type_return Type of price return to calculate:
+#' 'arit' - aritmetic (default), 'log' - log returns.
+#' @param freq_data Frequency of financial data: 'daily' (default),
+#' 'weekly', 'monthly', 'yearly'
+#' @param how_to_aggregate Defines whether to aggregate the data using the
+#' first observations of the aggregating period or last ('first', 'last').
+#'  For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the
+#'  last available day of the year will be used for all
 #'  aggregated values such as price_adjusted. (Default = "last")
-#' @param thresh_bad_data A percentage threshold for defining bad data. The dates of the benchmark ticker are compared to each asset. If the percentage of non-missing dates
-#'  with respect to the benchmark ticker is lower than thresh_bad_data, the function will ignore the asset (default = 0.75)
-#' @param do_complete_data Return a complete/balanced dataset? If TRUE, all missing pairs of ticker-date will be replaced by NA or closest price (see input do_fill_missing_prices). Default = FALSE.
+#' @param thresh_bad_data A percentage threshold for defining bad data. The
+#' dates of the benchmark ticker are compared to each asset. If the percentage
+#' of non-missing dates with respect to the benchmark ticker is lower than
+#' thresh_bad_data, the function will ignore the asset (default = 0.75)
+#' @param do_complete_data Return a complete/balanced dataset? If TRUE, all
+#' missing pairs of ticker-date will be replaced by NA or closest price
+#' (see input do_fill_missing_prices). Default = FALSE.
 #' @param do_cache Use cache system? (default = TRUE)
-#' @param cache_folder Where to save cache files? (default = yfR::yf_get_default_cache_folder() )
-#' @param do_parallel Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.
+#' @param cache_folder Where to save cache files?
+#' (default = yfR::yf_get_default_cache_folder() )
+#' @param do_parallel Flag for using parallel or not (default = FALSE).
+#' Before using parallel, make sure you call function future::plan() first.
 #' @param be_quiet Flag for not printing statements (default = FALSE)
 #'
 #' @return A dataframe with stock prices.
@@ -37,7 +53,7 @@
 #' first_date <- Sys.Date() - 15
 #' last_date <- Sys.Date()
 #'
-#' df_yf <- yf_get_data(
+#' df_yf <- yf_get(
 #'   tickers = tickers,
 #'   first_date = first_date,
 #'   last_date = last_date,
@@ -46,19 +62,19 @@
 #'
 #' print(df_yf)
 #' }
-yf_get_data <- function(tickers,
-                        first_date = Sys.Date() - 30,
-                        last_date = Sys.Date(),
-                        thresh_bad_data = 0.75,
-                        bench_ticker = "^GSPC",
-                        type_return = "arit",
-                        freq_data = "daily",
-                        how_to_aggregate = "last",
-                        do_complete_data = FALSE,
-                        do_cache = TRUE,
-                        cache_folder = yf_get_default_cache_folder(),
-                        do_parallel = FALSE,
-                        be_quiet = FALSE) {
+yf_get <- function(tickers,
+                   first_date = Sys.Date() - 30,
+                   last_date = Sys.Date(),
+                   thresh_bad_data = 0.75,
+                   bench_ticker = "^GSPC",
+                   type_return = "arit",
+                   freq_data = "daily",
+                   how_to_aggregate = "last",
+                   do_complete_data = FALSE,
+                   do_cache = TRUE,
+                   cache_folder = yf_get_default_cache_folder(),
+                   do_parallel = FALSE,
+                   be_quiet = FALSE) {
 
   # check for internet
   if (!curl::has_internet()) {
@@ -66,17 +82,23 @@ yf_get_data <- function(tickers,
   }
 
   # check cache folder
-  if ((do_cache) & (!dir.exists(cache_folder))) dir.create(cache_folder, recursive = TRUE)
+  if ((do_cache) & (!dir.exists(cache_folder))) dir.create(cache_folder,
+                                                           recursive = TRUE)
 
   # check options
   possible_values <- c("arit", "log")
   if (!any(type_return %in% possible_values)) {
-    stop(paste0("Input type.ret should be one of:\n\n", paste0(possible_values, collapse = "\n")))
+    stop(paste0("Input type.ret should be one of:\n\n",
+                paste0(possible_values,
+                       collapse = "\n")
+    )
+    )
   }
 
   possible_values <- c("first", "last")
   if (!any(how_to_aggregate %in% possible_values)) {
-    stop(paste0("Input how_to_aggregate should be one of:\n\n", paste0(possible_values, collapse = "\n")))
+    stop(paste0("Input how_to_aggregate should be one of:\n\n",
+                paste0(possible_values, collapse = "\n")))
   }
 
   # check for NA
@@ -90,7 +112,8 @@ yf_get_data <- function(tickers,
 
   possible_values <- c("daily", "weekly", "monthly", "yearly")
   if (!any(freq_data %in% possible_values)) {
-    stop(paste0("Input freq_data should be one of:\n\n", paste0(possible_values, collapse = "\n")))
+    stop(paste0("Input freq_data should be one of:\n\n",
+                paste0(possible_values, collapse = "\n")))
   }
 
   # check date class
@@ -106,7 +129,8 @@ yf_get_data <- function(tickers,
   }
 
   if (last_date <= first_date) {
-    stop("The last_date is lower (less recent) or equal to first_date. Please check your dates!")
+    stop(paste0("The last_date is lower (less recent) or equal to first_date.",
+                " Please check your dates!"))
   }
 
   # check tickers
@@ -135,7 +159,8 @@ yf_get_data <- function(tickers,
 
     my_msg <- paste0(
       "\nRunning yfR for {length(tickers)} stocks | ",
-      "{as.character(first_date)} --> {as.character(last_date)} ({days_diff} days)"
+      "{as.character(first_date)} --> ",
+      "{as.character(last_date)} ({days_diff} days)"
     )
     cli::cli_h2(my_msg)
 
@@ -191,7 +216,7 @@ yf_get_data <- function(tickers,
     if (!be_quiet) {
 
       cli::cli_h3(
-      'Running yfR with parallel backend ({available_cores} cores available)')
+        'Running yfR with parallel backend ({available_cores} cores available)')
 
     }
 
@@ -203,12 +228,15 @@ yf_get_data <- function(tickers,
 
     if (flag) {
       stop(paste0(
-        "When using do_parallel = TRUE, you need to call future::plan() to configure your parallel settings. \n",
+        "When using do_parallel = TRUE, you need to call future::plan() to ',
+        configure your parallel settings. \n",
         "A suggestion, write the following lines:\n\n",
-        "future::plan(future::multisession, workers = floor(parallel::detectCores()/2))",
+        "future::plan(future::multisession, ",
+        "workers = floor(parallel::detectCores()/2))",
         "\n\n",
         "The last line should be placed just before calling get_yf_data. ",
-        "Notice it will use half of your available cores so that your OS has some room to breathe."
+        "Notice it will use half of your available cores so that your OS has ",
+        "some room to breathe."
       ))
     }
 
@@ -253,16 +281,24 @@ yf_get_data <- function(tickers,
   if (freq_data != "daily") {
 
     str_freq <- switch(freq_data,
-      "weekly" = "1 week",
-      "monthly" = "1 month",
-      "yearly" = "1 year"
+                       "weekly" = "1 week",
+                       "monthly" = "1 month",
+                       "yearly" = "1 year"
     )
 
     # find the first monday (see issue #19 in BatchGetsymbols)
     # https://github.com/msperlin/BatchGetSymbols/issues/19
-    temp_dates <- seq(as.Date(paste0(lubridate::year(min(df_tickers$ref_date)), "-01-01")),
-      as.Date(paste0(lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")),
-      by = "1 day"
+    temp_dates <- seq(as.Date(paste0(
+      lubridate::year(min(df_tickers$ref_date)),
+      "-01-01"
+      )
+    ),
+    as.Date(paste0(
+      lubridate::year(max(df_tickers$ref_date)) + 1,
+      "-12-31"
+      )
+    ),
+    by = "1 day"
     )
 
     temp_weekdays <- lubridate::wday(temp_dates, week_start = 1)
@@ -273,15 +309,21 @@ yf_get_data <- function(tickers,
 
       # make sure it starts on a monday
       week_vec <- seq(first_monday,
-        as.Date(paste0(lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")),
-        by = str_freq
+                      as.Date(paste0(
+                        lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")
+                      ),
+                      by = str_freq
       )
     } else {
 
       # every other case
-      week_vec <- seq(as.Date(paste0(lubridate::year(min(df_tickers$ref_date)), "-01-01")),
-        as.Date(paste0(lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")),
-        by = str_freq
+      week_vec <- seq(as.Date(paste0(
+        lubridate::year(min(df_tickers$ref_date)), "-01-01")
+      ),
+      as.Date(paste0(
+        lubridate::year(max(df_tickers$ref_date)) + 1, "-12-31")
+      ),
+      by = str_freq
       )
 
     }
@@ -295,32 +337,32 @@ yf_get_data <- function(tickers,
     if (how_to_aggregate == "first") {
 
       df_tickers <- df_tickers |>
-      dplyr::group_by(time_groups, ticker) |>
-      dplyr::summarise(
-        ref_date = min(ref_date),
-        price_open = dplyr::first(price_open),
-        price_high = max(price_high),
-        price_low = min(price_low),
-        price_close = dplyr::first(price_close),
-        price_adjusted = dplyr::first(price_adjusted),
-        volume = sum(volume, na.rm = TRUE)
-      ) |>
+        dplyr::group_by(time_groups, ticker) |>
+        dplyr::summarise(
+          ref_date = min(ref_date),
+          price_open = dplyr::first(price_open),
+          price_high = max(price_high),
+          price_low = min(price_low),
+          price_close = dplyr::first(price_close),
+          price_adjusted = dplyr::first(price_adjusted),
+          volume = sum(volume, na.rm = TRUE)
+        ) |>
         dplyr::ungroup() |>
         dplyr::arrange(ticker, ref_date)
 
     } else if (how_to_aggregate == "last") {
 
       df_tickers <- df_tickers |>
-      dplyr::group_by(time_groups, ticker) |>
-      dplyr::summarise(
-        ref_date = min(ref_date),
-        volume = sum(volume, na.rm = TRUE),
-        price_open = dplyr::last(price_open),
-        price_high = max(price_high),
-        price_low = min(price_low),
-        price_close = dplyr::last(price_close),
-        price_adjusted = dplyr::last(price_adjusted)
-      ) |>
+        dplyr::group_by(time_groups, ticker) |>
+        dplyr::summarise(
+          ref_date = min(ref_date),
+          volume = sum(volume, na.rm = TRUE),
+          price_open = dplyr::last(price_open),
+          price_high = max(price_high),
+          price_low = min(price_low),
+          price_close = dplyr::last(price_close),
+          price_adjusted = dplyr::last(price_adjusted)
+        ) |>
         dplyr::ungroup() |>
         dplyr::arrange(ticker, ref_date)
 
@@ -357,17 +399,18 @@ yf_get_data <- function(tickers,
 
   # check if cache folder is tempdir()
   flag <- stringr::str_detect(cache_folder,
-    pattern = stringr::fixed(tempdir())
+                              pattern = stringr::fixed(tempdir())
   )
 
   if (!flag) {
     warning(stringr::str_glue(
       "\nIt seems you are using a non-default cache folder at {cache_folder}. ",
       "Be aware that if any stock event -- split or dividend -- happens ",
-      "in between cache files, the resulting aggregate cache data will not correspond to reality as ",
-      "some part of the price data will not be adjusted to the event. ",
-      "For safety and reproducibility, my suggestion is to use cache system only ",
-      "for the current session with tempdir(), which is the default option."
+      "in between cache files, the resulting aggregate cache data will not ",
+      "correspond to reality as some part of the price data will not be ",
+      "adjusted to the event. For safety and reproducibility, my suggestion ",
+      "is to use cache system only for the current session with tempdir(), ",
+      "which is the default option."
     ))
   }
 

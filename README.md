@@ -15,20 +15,26 @@ coverage](https://codecov.io/gh/msperlin/yfR/branch/main/graph/badge.svg)](https
 [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols).
 In a nutshell, it provides access to daily stock prices from [Yahoo
 Finance](https://finance.yahoo.com/), a vast repository with financial
-data around the globe. Moreover, *yfR* allows large scale download of
-data using a local caching system and parallel computing for speeding up
-the process.
+data around the globe. Yahoo Finance cover a large number of markets and
+assets, being used extensively for importing price datasets used in
+academic research and teaching.
+
+Package `yfR` is based on [quantmod](https://www.quantmod.com/) and used
+its main function for fetching data from Yahoo Finance. The main
+innovation in `yfR` is in the organization of the imported financial
+data and using local caching system and parallel computing for speeding
+up large scale download of datasets from Yahoo Finance.
 
 ## Features
 
--   Fetchs daily/weekly/monthly/annual stock prices (and returns) from
-    yahoo finance and returns a dataframe in the long format (stacked
+-   Fetchs daily/weekly/monthly/annual stock prices/returns from yahoo
+    finance and outputs a dataframe (tibble) in the long format (stacked
     data);
 
 -   A new feature called “collections” facilitates download of multiple
     tickers from a particular market/index. You can, for example,
     download data for all stocks in the SP500 index with a simple call
-    to `yf_get_collection()`;
+    to `yf_collection_get()`;
 
 -   A session-persistent smart cache system is available by default.
     This means that the data is saved locally and only missing portions
@@ -40,20 +46,20 @@ the process.
     choose to ignore tickers with high number of missing dates.
 
 -   A customized function called `yf_convert_to_wide()` can transform
-    the long dataframe into a wide format (tickers as columns). The
-    output is a list where each element is a different target variable
-    (prices, returns, volumes).
+    the long dataframe into a wide format (tickers as columns), much
+    used in portfolio optimization. The output is a list where each
+    element is a different target variable (prices, returns, volumes).
 
--   Parallel computing is available, speeding up the data importation
-    process.
+-   Parallel computing with package `furrr` is available, speeding up
+    the data importation process.
 
 ## Differences from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)
 
 Package `BatchgetSymbols` was developed back in 2016, with many bad
-choices from my part. Since then, I learned more about R and its
-ecosystem, resulting in better and more maintainable code. However, it
-is impossible to keep compatibility with the changes I wanted to make,
-which is why I created the new package `yfR`.
+structural choices from my part. Since then, I learned more about R and
+its ecosystem, resulting in better and more maintainable code. However,
+it is impossible to keep compatibility with the changes I wanted to
+make, which is why I decided to develop a new (and fresh) package.
 
 Here are the main differences between `yfR` (new) and `BatchGetSymbols`
 (old):
@@ -61,21 +67,23 @@ Here are the main differences between `yfR` (new) and `BatchGetSymbols`
 -   All input arguments are now formatted as “snake_case” and not
     “dot.case”. For example, the argument for the first date of data
     importation in `yfR::get_yf_data` is `first_date`, and not
-    `first.date` (see arguments in `BatchGetSymbols::BatchGetSymbols`)
+    `first.date` as used in `BatchGetSymbols::BatchGetSymbols`.
 
 -   All function have been renamed for a common API notation. For
     example, `BatchGetSymbols::BatchGetSymbols` is now
-    `yfR::get_yf_data`.
+    `yfR::get_yf_data`. Likewise, the function for fetching collections
+    is `yfR::get_collection`.
 
--   The output is always a tibble with the price data (and not a list).
-    If one wants the tibble with a summary of the importing process, it
-    is available as an attribute of the output (see function
+-   The output of `yfR::get_yf_data` is always a tibble with the price
+    data (and not a list as in `BatchGetSymbols::BatchGetSymbols`). If
+    one wants the tibble with a summary of the importing process, it is
+    available as an attribute of the output (see function
     `base::attributes`)
 
 -   A new feature called “collection”, which allows for easy download of
     a collection of tickers. For example, you can download price data
     for all components of the SP500 by simply calling
-    `yfR::yf_get_collection("SP500")`.
+    `yfR::yf_collection_get("SP500")`.
 
 -   New and prettier status messages using package `cli`
 
@@ -90,7 +98,10 @@ Here are the main differences between `yfR` (new) and `BatchGetSymbols`
     specially for long time periods with lots of corporate events. My
     advice is to **never use the yahoo finance data of individual stocks
     in production** (research papers or academic documents – thesis and
-    dissertations).
+    dissertations). If adjusted price data of individual stocks is
+    important for your research, **use other data sources** such as
+    [EOD](https://eodhistoricaldata.com/), [SimFin](https://simfin.com/)
+    or [Economática](https://economatica.com/).
 
 ## Installation
 
@@ -113,14 +124,15 @@ first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 
 # fetch data
-df_yf <- yf_get_data(tickers = my_ticker, 
+df_yf <- yf_get(tickers = my_ticker, 
                      first_date = first_date,
                      last_date = last_date)
 #> 
 #> ── Running yfR for 1 stocks | 2022-02-28 --> 2022-03-30 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for FB
+#> ℹ (1/1) Fetching data for ',
+#> 'FB
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 22 valid rows (2022-02-28 --> 2022-03-29)
@@ -152,36 +164,40 @@ my_ticker <- c('FB', 'GM', 'MMM')
 first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
-df_yf_multiple <- yf_get_data(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+df_yf_multiple <- yf_get(tickers = my_ticker, 
+                              first_date = first_date,
+                              last_date = last_date)
 #> 
 #> ── Running yfR for 3 stocks | 2021-12-20 --> 2022-03-30 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/3) Fetching data for FB
+#> ℹ (1/3) Fetching data for ',
+#> 'FB
 #> ✓    - found cache file (2022-02-28 --> 2022-03-29)
 #> !    - need new data (cache doesnt match query)
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Looking good!
-#> ℹ (2/3) Fetching data for GM
+#> ✓    - got 100% of valid prices -- Got it!
+#> ℹ (2/3) Fetching data for ',
+#> 'GM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
-#> ℹ (3/3) Fetching data for MMM
+#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ℹ (3/3) Fetching data for ',
+#> 'MMM
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- You got it msperlin!
+#> ✓    - got 100% of valid prices -- Good job msperlin!
 #> ℹ Binding price data
 
 
-p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
-                       color = ticker)) + 
+p <- ggplot(df_yf_multiple, 
+            aes(x = ref_date, y = price_adjusted,
+                color = ticker)) + 
   geom_line()
 
-p
+print(p)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
@@ -195,7 +211,9 @@ the SP500 index.
 ``` r
 library(yfR)
 
-df_yf <- yf_get_collection("SP500")
+df_yf <- yf_collection_get("SP500", 
+                           first_date = Sys.Date() - 30,
+                           last_date = Sys.Date())
 
 head(df_yf)
 ```
@@ -219,7 +237,7 @@ my_ticker <- 'GE'
 first_date <- '2010-01-01'
 last_date <- Sys.Date()
 
-df_dailly <- yf_get_data(tickers = my_ticker, 
+df_dailly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'daily') |>
   mutate(freq = 'daily')
@@ -227,15 +245,16 @@ df_dailly <- yf_get_data(tickers = my_ticker,
 #> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
+#> ℹ (1/1) Fetching data for ',
+#> 'GE
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Got it!
+#> ✓    - got 100% of valid prices -- Mas bah tche, que coisa linda!
 #> ℹ Binding price data
-  
-  
-df_weekly <- yf_get_data(tickers = my_ticker, 
+
+
+df_weekly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'weekly') |>
   mutate(freq = 'weekly')
@@ -243,27 +262,29 @@ df_weekly <- yf_get_data(tickers = my_ticker,
 #> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
+#> ℹ (1/1) Fetching data for ',
+#> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-29)
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
 #> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ Binding price data
 
-df_monthly <- yf_get_data(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'monthly') |>
+df_monthly <- yf_get(tickers = my_ticker, 
+                          first_date, last_date, 
+                          freq_data = 'monthly') |>
   mutate(freq = 'monthly')
 #> 
 #> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
+#> ℹ (1/1) Fetching data for ',
+#> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-29)
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
+#> ✓    - got 100% of valid prices -- You got it msperlin!
 #> ℹ Binding price data
 
-df_yearly <- yf_get_data(tickers = my_ticker, 
+df_yearly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'yearly') |>
   mutate(freq = 'yearly')
@@ -271,7 +292,8 @@ df_yearly <- yf_get_data(tickers = my_ticker,
 #> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-03-30 (4471 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
+#> ℹ (1/1) Fetching data for ',
+#> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-29)
 #> ✓    - got 3081 valid rows (2010-01-04 --> 2022-03-29)
 #> ✓    - got 100% of valid prices -- You got it msperlin!
@@ -312,25 +334,28 @@ my_ticker <- c('FB', 'GM', 'MMM')
 first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
-df_yf_multiple <- yf_get_data(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+df_yf_multiple <- yf_get(tickers = my_ticker, 
+                              first_date = first_date,
+                              last_date = last_date)
 #> 
 #> ── Running yfR for 3 stocks | 2021-12-20 --> 2022-03-30 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/3) Fetching data for FB
-#> ✓    - found cache file (2021-12-20 --> 2022-03-29)
-#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- All OK!
-#> ℹ (2/3) Fetching data for GM
-#> ✓    - found cache file (2021-12-20 --> 2022-03-29)
-#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
-#> ℹ (3/3) Fetching data for MMM
+#> ℹ (1/3) Fetching data for ',
+#> 'FB
 #> ✓    - found cache file (2021-12-20 --> 2022-03-29)
 #> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
 #> ✓    - got 100% of valid prices -- Good stuff!
+#> ℹ (2/3) Fetching data for ',
+#> 'GM
+#> ✓    - found cache file (2021-12-20 --> 2022-03-29)
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Got it!
+#> ℹ (3/3) Fetching data for ',
+#> 'MMM
+#> ✓    - found cache file (2021-12-20 --> 2022-03-29)
+#> ✓    - got 69 valid rows (2021-12-20 --> 2022-03-29)
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ Binding price data
 
 l_wide <- yf_convert_to_wide(df_yf_multiple)

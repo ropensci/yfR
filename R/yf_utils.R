@@ -81,7 +81,8 @@ calc_ret <- function(P,
 #   if (interactive()) {
 #     msg <- paste0(
 #       "\nWant to learn more about ",
-#       do_color(this_pkg), " (formerly BatchGetSymbols) and other R packages for Finance and Economics?",
+#       do_color(this_pkg), " (formerly BatchGetSymbols) and other R packages",
+#       "for Finance and Economics?",
 #       " Check out my book at ", do_color("https://www.msperlin.com/afedR/")
 #     )
 #   } else {

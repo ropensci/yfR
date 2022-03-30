@@ -1,8 +1,9 @@
 #' Transforms a long (stacked) dataframe into a list of wide dataframes
 #'
-#' @param df_in dataframe in the long format (probably the output of yf_get_data())
+#' @param df_in dataframe in the long format (probably the output of yf_get())
 #'
-#' @return A list with dataframes in the wide format (each element is a different column)
+#' @return A list with dataframes in the wide format (each element is a
+#'   different column)
 #' @export
 #'
 #' @examples

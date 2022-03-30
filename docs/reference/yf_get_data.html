@@ -55,8 +55,8 @@ using getSymbols. It organizes the data in the long format and outputs a "stacke
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Main function to download financial data from Yahoo Finance</h1>
-    <small class="dont-index">Source: <a href="https://github.com/msperlin/yfR/blob/HEAD/R/yf_get_data.R" class="external-link"><code>R/yf_get_data.R</code></a></small>
-    <div class="hidden name"><code>yf_get_data.Rd</code></div>
+    <small class="dont-index">Source: <a href="https://github.com/msperlin/yfR/blob/HEAD/R/yf_get.R" class="external-link"><code>R/yf_get.R</code></a></small>
+    <div class="hidden name"><code>yf_get.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -65,7 +65,7 @@ using <a href="https://rdrr.io/pkg/quantmod/man/getSymbols.html" class="external
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">yf_get_data</span><span class="op">(</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">yf_get</span><span class="op">(</span>
   <span class="va">tickers</span>,
   first_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span>,
   last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
@@ -136,7 +136,7 @@ a split or dividends event happens in between cache files.</p>
 <span class="r-in"><span class="va">first_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">15</span></span>
 <span class="r-in"><span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">df_yf</span> <span class="op">&lt;-</span> <span class="fu">yf_get_data</span><span class="op">(</span></span>
+<span class="r-in"><span class="va">df_yf</span> <span class="op">&lt;-</span> <span class="fu">yf_get</span><span class="op">(</span></span>
 <span class="r-in">  tickers <span class="op">=</span> <span class="va">tickers</span>,</span>
 <span class="r-in">  first_date <span class="op">=</span> <span class="va">first_date</span>,</span>
 <span class="r-in">  last_date <span class="op">=</span> <span class="va">last_date</span>,</span>

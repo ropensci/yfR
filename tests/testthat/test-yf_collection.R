@@ -26,7 +26,7 @@ test_that("Test of yf_get_index_comp()", {
 })
 
 
-test_that("Test of yf_get_collection()", {
+test_that("Test of yf_collection_get()", {
 
   # parallel test for collections
   n_workers <- floor(parallel::detectCores()/2)
@@ -41,7 +41,7 @@ test_that("Test of yf_get_collection()", {
 
   for (i_collection in available_collections) {
 
-    df <- yf_get_collection(collection = i_collection,
+    df <- yf_collection_get(collection = i_collection,
                             first_date = Sys.Date() - 30,
                             last_date = Sys.Date(),
                             do_parallel = TRUE)

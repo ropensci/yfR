@@ -11,7 +11,8 @@ yf_get_single_ticker <- function(ticker,
                                  be_quiet = FALSE,
                                  thresh_bad_data) {
   if (!be_quiet) {
-    my_msg <- set_cli_msg("({i_ticker}/{length_tickers}) Fetching data for {ticker}")
+    my_msg <- set_cli_msg("({i_ticker}/{length_tickers}) Fetching data for ',
+                          '{ticker}")
     cli::cli_alert_info(my_msg)
   }
 
@@ -54,7 +55,9 @@ yf_get_single_ticker <- function(ticker,
     if (nrow(temp_cache) > 1) {
       my_msg <- paste0(
         "Found more than one file in cache for ", ticker,
-        "\nYou must manually remove one of \n\n", paste0(temp_cache$filename, collapse = "\n")
+        "\nYou must manually remove one of \n\n",
+        paste0(temp_cache$filename,
+               collapse = "\n")
       )
       stop(my_msg)
 
@@ -91,7 +94,8 @@ yf_get_single_ticker <- function(ticker,
           cli::cli_alert_warning(my_msg)
         }
 
-        flag_date_bef <- ((first_date - temp_cache$first_date) < -max_diff_dates)
+        flag_date_bef <- ((first_date - temp_cache$first_date) <
+                            -max_diff_dates)
         df_out_bef <- data.frame()
         if (flag_date_bef) {
           df_out_bef <- yf_get_clean_data(
@@ -207,7 +211,8 @@ yf_get_single_ticker <- function(ticker,
 
     dl_status <- "OK"
     n_rows <- nrow(df_out)
-    perc_benchmark_dates <- sum(df_out$ref_date %in% df_bench$ref_date) / length(df_bench$ref_date)
+    perc_benchmark_dates <- sum(df_out$ref_date %in% df_bench$ref_date) /
+      length(df_bench$ref_date)
 
     if (perc_benchmark_dates >= thresh_bad_data) {
       threshold_decision <- "KEEP"
@@ -223,7 +228,8 @@ yf_get_single_ticker <- function(ticker,
         this_fd <- as.character(min(df_out$ref_date))
         this_ld <- as.character(max(df_out$ref_date))
 
-        my_msg <- set_cli_msg("got {nrow(df_out)} valid rows ({this_fd} --> {this_ld})",
+        my_msg <- set_cli_msg(
+          "got {nrow(df_out)} valid rows ({this_fd} --> {this_ld})",
           level = 1
         )
 

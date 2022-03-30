@@ -1,7 +1,7 @@
 #' Get current composition of stock indices
 #'
 #' @param mkt_index the index (e.g. IBOV, SP500, FTSE)
-#' @inheritParams yf_get_data
+#' @inheritParams yf_get
 #'
 #' @return A dataframe with the index compositino (column might vary)
 #' @export
