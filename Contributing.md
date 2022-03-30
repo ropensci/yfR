@@ -2,13 +2,17 @@
 
 <!-- This CONTRIBUTING.md is adapted from https://gist.github.com/peterdesmet/e90a1b0dc17af6c12daf6e8b2f044e7c -->
 
-First, thanks for the interest in the package and apraisal for contributing to the codebase. 
+First, thanks for the interest in the package and apraisal for contributing to the codebase of `yfR. 
 
-While I am an academic, my R projects have no official funding. It is always nice to see the community helping maintaing the code. 
+While I am an academic, my R projects have no official funding. It is always nice to have the community helping maintaing the code. Here are the main links for contributing:
 
 [repo]: https://github.com/msperlin/yfR
 [issues]: https://github.com/msperlin/yfR/issues
 [email]: mailto:marceloperlin@gmail.com
+[new_issue]: https://github.com/msperlin/yfR/issues/new
+[website]: https://msperlin.github.io/yfR
+[citation]: https://msperlin.github.io/yfR/authors.html
+
 
 ## Code of conduct
 
@@ -24,36 +28,25 @@ Think our_package is useful? Let others discover it, by telling them in person, 
 
 Using our_package for a paper you are writing? Consider [citing it][citation].
 
-### Ask a question ⁉️
-
-Using our_package and got stuck? Browse the [documentation][website] to see if you can find a solution. Still stuck? Post your question as an [issue on GitHub][new_issue]. While we cannot offer user support, we'll try to do our best to address it, as questions often lead to better documentation or the discovery of bugs.
-
-Want to ask a question in private? Contact the package maintainer by [email][mailto:email].
-
-### Propose an idea 💡
-
-Have an idea for a new our_package feature? Take a look at the [documentation][website] and [issue list][issues] to see if it isn't included or suggested yet. If not, suggest your idea as an [issue on GitHub][new_issue]. While we can't promise to implement your idea, it helps to:
-
-* Explain in detail how it would work.
-* Keep the scope as narrow as possible.
-
-See below if you want to contribute code for your idea as well.
 
 ### Report a bug 🐛
 
-Using our_package and discovered a bug? That's annoying! Don't let others have the same experience and report it as an [issue on GitHub][new_issue] so we can fix it. A good bug report makes it easier for us to do so, so please include:
+If you've found a bug using the package, please report it by creating an [issue on GitHub][new_issue] so we can fix it. A good bug report makes it easier for us to do so, so please include:
 
 * Your operating system name and version (e.g. Mac OS 10.13.6).
 * Any details about your local setup that might be helpful in troubleshooting.
 * Detailed steps to reproduce the bug.
 
+
 ### Improve the documentation 📖
 
 Noticed a typo on the website? Think a function could use a better example? Good documentation makes all the difference, so your help to improve it is very welcome!
 
+
 #### The website
 
 [This website][website] is generated with [`pkgdown`](http://pkgdown.r-lib.org/). That means we don't have to write any html: content is pulled together from documentation in the code, vignettes, [Markdown](https://guides.github.com/features/mastering-markdown/) files, the package `DESCRIPTION` and `_pkgdown.yml` settings. If you know your way around `pkgdown`, you can [propose a file change](https://help.github.com/articles/editing-files-in-another-user-s-repository/) to improve documentation. If not, [report an issue][new_issue] and we can point you in the right direction.
+
 
 #### Function documentation
 
@@ -63,9 +56,11 @@ Functions are described as comments near their code and translated to documentat
 2. Look for the file with the name of the function.
 3. [Propose a file change](https://help.github.com/articles/editing-files-in-another-user-s-repository/) to update the function documentation in the roxygen comments (starting with `#'`).
 
+
 ### Contribute code 📝
 
 Care to fix bugs or implement new functionality for our_package? Awesome! 👏 Have a look at the [issue list][issues] and leave a comment on the things you want to work on. See also the development guidelines below.
+
 
 ## Development guidelines
 

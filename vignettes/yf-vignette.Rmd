@@ -1,142 +1,140 @@
 ---
-title: "Using yf to download financial data for several tickers"
+title: "Using yfR"
 author: "Marcelo Perlin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How to use yf}
+  %\VignetteIndexEntry{Using yfR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-## Motivation
+## Examples
 
-```{r, echo=FALSE}
+### Fetching a single stock price
 
-knitr::opts_chunk$set(eval=FALSE)
-
-```
-
-
-`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), a R package for large-scale download of financial data from Yahoo Finance. Based on a set of tickers and date ranges, the package will download and organize the financial data in the tidy/long format, with many user options for parsing the data. 
-
-
-## Changes from `BatchGetSymbols`
-
-- New and more intuitive function names: BatchGetSymbols() -->  yf_get_data()
-- All input variables are now snake case (e.g. first_date --> first_date)
-- Use of collections for fetching large scale data (function `yf_get_collection()`)
-- No more dependency of quantmod:getSymbols
-- Improved status message with cli
-- Output is a dataframe (and not a list). The "df_control" dataframe is now an attribute of "df_tickers"
-- Better handling of invalid data in cache
-
-
-## Warnings
-
-- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources. My advice is to never use the data of individual stocks in production. 
-
-- Since version 2.6, the cache system is session-persistent by default, meaning that whenever you restart your R session, you lose all your cached data. This is a safety feature for mismatching prices due to corporate events.
-
-## Main features:
-
-- Organizes data in a tabular/long or wide format, returning prices and returns (arithmetic or logarithmic)
-- A session-persistent smart cache system is available by default. This means that the YF data is saved locally and only missing portions are downloaded, if needed.
-- All dates are compared to a benchmark ticker such as SP500 and, whenever an individual asset does not have a sufficient number of dates, the software drops it from the output. This means you can choose to ignore tickers with high number of missing dates.
-- A customized function called `yf_convert_to_wide()` can transform the long  table into a wide format (tickers as columns). 
-- Users can choose the frequency of the resulting dataset (daily, weekly, monthly, yearly)
-- Parallel computing is available, speeding up the data importation process
-
-
-## A simple example
-
-As a simple exercise, let's download data for three stocks, facebook (FB), 3M (MMM), PETR4.SA (PETROBRAS) and abcdef, a ticker I just made up. We will use the last 60 days as the time period. This example will show the simple interface of the package and how it handles invalid tickers.
-
-```{r example1, eval=TRUE, results='hide'}
-if (!require(yfR)) install.packages('yfR')
-
+```{r, results='hold'}
 library(yfR)
 
-# set dates
-first_date <- Sys.Date() - 60
-last_date <- Sys.Date()
-freq_data <- 'daily'
-# set tickers
-tickers <- c('FB','MMM','PETR4.SA')
-
-df_yf <- yf_get_data(tickers = tickers, 
-                         first_date = first_date,
-                         last_date = last_date, 
-                         freq_data = freq_data) # cache in tempdir()
-
-```
-
-
-After downloading the data, we can check the success of the process for each ticker. Notice that the last ticker does not exist in yahoo finance and therefore results in an error. All information regarding the download process is provided in the dataframe df.control:
-
-```{r example2}
-str(df_yf)
-```
-
-Moreover, we can plot the daily closing prices using ggplot2:
-
-
-```{r plot.prices, fig.width=7, fig.height=2.5}
-library(ggplot2)
- 
-p <- ggplot(df_yf, aes(x = ref_date, y = price_close)) + 
-  geom_line() + facet_wrap(~ticker, scales = 'free_y') 
-
-print(p)
-```
-
-
-
-## Downloading data for all tickers in the SP500 index
-
-The package was designed for large scale download of financial data. An example is downloading all stocks in the current composition of the SP500 stock index. The package also includes a function that downloads the current composition of the SP500 index from the internet. By using this function along with BatchGetSymbols, we can easily import end-of-day data for all assets in the index. 
-
-In the following code we download data for the SP500 stocks for the last year. The code is not executed in this vignette given its time duration, but you can just copy and paste on its own R script in order to check the results. In my computer it takes around 5 minutes to download the whole dataset.
-
-```{r example3,eval=FALSE}
-library(yfR)
-
-first_date <- Sys.Date()-365
+# set options for algorithm
+my_ticker <- 'FB'
+first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 
-df_sp500 <- yf_get_collection('SP500')
+# fetch data
+df_yf <- yf_get_data(tickers = my_ticker, 
+                     first_date = first_date,
+                     last_date = last_date)
 
+# output is a tibble with data
+head(df_yf)
 ```
 
-
-## Downloading data for different frequencies
+### Fetching many stock prices
 
 ```{r}
 library(yfR)
-library(purrr)
+library(ggplot2)
+
+my_ticker <- c('FB', 'GM', 'MMM')
+first_date <- Sys.Date() - 100
+last_date <- Sys.Date()
+
+df_yf_multiple <- yf_get_data(tickers = my_ticker, 
+                     first_date = first_date,
+                     last_date = last_date)
+
+
+p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
+                       color = ticker)) + 
+  geom_line()
+
+p
+
+```
+
+
+### Fetching collections of prices
+
+Collections are just a bundle of tickers pre-organized in the package. For example, collection `SP500` represents the current composition of the SP500 index. 
+
+```{r, eval=FALSE}
+library(yfR)
+
+df_yf <- yf_get_collection("SP500")
+
+head(df_yf)
+```
+
+
+### Fetching daily/weekly/monthly/yearly price data 
+
+```{r}
+library(yfR)
 library(ggplot2)
 library(dplyr)
 
-fct_handler <- function(my_freq) {
+my_ticker <- 'GE'
+first_date <- '2010-01-01'
+last_date <- Sys.Date()
+
+df_dailly <- yf_get_data(tickers = my_ticker, 
+                         first_date, last_date, 
+                         freq_data = 'daily') |>
+  mutate(freq = 'daily')
   
-  df_yf <- yf_get_data(tickers = c('GE'), 
-                      first_date = '2015-01-01',
-                      last_date = Sys.Date(), 
-                      do_cache = FALSE,
-                      freq_data = my_freq)
   
-  df$freq <- my_freq
+df_weekly <- yf_get_data(tickers = my_ticker, 
+                         first_date, last_date, 
+                         freq_data = 'weekly') |>
+  mutate(freq = 'weekly')
 
-  return(df)
-}
+df_monthly <- yf_get_data(tickers = my_ticker, 
+                         first_date, last_date, 
+                         freq_data = 'monthly') |>
+  mutate(freq = 'monthly')
 
-my_possible_freq <-  c('daily', 'weekly', 'monthly', 'yearly')
+df_yearly <- yf_get_data(tickers = my_ticker, 
+                         first_date, last_date, 
+                         freq_data = 'yearly') |>
+  mutate(freq = 'yearly')
 
-df_allfreq <- bind_rows(map(.x = my_possible_freq, .f = fct_handler))
+df_allfreq <- bind_rows(
+  list(df_dailly, df_weekly, df_monthly, df_yearly)
+) |>
+  mutate(freq = factor(freq, 
+                       levels = c('daily', 
+                                  'weekly',
+                                  'monthly',
+                                  'yearly'))) # make sure the order in plot is right
 
 p <- ggplot(df_allfreq, aes(x=ref_date, y = price_adjusted)) + 
-  geom_point() + geom_line() + facet_grid(freq ~ ticker)
+  geom_point() + geom_line() + facet_grid(freq ~ ticker) + 
+  theme_minimal() + 
+  labs(x = '', y = 'Adjusted Prices')
 
 print(p)
 ```
 
+
+### Changing format to wide
+
+```{r}
+library(yfR)
+library(ggplot2)
+library(kableExtra)
+
+my_ticker <- c('FB', 'GM', 'MMM')
+first_date <- Sys.Date() - 100
+last_date <- Sys.Date()
+
+df_yf_multiple <- yf_get_data(tickers = my_ticker, 
+                     first_date = first_date,
+                     last_date = last_date)
+
+l_wide <- yf_converto_to_wide(df_yf_multiple)
+
+prices_wide <- l_wide$price_adjusted
+
+knitr::kable(head(prices_wide)) 
+```
