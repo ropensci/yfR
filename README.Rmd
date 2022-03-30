@@ -21,12 +21,14 @@ knitr::opts_chunk$set(
 
 # Motivation
 
-`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols). In a nutshell, it provides access to daily stock prices from [Yahoo Finance](https://finance.yahoo.com/), a vast repository with financial data around the globe. Moreover, *yfR* allows large scale download of data using a local caching system and parallel computing for speeding up the process.
+`yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols). In a nutshell, it provides access to daily stock prices from [Yahoo Finance](https://finance.yahoo.com/), a vast repository with financial data around the globe. Yahoo Finance cover a large number of markets and assets, being used extensively for importing price datasets used in academic research and teaching. 
+
+Package `yfR` is based on [quantmod](https://www.quantmod.com/) and used its main function for fetching data from Yahoo Finance. The main innovation in `yfR` is in the organization of the imported financial data and using local caching system and parallel computing for speeding up large scale download of datasets from Yahoo Finance.
 
 
 ## Features
 
-- Fetchs daily/weekly/monthly/annual stock prices (and returns) from yahoo finance and returns a dataframe in the long format (stacked data);
+- Fetchs daily/weekly/monthly/annual stock prices/returns from yahoo finance and outputs a dataframe (tibble) in the long format (stacked data);
 
 - A new feature called "collections" facilitates download of multiple tickers from a particular market/index. You can, for example, download data for all stocks in the SP500 index with a simple call to `yf_get_collection()`;
 
@@ -34,21 +36,22 @@ knitr::opts_chunk$set(
 
 - All dates are compared to a benchmark ticker such as SP500 and, whenever an individual asset does not have a sufficient number of dates, the software drops it from the output. This means you can choose to ignore tickers with high number of missing dates.
 
-- A customized function called `yf_convert_to_wide()` can transform the long dataframe into a wide format (tickers as columns). The output is a list where each element is a different target variable (prices, returns, volumes).
+- A customized function called `yf_convert_to_wide()` can transform the long dataframe into a wide format (tickers as columns), much used in portfolio optimization. The output is a list where each element is a different target variable (prices, returns, volumes).
 
-- Parallel computing is available, speeding up the data importation process.
+- Parallel computing with package `furrr` is available, speeding up the data importation process.
+
 
 ## Differences from [BatchGetSymbols](https://github.com/msperlin/BatchGetSymbols)
 
-Package `BatchgetSymbols` was developed back in 2016, with many bad choices from my part. Since then, I learned more about R and its ecosystem, resulting in better and more maintainable code. However, it is impossible to keep compatibility with the changes I wanted to make, which is why I created the new package `yfR`. 
+Package `BatchgetSymbols` was developed back in 2016, with many bad structural choices from my part. Since then, I learned more about R and its ecosystem, resulting in better and more maintainable code. However, it is impossible to keep compatibility with the changes I wanted to make, which is why I decided to develop a new (and fresh) package. 
 
 Here are the main differences between `yfR` (new) and `BatchGetSymbols` (old): 
 
-- All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::get_yf_data` is `first_date`, and not `first.date` (see arguments in `BatchGetSymbols::BatchGetSymbols`)
+- All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::get_yf_data` is `first_date`, and not `first.date` as used in  `BatchGetSymbols::BatchGetSymbols`.
 
-- All function have been renamed for a common API notation. For example, `BatchGetSymbols::BatchGetSymbols` is now `yfR::get_yf_data`.
+- All function have been renamed for a common API notation. For example, `BatchGetSymbols::BatchGetSymbols` is now `yfR::get_yf_data`. Likewise, the function for fetching collections is `yfR::get_collection`.
 
-- The output is always a tibble with the price data (and not a list). If one wants the tibble with a summary of the importing process, it is available as an attribute of the output (see function `base::attributes`)
+- The output of `yfR::get_yf_data` is always a tibble with the price data (and not a list as in `BatchGetSymbols::BatchGetSymbols`). If one wants the tibble with a summary of the importing process, it is available as an attribute of the output (see function `base::attributes`)
 
 - A new feature called "collection", which allows for easy download of a collection of tickers. For example, you can download price data for all components of the SP500 by simply calling `yfR::yf_get_collection("SP500")`.
 
@@ -57,7 +60,7 @@ Here are the main differences between `yfR` (new) and `BatchGetSymbols` (old):
 
 ## Warnings
 
-- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources, specially for long time periods with lots of corporate events. My advice is to **never use the yahoo finance data of individual stocks in production** (research papers or academic documents -- thesis and dissertations). 
+- Yahoo finance data is far from perfect or reliable, specially for individual stocks. In my experience, using it for research code with stock **indices** is fine and I can match it with other data sources. But, adjusted stock prices for **individual assets** is messy as stock events such as splits or dividends are not properly registered. I was never able to match it with other data sources, specially for long time periods with lots of corporate events. My advice is to **never use the yahoo finance data of individual stocks in production** (research papers or academic documents -- thesis and dissertations). If adjusted price data of individual stocks is important for your research, **use other data sources** such as [EOD](https://eodhistoricaldata.com/), [SimFin](https://simfin.com/) or [Economática](https://economatica.com/).
 
 
 ## Installation
@@ -92,6 +95,7 @@ df_yf <- yf_get_data(tickers = my_ticker,
 head(df_yf)
 ```
 
+
 ### Fetching many stock prices
 
 ```{r}
@@ -103,15 +107,16 @@ first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
 df_yf_multiple <- yf_get_data(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                              first_date = first_date,
+                              last_date = last_date)
 
 
-p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
-                       color = ticker)) + 
+p <- ggplot(df_yf_multiple, 
+            aes(x = ref_date, y = price_adjusted,
+                color = ticker)) + 
   geom_line()
 
-p
+print(p)
 
 ```
 
@@ -123,7 +128,9 @@ Collections are just a bundle of tickers pre-organized in the package. For examp
 ```{r, eval=FALSE}
 library(yfR)
 
-df_yf <- yf_get_collection("SP500")
+df_yf <- yf_get_collection("SP500", 
+                           first_date = Sys.Date() - 30,
+                           last_date = Sys.Date())
 
 head(df_yf)
 ```
@@ -144,16 +151,16 @@ df_dailly <- yf_get_data(tickers = my_ticker,
                          first_date, last_date, 
                          freq_data = 'daily') |>
   mutate(freq = 'daily')
-  
-  
+
+
 df_weekly <- yf_get_data(tickers = my_ticker, 
                          first_date, last_date, 
                          freq_data = 'weekly') |>
   mutate(freq = 'weekly')
 
 df_monthly <- yf_get_data(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'monthly') |>
+                          first_date, last_date, 
+                          freq_data = 'monthly') |>
   mutate(freq = 'monthly')
 
 df_yearly <- yf_get_data(tickers = my_ticker, 
@@ -191,8 +198,8 @@ first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
 df_yf_multiple <- yf_get_data(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                              first_date = first_date,
+                              last_date = last_date)
 
 l_wide <- yf_convert_to_wide(df_yf_multiple)
 
