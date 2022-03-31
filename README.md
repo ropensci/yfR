@@ -71,17 +71,17 @@ Here are the main differences between `yfR` (new) and `BatchGetSymbols`
 
 -   All input arguments are now formatted as “snake_case” and not
     “dot.case”. For example, the argument for the first date of data
-    importation in `yfR::get_yf_data` is `first_date`, and not
-    `first.date` as used in `BatchGetSymbols::BatchGetSymbols`.
+    importation in `yfR::yf_get()` is `first_date`, and not `first.date`
+    as used in `BatchGetSymbols::BatchGetSymbols`.
 
 -   All function have been renamed for a common API notation. For
-    example, `BatchGetSymbols::BatchGetSymbols` is now
-    `yfR::get_yf_data`. Likewise, the function for fetching collections
-    is `yfR::get_collection`.
+    example, `BatchGetSymbols::BatchGetSymbols` is now `yfR::yf_get()`.
+    Likewise, the function for fetching collections is
+    `yfR::yf_collection_get()`.
 
--   The output of `yfR::get_yf_data` is always a tibble with the price
-    data (and not a list as in `BatchGetSymbols::BatchGetSymbols`). If
-    one wants the tibble with a summary of the importing process, it is
+-   The output of `yfR::yf_get()` is always a tibble with the price data
+    (and not a list as in `BatchGetSymbols::BatchGetSymbols`). If one
+    wants the tibble with a summary of the importing process, it is
     available as an attribute of the output (see function
     `base::attributes`)
 
@@ -181,7 +181,7 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
 #> ✓    - found cache file (2022-03-01 --> 2022-03-30)
 #> !    - need new data (cache doesnt match query)
 #> ✓    - got 69 valid rows (2021-12-21 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Nice!
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ (2/3) Fetching data for ',
 #> 'GM
 #> !    - not cached
@@ -193,7 +193,7 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 69 valid rows (2021-12-21 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Well done msperlin!
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ Binding price data
 
 
@@ -255,7 +255,7 @@ df_dailly <- yf_get(tickers = my_ticker,
 #> !    - not cached
 #> ✓    - cache saved successfully
 #> ✓    - got 3082 valid rows (2010-01-04 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Youre doing good!
+#> ✓    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
 
 
@@ -271,7 +271,7 @@ df_weekly <- yf_get(tickers = my_ticker,
 #> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-30)
 #> ✓    - got 3082 valid rows (2010-01-04 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - got 100% of valid prices -- Looking good!
 #> ℹ Binding price data
 
 df_monthly <- yf_get(tickers = my_ticker, 
@@ -286,7 +286,7 @@ df_monthly <- yf_get(tickers = my_ticker,
 #> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-30)
 #> ✓    - got 3082 valid rows (2010-01-04 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Time for some tea?
+#> ✓    - got 100% of valid prices -- Good stuff!
 #> ℹ Binding price data
 
 df_yearly <- yf_get(tickers = my_ticker, 
@@ -301,7 +301,7 @@ df_yearly <- yf_get(tickers = my_ticker,
 #> 'GE
 #> ✓    - found cache file (2010-01-04 --> 2022-03-30)
 #> ✓    - got 3082 valid rows (2010-01-04 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
 
 df_allfreq <- bind_rows(
@@ -350,17 +350,17 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
 #> 'FB
 #> ✓    - found cache file (2021-12-21 --> 2022-03-30)
 #> ✓    - got 69 valid rows (2021-12-21 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Good job msperlin!
+#> ✓    - got 100% of valid prices -- Time for some tea?
 #> ℹ (2/3) Fetching data for ',
 #> 'GM
 #> ✓    - found cache file (2021-12-21 --> 2022-03-30)
 #> ✓    - got 69 valid rows (2021-12-21 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Looking good!
+#> ✓    - got 100% of valid prices -- Got it!
 #> ℹ (3/3) Fetching data for ',
 #> 'MMM
 #> ✓    - found cache file (2021-12-21 --> 2022-03-30)
 #> ✓    - got 69 valid rows (2021-12-21 --> 2022-03-30)
-#> ✓    - got 100% of valid prices -- Youre doing good!
+#> ✓    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 l_wide <- yf_convert_to_wide(df_yf_multiple)

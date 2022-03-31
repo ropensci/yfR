@@ -50,11 +50,11 @@ Package `BatchgetSymbols` was developed back in 2016, with many bad structural c
 
 Here are the main differences between `yfR` (new) and `BatchGetSymbols` (old): 
 
-- All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::get_yf_data` is `first_date`, and not `first.date` as used in  `BatchGetSymbols::BatchGetSymbols`.
+- All input arguments are now formatted as "snake_case" and not "dot.case". For example, the argument for the first date of data importation in `yfR::yf_get()` is `first_date`, and not `first.date` as used in  `BatchGetSymbols::BatchGetSymbols`.
 
-- All function have been renamed for a common API notation. For example, `BatchGetSymbols::BatchGetSymbols` is now `yfR::get_yf_data`. Likewise, the function for fetching collections is `yfR::get_collection`.
+- All function have been renamed for a common API notation. For example, `BatchGetSymbols::BatchGetSymbols` is now `yfR::yf_get()`. Likewise, the function for fetching collections is `yfR::yf_collection_get()`.
 
-- The output of `yfR::get_yf_data` is always a tibble with the price data (and not a list as in `BatchGetSymbols::BatchGetSymbols`). If one wants the tibble with a summary of the importing process, it is available as an attribute of the output (see function `base::attributes`)
+- The output of `yfR::yf_get()` is always a tibble with the price data (and not a list as in `BatchGetSymbols::BatchGetSymbols`). If one wants the tibble with a summary of the importing process, it is available as an attribute of the output (see function `base::attributes`)
 
 - A new feature called "collection", which allows for easy download of a collection of tickers. For example, you can download price data for all components of the SP500 by simply calling `yfR::yf_collection_get("SP500")`.
 
