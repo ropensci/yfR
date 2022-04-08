@@ -291,12 +291,12 @@ yf_get <- function(tickers,
     temp_dates <- seq(as.Date(paste0(
       lubridate::year(min(df_tickers$ref_date)),
       "-01-01"
-      )
+    )
     ),
     as.Date(paste0(
       lubridate::year(max(df_tickers$ref_date)) + 1,
       "-12-31"
-      )
+    )
     ),
     by = "1 day"
     )
