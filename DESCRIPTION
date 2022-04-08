@@ -5,7 +5,8 @@ Authors@R: person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role =
 Description: Facilitates download of financial data from Yahoo Finance <https://finance.yahoo.com/>, 
  a vast repository of stock price data across multiple financial exchanges. The package offers a local caching system
  and support for parallel computation.
-URL: https://github.com/msperlin/yfR
+URL: https://github.com/msperlin/yfR,
+    https://msperlin.github.io/yfR/
 BugReports: https://github.com/msperlin/yfR/issues
 Depends:
     R (>= 4.1)
