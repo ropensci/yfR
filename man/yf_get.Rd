@@ -21,32 +21,45 @@ yf_get(
 )
 }
 \arguments{
-\item{tickers}{A vector of tickers. If not sure whether the ticker is available, search for it in yahoo finance <https://finance.yahoo.com/>.}
+\item{tickers}{A vector of tickers. If not sure whether the ticker is
+available, search for it in yahoo finance <https://finance.yahoo.com/>.}
 
 \item{first_date}{The first date of query (Date or character as YYYY-MM-DD)}
 
 \item{last_date}{The last date of query (Date or character as YYYY-MM-DD)}
 
-\item{thresh_bad_data}{A percentage threshold for defining bad data. The dates of the benchmark ticker are compared to each asset. If the percentage of non-missing dates
-with respect to the benchmark ticker is lower than thresh_bad_data, the function will ignore the asset (default = 0.75)}
+\item{thresh_bad_data}{A percentage threshold for defining bad data. The
+dates of the benchmark ticker are compared to each asset. If the percentage
+of non-missing dates with respect to the benchmark ticker is lower than
+thresh_bad_data, the function will ignore the asset (default = 0.75)}
 
-\item{bench_ticker}{The ticker of the benchmark asset used to compare dates. My suggestion is to use the main stock index of the market from where the data is coming from (default = ^GSPC (SP500, US market))}
+\item{bench_ticker}{The ticker of the benchmark asset used to compare dates.
+My suggestion is to use the main stock index of the market from where the
+data is coming from (default = ^GSPC (SP500, US market))}
 
-\item{type_return}{Type of price return to calculate: 'arit' - aritmetic (default), 'log' - log returns.}
+\item{type_return}{Type of price return to calculate:
+'arit' - aritmetic (default), 'log' - log returns.}
 
-\item{freq_data}{Frequency of financial data: 'daily' (default), 'weekly', 'monthly', 'yearly'}
+\item{freq_data}{Frequency of financial data: 'daily' (default),
+'weekly', 'monthly', 'yearly'}
 
-\item{how_to_aggregate}{Defines whether to aggregate the data using the first observations of the aggregating period or last ('first', 'last').
-For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the last available day of the year will be used for all
-aggregated values such as price_adjusted. (Default = "last")}
+\item{how_to_aggregate}{Defines whether to aggregate the data using the
+first observations of the aggregating period or last ('first', 'last').
+ For example, if freq_data = 'yearly' and how_to_aggregate = 'last', the
+ last available day of the year will be used for all
+ aggregated values such as price_adjusted. (Default = "last")}
 
-\item{do_complete_data}{Return a complete/balanced dataset? If TRUE, all missing pairs of ticker-date will be replaced by NA or closest price (see input do_fill_missing_prices). Default = FALSE.}
+\item{do_complete_data}{Return a complete/balanced dataset? If TRUE, all
+missing pairs of ticker-date will be replaced by NA or closest price
+(see input do_fill_missing_prices). Default = FALSE.}
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 
-\item{cache_folder}{Where to save cache files? (default = yfR::yf_get_default_cache_folder() )}
+\item{cache_folder}{Where to save cache files?
+(default = yfR::yf_get_default_cache_folder() )}
 
-\item{do_parallel}{Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.}
+\item{do_parallel}{Flag for using parallel or not (default = FALSE).
+Before using parallel, make sure you call function future::plan() first.}
 
 \item{be_quiet}{Flag for not printing statements (default = FALSE)}
 }
@@ -54,13 +67,16 @@ aggregated values such as price_adjusted. (Default = "last")}
 A dataframe with stock prices.
 }
 \description{
-Based primarly on a set of tickers and time period, this function will download stock price data from Yahoo Finance
-using \link[quantmod]{getSymbols}. It organizes the data in the long format and outputs a "stacked" dataframe.
+Based primarly on a set of tickers and time period, this function will
+download stock price data from Yahoo Finance using
+\link[quantmod]{getSymbols}. It organizes the data in the long format and
+outputs a "stacked" dataframe.
 }
 \section{Warning}{
 
 
-Be aware that when using cache system in a local folder (and not the default tempdir()), the aggregate prices series might not match if
+Be aware that when using cache system in a local folder (and not the default
+ tempdir()), the aggregate prices series might not match if
 a split or dividends event happens in between cache files.
 }
 

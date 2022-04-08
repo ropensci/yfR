@@ -10,9 +10,22 @@ URL: https://github.com/msperlin/yfR,
 BugReports: https://github.com/msperlin/yfR/issues
 Depends:
     R (>= 4.1)
-Imports: stringr, curl, tidyr, 
-    lubridate, furrr, purrr, future, tibble, zoo,
-    cli, readr, rvest, dplyr, quantmod
+Imports: 
+    stringr,
+    curl,
+    tidyr,
+    lubridate,
+    furrr,
+    purrr,
+    future,
+    tibble,
+    zoo,
+    cli,
+    readr,
+    rvest,
+    dplyr,
+    quantmod,
+    magrittr
 License: MIT + file LICENSE
 LazyData: true
 RoxygenNote: 7.1.2

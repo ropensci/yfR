@@ -15,7 +15,8 @@ yf_get_index_comp(
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 
-\item{cache_folder}{Where to save cache files? (default = yfR::yf_get_default_cache_folder() )}
+\item{cache_folder}{Where to save cache files?
+(default = yfR::yf_get_default_cache_folder() )}
 }
 \value{
 A dataframe with the index compositino (column might vary)

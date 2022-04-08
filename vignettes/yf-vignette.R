@@ -52,28 +52,28 @@ last_date <- Sys.Date()
 
 df_dailly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
-                         freq_data = 'daily') |>
+                         freq_data = 'daily') %>%
   mutate(freq = 'daily')
   
   
 df_weekly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
-                         freq_data = 'weekly') |>
+                         freq_data = 'weekly') %>%
   mutate(freq = 'weekly')
 
 df_monthly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
-                         freq_data = 'monthly') |>
+                         freq_data = 'monthly') %>%
   mutate(freq = 'monthly')
 
 df_yearly <- yf_get(tickers = my_ticker, 
                          first_date, last_date, 
-                         freq_data = 'yearly') |>
+                         freq_data = 'yearly') %>%
   mutate(freq = 'yearly')
 
 df_allfreq <- bind_rows(
   list(df_dailly, df_weekly, df_monthly, df_yearly)
-) |>
+) %>%
   mutate(freq = factor(freq, 
                        levels = c('daily', 
                                   'weekly',

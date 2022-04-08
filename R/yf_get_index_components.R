@@ -85,7 +85,7 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
   for (i_try in seq(max_tries)) {
     my_url <- 'https://en.wikipedia.org/wiki/List_of_companies_listed_on_B3'
 
-    df_ibov_comp <- rvest::read_html(my_url) |>
+    df_ibov_comp <- rvest::read_html(my_url) %>%
       rvest::html_table()
 
     df_ibov_comp <- df_ibov_comp[[1]]
@@ -95,16 +95,16 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
     if (nrow(df_ibov_comp) > 0) break()
   }
 
-  df_ibov_comp <- df_ibov_comp |>
+  df_ibov_comp <- df_ibov_comp %>%
     dplyr::rename(ticker = Ticker,
                   company = Company,
-                  industry = Industry) |>
+                  industry = Industry) %>%
     dplyr::mutate(type_stock = NA,
                   quantity = NA,
                   percentage_participation = NA,
                   ref_date = Sys.Date(),
                   index = "IBOV",
-                  index_ticker = "^BVSP") |>
+                  index_ticker = "^BVSP") %>%
     dplyr::select(-Headquarters)
 
   if (do_cache) {
@@ -142,19 +142,19 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
 
   my_xpath <- '//*[@id="mw-content-text"]/div/table[2]' # old xpath
   my_xpath <- '//*[@id="constituents"]'
-  df_ftse <- my_url |>
-    rvest::read_html() |>
-    rvest::html_nodes(xpath = my_xpath) |>
+  df_ftse <- my_url %>%
+    rvest::read_html() %>%
+    rvest::html_nodes(xpath = my_xpath) %>%
     rvest::html_table()
 
   df_ftse <- df_ftse[[1]]
 
-  df_ftse <- df_ftse |>
+  df_ftse <- df_ftse %>%
     dplyr::rename(
       ticker = EPIC,
       company = Company,
       sector = names(df_ftse)[3]
-    ) |>
+    ) %>%
     dplyr::mutate(
       index = "FTSE",
       index_ticker = "^FTSE"
@@ -194,20 +194,20 @@ yf_get_sp500_stocks <- function(do_cache = TRUE,
 
   read_html <- 0 # fix for global variable nagging from BUILD
   my_xpath <- '//*[@id="constituents"]'
-  df_sp500 <- my_url |>
-    rvest::read_html() |>
-    rvest::html_nodes(xpath = my_xpath) |>
+  df_sp500 <- my_url %>%
+    rvest::read_html() %>%
+    rvest::html_nodes(xpath = my_xpath) %>%
     rvest::html_table(fill = TRUE)
 
   df_sp500 <- df_sp500[[1]]
 
-  df_sp500 <- df_sp500  |>
+  df_sp500 <- df_sp500  %>%
     dplyr::rename(
       ticker = Symbol,
       company = Security,
       sector = `GICS Sector`
-    ) |>
-    dplyr::select(ticker, company, sector) |>
+    ) %>%
+    dplyr::select(ticker, company, sector) %>%
     dplyr::mutate(
       index = "SP500",
       index_ticker = "^GSPC"

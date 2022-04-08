@@ -41,8 +41,8 @@ yf_get_clean_data <- function(ticker,
   # suppressWarnings({
   #   try(
   #     {
-  #       df_raw <- readr::read_csv(yf_csv_link, col_types = my_cols) |>
-  #       dplyr::mutate(ticker = ticker) |>
+  #       df_raw <- readr::read_csv(yf_csv_link, col_types = my_cols) %>%
+  #       dplyr::mutate(ticker = ticker) %>%
   #       dplyr::rename(
   #         ref_date = Date,
   #         price_open = Open,
@@ -51,8 +51,8 @@ yf_get_clean_data <- function(ticker,
   #         price_close = Close,
   #         price_adjusted = `Adj Close`,
   #         volume = Volume
-  #       ) |>
-  #       dplyr::arrange(ref_date) |> # make sure dates are sorted,
+  #       ) %>%
+  #       dplyr::arrange(ref_date) %>% # make sure dates are sorted,
   #       dplyr::relocate(ticker, ref_date)
   #     },
   #     silent = T
@@ -64,10 +64,10 @@ yf_get_clean_data <- function(ticker,
 
   # fix df_raw
   ref_date <- zoo::index(df_raw)
-  df_raw <- as.data.frame(df_raw) |>
+  df_raw <- as.data.frame(df_raw) %>%
     dplyr::mutate(ref_date = ref_date,
                   ticker = ticker)
-  #|>
+  #%>%
    # as.data.frame(df_raw[!duplicated(zoo::index(df_raw))])
 
   colnames(df_raw) <- c('price_open','price_high','price_low',
@@ -75,14 +75,14 @@ yf_get_clean_data <- function(ticker,
                      'ref_date', 'ticker')
 
   # further organization
-  df_raw <- df_raw |>
-    dplyr::arrange(ref_date) |> # make sure dates are sorted,
+  df_raw <- df_raw %>%
+    dplyr::arrange(ref_date) %>% # make sure dates are sorted,
     dplyr::relocate(ticker, ref_date) # relocate columns
 
   # make sure each date point only appear once
   # sometimes, yf outputs two data points for the same date (not sure why)
-  df_raw <- df_raw |>
-    dplyr::group_by(ref_date, ticker) |>
+  df_raw <- df_raw %>%
+    dplyr::group_by(ref_date, ticker) %>%
     dplyr::filter(dplyr::row_number()==1)
 
   # make sure only unique rows are returned

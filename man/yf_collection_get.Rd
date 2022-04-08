@@ -22,11 +22,13 @@ available collections}
 
 \item{last_date}{The last date of query (Date or character as YYYY-MM-DD)}
 
-\item{do_parallel}{Flag for using parallel or not (default = FALSE). Before using parallel, make sure you call function future::plan() first.}
+\item{do_parallel}{Flag for using parallel or not (default = FALSE).
+Before using parallel, make sure you call function future::plan() first.}
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 
-\item{cache_folder}{Where to save cache files? (default = yfR::yf_get_default_cache_folder() )}
+\item{cache_folder}{Where to save cache files?
+(default = yfR::yf_get_default_cache_folder() )}
 }
 \value{
 A dataframe with financial prices from collection

@@ -271,8 +271,8 @@ yf_get <- function(tickers,
 
     # makes sure each data point is ticker/ref_date is available in output
     # missing are set as NA
-    df_tickers <- df_tickers |>
-      dplyr::group_by(ticker, ref_date) |>
+    df_tickers <- df_tickers %>%
+      dplyr::group_by(ticker, ref_date) %>%
       tidyr::complete()
 
   }
@@ -336,8 +336,8 @@ yf_get <- function(tickers,
 
     if (how_to_aggregate == "first") {
 
-      df_tickers <- df_tickers |>
-        dplyr::group_by(time_groups, ticker) |>
+      df_tickers <- df_tickers %>%
+        dplyr::group_by(time_groups, ticker) %>%
         dplyr::summarise(
           ref_date = min(ref_date),
           price_open = dplyr::first(price_open),
@@ -346,14 +346,14 @@ yf_get <- function(tickers,
           price_close = dplyr::first(price_close),
           price_adjusted = dplyr::first(price_adjusted),
           volume = sum(volume, na.rm = TRUE)
-        ) |>
-        dplyr::ungroup() |>
+        ) %>%
+        dplyr::ungroup() %>%
         dplyr::arrange(ticker, ref_date)
 
     } else if (how_to_aggregate == "last") {
 
-      df_tickers <- df_tickers |>
-        dplyr::group_by(time_groups, ticker) |>
+      df_tickers <- df_tickers %>%
+        dplyr::group_by(time_groups, ticker) %>%
         dplyr::summarise(
           ref_date = min(ref_date),
           volume = sum(volume, na.rm = TRUE),
@@ -362,8 +362,8 @@ yf_get <- function(tickers,
           price_low = min(price_low),
           price_close = dplyr::last(price_close),
           price_adjusted = dplyr::last(price_adjusted)
-        ) |>
-        dplyr::ungroup() |>
+        ) %>%
+        dplyr::ungroup() %>%
         dplyr::arrange(ticker, ref_date)
 
     }
@@ -415,7 +415,7 @@ yf_get <- function(tickers,
   }
 
   # setup final output (ungrouped tibble)
-  df_out <- df_tickers |>
+  df_out <- df_tickers %>%
     dplyr::ungroup()
 
   attributes(df_out)$df_control <- df_control
