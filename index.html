@@ -84,7 +84,7 @@
 </h1>
 </div>
 <p><code>yfR</code> is the second and backwards-incompatible version of <a href="https://CRAN.R-project.org/package=BatchGetSymbols" class="external-link">BatchGetSymbols</a>. In a nutshell, it provides access to daily stock prices from <a href="https://finance.yahoo.com/" class="external-link">Yahoo Finance</a>, a vast repository with financial data around the globe. Yahoo Finance cover a large number of markets and assets, being used extensively for importing price datasets used in academic research and teaching.</p>
-<p>Package <code>yfR</code> is based on <a href="https://www.quantmod.com/" class="external-link">quantmod</a> and used its main function for fetching data from Yahoo Finance. The main innovation in <code>yfR</code> is in the organization of the imported financial data and using local caching system and parallel computing for speeding up large scale download of datasets from Yahoo Finance.</p>
+<p>Package <code>yfR</code> is based on <a href="https://www.quantmod.com/" class="external-link">quantmod</a> and uses one of its functions (<code><a href="https://rdrr.io/pkg/quantmod/man/getSymbols.html" class="external-link">quantmod::getSymbols</a></code>) for fetching data from Yahoo Finance. The main innovation in <code>yfR</code> is in the organization of the imported financial data and using a local caching system and parallel computing for speeding up large scale download of datasets from Yahoo Finance.</p>
 <p>See full documentation <a href="https://github.com/msperlin/yfR" class="external-link">here</a>.</p>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
@@ -105,10 +105,10 @@
 <p>Package <code>BatchgetSymbols</code> was developed back in 2016, with many bad structural choices from my part. Since then, I learned more about R and its ecosystem, resulting in better and more maintainable code. However, it is impossible to keep compatibility with the changes I wanted to make, which is why I decided to develop a new (and fresh) package.</p>
 <p>Here are the main differences between <code>yfR</code> (new) and <code>BatchGetSymbols</code> (old):</p>
 <ul>
-<li><p>All input arguments are now formatted as “snake_case” and not “dot.case”. For example, the argument for the first date of data importation in <code><a href="reference/yf_get.html">yfR::yf_get()</a></code> is <code>first_date</code>, and not <code>first.date</code> as used in <code>BatchGetSymbols::BatchGetSymbols</code>.</p></li>
+<li><p>All input arguments are now formatted as “snake_case” and not “dot.case”. For example, the argument for the first date of data importation in <code><a href="reference/yf_get.html">yfR::yf_get()</a></code> is <code>first_date</code>, and not <code>first.date</code>, as used in <code>BatchGetSymbols::BatchGetSymbols</code>.</p></li>
+<li><p>A new feature called “collection”, which allows for easy download of a collection of tickers. For example, you can download price data for all components of the SP500 by simply calling <code>yfR::yf_collection_get("SP500")</code>.</p></li>
 <li><p>All function have been renamed for a common API notation. For example, <code>BatchGetSymbols::BatchGetSymbols</code> is now <code><a href="reference/yf_get.html">yfR::yf_get()</a></code>. Likewise, the function for fetching collections is <code><a href="reference/yf_collection_get.html">yfR::yf_collection_get()</a></code>.</p></li>
 <li><p>The output of <code><a href="reference/yf_get.html">yfR::yf_get()</a></code> is always a tibble with the price data (and not a list as in <code>BatchGetSymbols::BatchGetSymbols</code>). If one wants the tibble with a summary of the importing process, it is available as an attribute of the output (see function <code><a href="https://rdrr.io/r/base/attributes.html" class="external-link">base::attributes</a></code>)</p></li>
-<li><p>A new feature called “collection”, which allows for easy download of a collection of tickers. For example, you can download price data for all components of the SP500 by simply calling <code>yfR::yf_collection_get("SP500")</code>.</p></li>
 <li><p>New and prettier status messages using package <code>cli</code></p></li>
 </ul>
 </div>
@@ -145,15 +145,14 @@
                      first_date <span class="op">=</span> <span class="va">first_date</span>,
                      last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 1 stocks | 2022-03-01 --&gt; 2022-03-31 (30 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2022-04-01 --&gt; 2022-05-01 (30 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/1) Fetching data for ',</span>
-<span class="co">#&gt; 'FB</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for FB</span>
 <span class="co">#&gt; !    - not cached</span>
-<span class="co">#&gt; ✓    - cache saved successfully</span>
-<span class="co">#&gt; ✓    - got 22 valid rows (2022-03-01 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Good stuff!</span>
+<span class="co">#&gt; ✔    - cache saved successfully</span>
+<span class="co">#&gt; ✔    - got 20 valid rows (2022-04-01 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Nice!</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
 <span class="co"># output is a tibble with data</span>
@@ -161,12 +160,12 @@
 <span class="co">#&gt; # A tibble: 6 × 10</span>
 <span class="co">#&gt;   ticker ref_date   price_open price_high price_low price_close   volume</span>
 <span class="co">#&gt;   &lt;chr&gt;  &lt;date&gt;          &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 FB     2022-03-01       210.       212.      202.        203. 27094900</span>
-<span class="co">#&gt; 2 FB     2022-03-02       205.       209.      202.        208. 29452100</span>
-<span class="co">#&gt; 3 FB     2022-03-03       209.       209.      201.        203. 27263500</span>
-<span class="co">#&gt; 4 FB     2022-03-04       202.       206.      199.        200. 32130900</span>
-<span class="co">#&gt; 5 FB     2022-03-07       201.       201.      187.        187. 38560600</span>
-<span class="co">#&gt; 6 FB     2022-03-08       188.       197.      186.        190. 37508100</span>
+<span class="co">#&gt; 1 FB     2022-04-01       225.       227.      223.        225. 19533300</span>
+<span class="co">#&gt; 2 FB     2022-04-04       226.       234.      226.        234. 28054800</span>
+<span class="co">#&gt; 3 FB     2022-04-05       234.       237.      231.        232. 29727200</span>
+<span class="co">#&gt; 4 FB     2022-04-06       227.       229.      221.        223. 28995100</span>
+<span class="co">#&gt; 5 FB     2022-04-07       224.       226.      219.        223. 21037200</span>
+<span class="co">#&gt; 6 FB     2022-04-08       222.       225.      220.        222. 18363700</span>
 <span class="co">#&gt; # … with 3 more variables: price_adjusted &lt;dbl&gt;, ret_adjusted_prices &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   ret_closing_prices &lt;dbl&gt;</span></code></pre></div>
 </div>
@@ -185,27 +184,24 @@
                               first_date <span class="op">=</span> <span class="va">first_date</span>,
                               last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 3 stocks | 2021-12-21 --&gt; 2022-03-31 (100 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 3 stocks | 2022-01-21 --&gt; 2022-05-01 (100 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/3) Fetching data for ',</span>
-<span class="co">#&gt; 'FB</span>
-<span class="co">#&gt; ✓    - found cache file (2022-03-01 --&gt; 2022-03-30)</span>
+<span class="co">#&gt; ℹ (1/3) Fetching data for FB</span>
+<span class="co">#&gt; ✔    - found cache file (2022-04-01 --&gt; 2022-04-29)</span>
 <span class="co">#&gt; !    - need new data (cache doesnt match query)</span>
-<span class="co">#&gt; ✓    - got 69 valid rows (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Looking good!</span>
-<span class="co">#&gt; ℹ (2/3) Fetching data for ',</span>
-<span class="co">#&gt; 'GM</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Got it!</span>
+<span class="co">#&gt; ℹ (2/3) Fetching data for GM</span>
 <span class="co">#&gt; !    - not cached</span>
-<span class="co">#&gt; ✓    - cache saved successfully</span>
-<span class="co">#&gt; ✓    - got 69 valid rows (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Well done msperlin!</span>
-<span class="co">#&gt; ℹ (3/3) Fetching data for ',</span>
-<span class="co">#&gt; 'MMM</span>
+<span class="co">#&gt; ✔    - cache saved successfully</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Mais faceiro que guri de bombacha nova!</span>
+<span class="co">#&gt; ℹ (3/3) Fetching data for MMM</span>
 <span class="co">#&gt; !    - not cached</span>
-<span class="co">#&gt; ✓    - cache saved successfully</span>
-<span class="co">#&gt; ✓    - got 69 valid rows (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Got it!</span>
+<span class="co">#&gt; ✔    - cache saved successfully</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- You got it msperlin!</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
 
@@ -255,15 +251,14 @@
                          freq_data <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-03-31 (4472 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-05-01 (4503 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/1) Fetching data for ',</span>
-<span class="co">#&gt; 'GE</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
 <span class="co">#&gt; !    - not cached</span>
-<span class="co">#&gt; ✓    - cache saved successfully</span>
-<span class="co">#&gt; ✓    - got 3082 valid rows (2010-01-04 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Time for some tea?</span>
+<span class="co">#&gt; ✔    - cache saved successfully</span>
+<span class="co">#&gt; ✔    - got 3103 valid rows (2010-01-04 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- You got it msperlin!</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
 
@@ -272,14 +267,13 @@
                          freq_data <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-03-31 (4472 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-05-01 (4503 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/1) Fetching data for ',</span>
-<span class="co">#&gt; 'GE</span>
-<span class="co">#&gt; ✓    - found cache file (2010-01-04 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 3082 valid rows (2010-01-04 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Looking good!</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
+<span class="co">#&gt; ✔    - found cache file (2010-01-04 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 3103 valid rows (2010-01-04 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Mas bah tche, que coisa linda!</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
 <span class="va">df_monthly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
@@ -287,14 +281,13 @@
                           freq_data <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-03-31 (4472 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-05-01 (4503 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/1) Fetching data for ',</span>
-<span class="co">#&gt; 'GE</span>
-<span class="co">#&gt; ✓    - found cache file (2010-01-04 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 3082 valid rows (2010-01-04 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Good stuff!</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
+<span class="co">#&gt; ✔    - found cache file (2010-01-04 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 3103 valid rows (2010-01-04 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Good stuff!</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
 <span class="va">df_yearly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
@@ -302,14 +295,13 @@
                          freq_data <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-03-31 (4472 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-05-01 (4503 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/1) Fetching data for ',</span>
-<span class="co">#&gt; 'GE</span>
-<span class="co">#&gt; ✓    - found cache file (2010-01-04 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 3082 valid rows (2010-01-04 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Time for some tea?</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
+<span class="co">#&gt; ✔    - found cache file (2010-01-04 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 3103 valid rows (2010-01-04 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Time for some tea?</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
 <span class="va">df_allfreq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span>
@@ -350,24 +342,21 @@
                               first_date <span class="op">=</span> <span class="va">first_date</span>,
                               last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 3 stocks | 2021-12-21 --&gt; 2022-03-31 (100 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 3 stocks | 2022-01-21 --&gt; 2022-05-01 (100 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/3) Fetching data for ',</span>
-<span class="co">#&gt; 'FB</span>
-<span class="co">#&gt; ✓    - found cache file (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 69 valid rows (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Time for some tea?</span>
-<span class="co">#&gt; ℹ (2/3) Fetching data for ',</span>
-<span class="co">#&gt; 'GM</span>
-<span class="co">#&gt; ✓    - found cache file (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 69 valid rows (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Got it!</span>
-<span class="co">#&gt; ℹ (3/3) Fetching data for ',</span>
-<span class="co">#&gt; 'MMM</span>
-<span class="co">#&gt; ✓    - found cache file (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 69 valid rows (2021-12-21 --&gt; 2022-03-30)</span>
-<span class="co">#&gt; ✓    - got 100% of valid prices -- Well done msperlin!</span>
+<span class="co">#&gt; ℹ (1/3) Fetching data for FB</span>
+<span class="co">#&gt; ✔    - found cache file (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Good stuff!</span>
+<span class="co">#&gt; ℹ (2/3) Fetching data for GM</span>
+<span class="co">#&gt; ✔    - found cache file (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Got it!</span>
+<span class="co">#&gt; ℹ (3/3) Fetching data for MMM</span>
+<span class="co">#&gt; ✔    - found cache file (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-01-21 --&gt; 2022-04-29)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Good stuff!</span>
 <span class="co">#&gt; ℹ Binding price data</span>
 
 <span class="va">l_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_convert_to_wide.html">yf_convert_to_wide</a></span><span class="op">(</span><span class="va">df_yf_multiple</span><span class="op">)</span>
@@ -378,12 +367,12 @@
 <span class="co">#&gt; # A tibble: 6 × 4</span>
 <span class="co">#&gt;   ref_date      FB    GM   MMM</span>
 <span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 2021-12-21  334.  54.8  171.</span>
-<span class="co">#&gt; 2 2021-12-22  330.  56.1  171.</span>
-<span class="co">#&gt; 3 2021-12-23  335.  56.9  173.</span>
-<span class="co">#&gt; 4 2021-12-27  346.  57.4  175.</span>
-<span class="co">#&gt; 5 2021-12-28  346.  57.1  176.</span>
-<span class="co">#&gt; 6 2021-12-29  343.  57.2  177.</span></code></pre></div>
+<span class="co">#&gt; 1 2022-01-21  303.  53.3  171.</span>
+<span class="co">#&gt; 2 2022-01-24  309.  52.6  171.</span>
+<span class="co">#&gt; 3 2022-01-25  300.  51.9  172.</span>
+<span class="co">#&gt; 4 2022-01-26  295.  52.3  168.</span>
+<span class="co">#&gt; 5 2022-01-27  295.  51.5  169.</span>
+<span class="co">#&gt; 6 2022-01-28  302.  50.2  162.</span></code></pre></div>
 </div>
 </div>
 </div>
