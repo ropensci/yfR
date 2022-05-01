@@ -66,6 +66,9 @@ test_that(desc = "Test of yf_get()", {
 
 test_that(desc = "Test of yf_get(): do_parallel = TRUE", {
 
+  # 20220501 yf now sets api limits, which invalidates any parallel computation
+  skip("Skipping since parallel is not supported due to YF api limits")
+
   if (!covr::in_covr()) {
     skip_if_offline()
     skip_on_cran() # too heavy for cran

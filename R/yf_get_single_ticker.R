@@ -11,8 +11,7 @@ yf_get_single_ticker <- function(ticker,
                                  be_quiet = FALSE,
                                  thresh_bad_data) {
   if (!be_quiet) {
-    my_msg <- set_cli_msg("({i_ticker}/{length_tickers}) Fetching data for ',
-                          '{ticker}")
+    my_msg <- set_cli_msg("({i_ticker}/{length_tickers}) Fetching data for {ticker}")
     cli::cli_alert_info(my_msg)
   }
 

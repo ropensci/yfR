@@ -10,23 +10,29 @@ test_that("Test of yf_get_available_indices()", {
 
 test_that("Test of yf_get_index_comp()", {
 
-    if (!covr::in_covr()) {
-      skip_if_offline()
-      skip_on_cran() # too heavy for cran
-    }
+  if (!covr::in_covr()) {
+    skip_if_offline()
+    skip_on_cran() # too heavy for cran
+  }
 
-    available_indices <- yf_get_available_indices()
+  available_indices <- yf_get_available_indices()
 
-    for (i_index in available_indices) {
+  for (i_index in available_indices) {
 
-      expect_true(tibble::is_tibble(yf_get_index_comp(i_index)))
+    expect_true(tibble::is_tibble(yf_get_index_comp(i_index)))
 
-    }
+  }
 
 })
 
 
 test_that("Test of yf_collection_get()", {
+
+  # 20220501 yf now sets api limits, which invalidates any parallel computation
+  skip(
+    paste0("Skipping since parallel is not supported due to YF api limits, ",
+           "and collections are large datasets for single session download.")
+  )
 
   # parallel test for collections
   n_workers <- floor(parallel::detectCores()/2)
