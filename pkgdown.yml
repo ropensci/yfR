@@ -1,9 +1,9 @@
 pandoc: 2.14.2
-pkgdown: 2.0.2
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   yf-vignette: yf-vignette.html
-last_built: 2022-04-08T13:01Z
+last_built: 2022-05-01T13:07Z
 urls:
   reference: https://msperlin.github.io/yfR/reference
   article: https://msperlin.github.io/yfR/articles
