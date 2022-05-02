@@ -9,7 +9,8 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 coverage](https://codecov.io/gh/msperlin/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/yfR?branch=main)
 [![R build
 (rcmdcheck)](https://github.com/msperlin/yfR/workflows/R-CMD-check/badge.svg)](https://github.com/msperlin/yfR/actions)
-
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/523_status.svg)](https://github.com/ropensci/software-review/issues/523)
 <!-- badges: end -->
 
 # Motivation
@@ -134,14 +135,14 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-04-01 --> 2022-05-01 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-04-02 --> 2022-05-02 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 20 valid rows (2022-04-01 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Nice!
+#> ✔    - got 19 valid rows (2022-04-04 --> 2022-04-29)
+#> ✔    - got 100% of valid prices -- Good job msperlin!
 #> ℹ Binding price data
 
 # output is a tibble with data
@@ -149,12 +150,12 @@ head(df_yf)
 #> # A tibble: 6 × 10
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 FB     2022-04-01       225.       227.      223.        225. 19533300
-#> 2 FB     2022-04-04       226.       234.      226.        234. 28054800
-#> 3 FB     2022-04-05       234.       237.      231.        232. 29727200
-#> 4 FB     2022-04-06       227.       229.      221.        223. 28995100
-#> 5 FB     2022-04-07       224.       226.      219.        223. 21037200
-#> 6 FB     2022-04-08       222.       225.      220.        222. 18363700
+#> 1 FB     2022-04-04       226.       234.      226.        234. 28054800
+#> 2 FB     2022-04-05       234.       237.      231.        232. 29727200
+#> 3 FB     2022-04-06       227.       229.      221.        223. 28995100
+#> 4 FB     2022-04-07       224.       226.      219.        223. 21037200
+#> 5 FB     2022-04-08       222.       225.      220.        222. 18363700
+#> 6 FB     2022-04-11       218.       221.      215.        216. 20516600
 #> # … with 3 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
 #> #   ret_closing_prices <dbl>
 ```
@@ -173,24 +174,24 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
                               first_date = first_date,
                               last_date = last_date)
 #> 
-#> ── Running yfR for 3 stocks | 2022-01-21 --> 2022-05-01 (100 days) ──
+#> ── Running yfR for 3 stocks | 2022-01-22 --> 2022-05-02 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/3) Fetching data for FB
-#> ✔    - found cache file (2022-04-01 --> 2022-04-29)
+#> ✔    - found cache file (2022-04-04 --> 2022-04-29)
 #> !    - need new data (cache doesnt match query)
-#> ✔    - got 69 valid rows (2022-01-21 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Got it!
+#> ✔    - got 68 valid rows (2022-01-24 --> 2022-04-29)
+#> ✔    - got 100% of valid prices -- You got it msperlin!
 #> ℹ (2/3) Fetching data for GM
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 69 valid rows (2022-01-21 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Mais faceiro que guri de bombacha nova!
+#> ✔    - got 68 valid rows (2022-01-24 --> 2022-04-29)
+#> ✔    - got 100% of valid prices -- Youre doing good!
 #> ℹ (3/3) Fetching data for MMM
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 69 valid rows (2022-01-21 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- You got it msperlin!
+#> ✔    - got 68 valid rows (2022-01-24 --> 2022-04-29)
+#> ✔    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
 
 
@@ -244,14 +245,14 @@ df_dailly <- yf_get(tickers = my_ticker,
                          freq_data = 'daily') %>%
   mutate(freq = 'daily')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-01 (4503 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-02 (4504 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
 #> !    - not cached
 #> ✔    - cache saved successfully
 #> ✔    - got 3103 valid rows (2010-01-04 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- You got it msperlin!
+#> ✔    - got 100% of valid prices -- Mais faceiro que guri de bombacha nova!
 #> ℹ Binding price data
 
 
@@ -260,13 +261,13 @@ df_weekly <- yf_get(tickers = my_ticker,
                          freq_data = 'weekly') %>%
   mutate(freq = 'weekly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-01 (4503 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-02 (4504 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
 #> ✔    - found cache file (2010-01-04 --> 2022-04-29)
 #> ✔    - got 3103 valid rows (2010-01-04 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Mas bah tche, que coisa linda!
+#> ✔    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 df_monthly <- yf_get(tickers = my_ticker, 
@@ -274,7 +275,7 @@ df_monthly <- yf_get(tickers = my_ticker,
                           freq_data = 'monthly') %>%
   mutate(freq = 'monthly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-01 (4503 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-02 (4504 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
@@ -288,13 +289,13 @@ df_yearly <- yf_get(tickers = my_ticker,
                          freq_data = 'yearly') %>%
   mutate(freq = 'yearly')
 #> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-01 (4503 days) ──
+#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-05-02 (4504 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for GE
 #> ✔    - found cache file (2010-01-04 --> 2022-04-29)
 #> ✔    - got 3103 valid rows (2010-01-04 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Time for some tea?
+#> ✔    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 
 df_allfreq <- bind_rows(
@@ -336,21 +337,21 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
                               first_date = first_date,
                               last_date = last_date)
 #> 
-#> ── Running yfR for 3 stocks | 2022-01-21 --> 2022-05-01 (100 days) ──
+#> ── Running yfR for 3 stocks | 2022-01-22 --> 2022-05-02 (100 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/3) Fetching data for FB
-#> ✔    - found cache file (2022-01-21 --> 2022-04-29)
-#> ✔    - got 69 valid rows (2022-01-21 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Good stuff!
+#> ✔    - found cache file (2022-01-24 --> 2022-04-29)
+#> ✔    - got 68 valid rows (2022-01-24 --> 2022-04-29)
+#> ✔    - got 100% of valid prices -- Good job msperlin!
 #> ℹ (2/3) Fetching data for GM
-#> ✔    - found cache file (2022-01-21 --> 2022-04-29)
-#> ✔    - got 69 valid rows (2022-01-21 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Got it!
+#> ✔    - found cache file (2022-01-24 --> 2022-04-29)
+#> ✔    - got 68 valid rows (2022-01-24 --> 2022-04-29)
+#> ✔    - got 100% of valid prices -- Time for some tea?
 #> ℹ (3/3) Fetching data for MMM
-#> ✔    - found cache file (2022-01-21 --> 2022-04-29)
-#> ✔    - got 69 valid rows (2022-01-21 --> 2022-04-29)
-#> ✔    - got 100% of valid prices -- Good stuff!
+#> ✔    - found cache file (2022-01-24 --> 2022-04-29)
+#> ✔    - got 68 valid rows (2022-01-24 --> 2022-04-29)
+#> ✔    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
 
 l_wide <- yf_convert_to_wide(df_yf_multiple)
@@ -361,10 +362,10 @@ head(prices_wide)
 #> # A tibble: 6 × 4
 #>   ref_date      FB    GM   MMM
 #>   <date>     <dbl> <dbl> <dbl>
-#> 1 2022-01-21  303.  53.3  171.
-#> 2 2022-01-24  309.  52.6  171.
-#> 3 2022-01-25  300.  51.9  172.
-#> 4 2022-01-26  295.  52.3  168.
-#> 5 2022-01-27  295.  51.5  169.
-#> 6 2022-01-28  302.  50.2  162.
+#> 1 2022-01-24  309.  52.6  171.
+#> 2 2022-01-25  300.  51.9  172.
+#> 3 2022-01-26  295.  52.3  168.
+#> 4 2022-01-27  295.  51.5  169.
+#> 5 2022-01-28  302.  50.2  162.
+#> 6 2022-01-31  313.  52.7  164.
 ```

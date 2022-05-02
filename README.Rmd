@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test coverage](https://codecov.io/gh/msperlin/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/yfR?branch=main)
 [![R build (rcmdcheck)](https://github.com/msperlin/yfR/workflows/R-CMD-check/badge.svg)](https://github.com/msperlin/yfR/actions)
-
+[![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/523_status.svg)](https://github.com/ropensci/software-review/issues/523)
 <!-- badges: end -->
 
 # Motivation
