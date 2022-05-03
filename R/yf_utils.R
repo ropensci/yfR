@@ -37,7 +37,7 @@ get_morale_boost <- function() {
 date_to_unix <- function(date_in) {
   out <- as.numeric(
     as.POSIXct(as.Date(date_in,
-      origin = "1970-01-01"
+                       origin = "1970-01-01"
     ))
   )
   return(out)
@@ -60,8 +60,8 @@ calc_ret <- function(P,
   my_length <- length(P)
 
   ret <- switch(type_return,
-    "arit" = P / dplyr::lag(P) - 1,
-    "log" = log(P / dplyr::lag(P))
+                "arit" = P / dplyr::lag(P) - 1,
+                "log" = log(P / dplyr::lag(P))
   )
 
   idx <- (tickers != dplyr::lag(tickers))
@@ -69,6 +69,39 @@ calc_ret <- function(P,
 
   return(ret)
 }
+
+#' Function to calculate accumulated returns from a price and ticker vector
+#' @noRd
+calc_cum_ret <- function(ret,
+                         tickers = rep("ticker", length(ret)),
+                         type_return = "arit") {
+
+  # replace all NAs by 0
+  idx <- is.na(ret)
+  ret[idx] <- 0
+
+  l_ret <- split(ret, tickers)
+
+  calc_cum <- function(x, type_return) {
+    this_cum_ret <- switch(type_return,
+                           "arit" = cumprod(1 + x),
+                           "log" = cumsum(1 + x))
+
+    return(this_cum_ret)
+  }
+
+  l_cum_ret <- purrr::map(l_ret,
+                          calc_cum,
+                          type_return = type_return)
+
+  cum_ret <- do.call(c, l_cum_ret)
+
+  names(cum_ret) <- NULL
+
+  return(cum_ret)
+}
+
+
 
 
 # 20220328 - removed startup message due to ropensci practices

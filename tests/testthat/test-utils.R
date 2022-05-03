@@ -53,6 +53,34 @@ test_that(desc = "Test of calc_ret()", {
 
 })
 
+
+test_that(desc = "Test of cum_calc_ret()", {
+
+  # type_return = "arit"
+  type_return = "arit"
+  N <- 100
+  P <- c(
+    c(100 + cumsum(rnorm(N)/10),
+      100 + cumsum(rnorm(N)/10),
+      100 + cumsum(rnorm(N)/10))
+  )
+
+  tickers <- c(
+    rep("A", N),
+    rep("B", N),
+    rep("C", N)
+    )
+
+  ret <- calc_ret(P, tickers, type_return)
+  cum_r <- calc_cum_ret(ret, tickers, type_return)
+
+  expect_true(class(cum_r) == "numeric")
+  expect_true(cum_r[1] == 1)
+  expect_false(any(cum_r < 0))
+
+})
+
+
 test_that(desc = "Test of set_cli_msg()", {
 
   my_msg <- set_cli_msg("hey, im a message")

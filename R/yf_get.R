@@ -401,6 +401,13 @@ yf_get <- function(tickers,
     type_return
   )
 
+  # calculate acumulated returns
+  df_tickers$cumret_adjusted_prices <- calc_cum_ret(
+    df_tickers$ret_adjusted_prices,
+    df_tickers$ticker,
+    type_return
+  )
+
   # fix for issue with repeated rows (see git issue 16)
   # https://github.com/msperlin/BatchGetSymbols/issues/16
   df_tickers <- unique(df_tickers)

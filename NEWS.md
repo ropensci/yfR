@@ -1,3 +1,7 @@
+## Version 0.0.3 (2022-05-03)
+
+- Added cumulative return at output
+
 ## Version 0.0.2 (2022-05-02)
 
 - Added warning message for parallel option (yahoo finance has just set a api limit)
