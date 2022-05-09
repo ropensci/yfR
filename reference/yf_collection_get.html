@@ -66,7 +66,8 @@ and will download all data from Yahoo Finance using <code><a href="yf_get.html">
   last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
   do_parallel <span class="op">=</span> <span class="cn">FALSE</span>,
   do_cache <span class="op">=</span> <span class="cn">TRUE</span>,
-  cache_folder <span class="op">=</span> <span class="fu">yf_get_default_cache_folder</span><span class="op">(</span><span class="op">)</span>
+  cache_folder <span class="op">=</span> <span class="fu">yf_get_default_cache_folder</span><span class="op">(</span><span class="op">)</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -88,6 +89,8 @@ Before using parallel, make sure you call function future::plan() first.</p></dd
 <dt>cache_folder</dt>
 <dd><p>Where to save cache files?
 (default = yfR::yf_get_default_cache_folder() )</p></dd>
+<dt>...</dt>
+<dd><p>Other arguments passed to <code><a href="yf_get.html">yf_get</a></code></p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
