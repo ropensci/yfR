@@ -6,6 +6,7 @@
 #' @param collection A collection to fetch data (e.g. "SP500", "IBOV", "FTSE" ).
 #'   See function \code{\link{yf_get_available_collections}} for finding all
 #'   available collections
+#' @param ... Other arguments passed to \code{\link{yf_get}}
 #' @inheritParams yf_get
 #'
 #' @return A dataframe with financial prices from collection
@@ -22,7 +23,8 @@ yf_collection_get <- function(collection,
                               last_date = Sys.Date(),
                               do_parallel = FALSE,
                               do_cache = TRUE,
-                              cache_folder = yf_get_default_cache_folder()) {
+                              cache_folder = yf_get_default_cache_folder(),
+                              ...) {
 
   cli::cli_h1('Fetching price collection for {collection}')
 
@@ -58,7 +60,8 @@ yf_collection_get <- function(collection,
     do_cache = do_cache,
     do_parallel = do_parallel,
     bench_ticker = ticker_index,
-    cache_folder = cache_folder
+    cache_folder = cache_folder,
+    ...
   )
 
   return(df_yf)

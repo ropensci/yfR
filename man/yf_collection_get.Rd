@@ -10,7 +10,8 @@ yf_collection_get(
   last_date = Sys.Date(),
   do_parallel = FALSE,
   do_cache = TRUE,
-  cache_folder = yf_get_default_cache_folder()
+  cache_folder = yf_get_default_cache_folder(),
+  ...
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ Before using parallel, make sure you call function future::plan() first.}
 
 \item{cache_folder}{Where to save cache files?
 (default = yfR::yf_get_default_cache_folder() )}
+
+\item{...}{Other arguments passed to \code{\link{yf_get}}}
 }
 \value{
 A dataframe with financial prices from collection
