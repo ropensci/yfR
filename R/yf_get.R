@@ -153,19 +153,21 @@ yf_get <- function(tickers,
   # check if using do_parallel = TRUE
   # 20220501 Yahoo finance started setting limits to api calls, which
   # invalidates the use of any parallel computation
-  if (do_parallel) {
-    my_message <- stringr::str_glue(
-      "Since 2022-04-25, Yahoo Finance started to set limits to api calls, ",
-      "resulting in 401 errors. When using parallel computations for fetching ",
-      "data, the limit is reached easily. Said that, the parallel option is now",
-      " disabled by default. Please set do_parallel = FALSE to use this function.",
-      "\n\n",
-      "Returning empty dataframe.")
+  # 2220522 quantmod::getSymbols now uses json endpoint (not limited, so far)
 
-    cli::cli_alert_danger(my_message)
-    return(data.frame())
-
-  }
+  # if (do_parallel) {
+  #   my_message <- stringr::str_glue(
+  #     "Since 2022-04-25, Yahoo Finance started to set limits to api calls, ",
+  #     "resulting in 401 errors. When using parallel computations for fetching ",
+  #     "data, the limit is reached easily. Said that, the parallel option is now",
+  #     " disabled by default. Please set do_parallel = FALSE to use this function.",
+  #     "\n\n",
+  #     "Returning empty dataframe.")
+  #
+  #   cli::cli_alert_danger(my_message)
+  #   return(data.frame())
+  #
+  # }
 
   # first screen msgs
 

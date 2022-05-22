@@ -1,7 +1,7 @@
 library(testthat)
 library(yfR)
 
-# Functions for testing output from calls to yf_get
+# Function for testing output from calls to yf_get
 test_yf_output <- function(df_yf, tickers) {
 
   testthat::expect_true(tibble::is_tibble(df_yf))
@@ -67,7 +67,9 @@ test_that(desc = "Test of yf_get()", {
 test_that(desc = "Test of yf_get(): do_parallel = TRUE", {
 
   # 20220501 yf now sets api limits, which invalidates any parallel computation
-  skip("Skipping since parallel is not supported due to YF api limits")
+  # 2220522 now getSymbols uses json endpoint (not limited, so far)
+
+  #skip("Skipping since parallel is not supported due to YF api limits")
 
   if (!covr::in_covr()) {
     skip_if_offline()

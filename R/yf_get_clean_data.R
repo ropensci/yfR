@@ -20,6 +20,7 @@ yf_get_clean_data <- function(ticker,
                                        src = 'yahoo',
                                        from = first_date,
                                        to = last_date,
+                                       use.json.api = TRUE,
                                        auto.assign = FALSE)
       },
       silent = TRUE)
