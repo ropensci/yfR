@@ -27,11 +27,13 @@ knitr::opts_chunk$set(
 
 In a nutshell, [Yahoo Finance](https://finance.yahoo.com/) provides a vast repository of stock price data around the globe. It cover a signficant number of markets and assets, being used extensively in academic research and teaching. In order to import the financial data, all you need is a ticker (id of a stock, e.g. "FB" for [Meta platforms](https://finance.yahoo.com/quote/FB?p=FB&.tsrc=fin-srch)) and a time period. 
 
-# Finding ticker
+# Finding tickers
 
-The easiest way to find the tickers of a company stock is to search for it in [Yahoo Finance](https://finance.yahoo.com/) website. 
+The easiest way to find the tickers of a company stock is to search for it in [Yahoo Finance's](https://finance.yahoo.com/) website. At the top page you'll find a search bar. 
 
-See full documentation [here](https://github.com/msperlin/yfR).
+![YF Search](search-yf.png?raw=true "Example of search in YF")
+From there, you'll that a company can have many different stocks traded at different markets. As the example shows, Petrobras is traded at NYQ (New York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE (Buenos Aires/Argentina Exchange), all with different symbols (tickers).
+
 
 ## Features
 
