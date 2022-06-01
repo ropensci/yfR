@@ -40,40 +40,32 @@ in dollars, while price data for PETR3.SA (B3/BR) is measured in Reais
 
 The return dataframe contains the following columns:
 
-ticker  
-The requested tickers (ids of stocks)
+**ticker**: The requested tickers (ids of stocks)
 
-ref_date  
-The reference day (this can also be year/month/week when using argument
-freq_data)
+**ref_date**: The reference day (this can also be year/month/week when
+using argument freq_data)
 
-price_open  
-The opening price of the day/period
+**price_open**: The opening price of the day/period
 
-price_high  
-The highest price of the day/period
+**price_high**: The highest price of the day/period
 
-price_close  
-The close/last price of the day/period
+**price_close**: The close/last price of the day/period
 
-volume  
-The financial volume of the day/period
+**volume**: The financial volume of the day/period
 
-price_adjusted  
-The stock price adjusted for corporate events such as splits, dividends
-and others – this is usually what you want/need for studying stocks as
-it represents the actual financial performance of stockholders
+**price_adjusted**: The stock price adjusted for corporate events such
+as splits, dividends and others – this is usually what you want/need for
+studying stocks as it represents the actual financial performance of
+stockholders
 
-ret_adjusted_prices  
-The arithmetic or log return (see input type_return) for the adjusted
-stock prices
+**ret_adjusted_prices**: The arithmetic or log return (see input
+type_return) for the adjusted stock prices
 
-ret_adjusted_prices  
-The arithmetic or log return (see input type_return) for the closing
-stock prices
+**ret_adjusted_prices**: The arithmetic or log return (see input
+type_return) for the closing stock prices
 
-cumret_adjusted_prices  
-The accumulated arithmetic/log return for the period (starts at 100%)
+**cumret_adjusted_prices**: The accumulated arithmetic/log return for
+the period (starts at 100%)
 
 # Finding tickers
 
@@ -81,7 +73,8 @@ The easiest way to find the tickers of a company stock is to search for
 it in [Yahoo Finance’s](https://finance.yahoo.com/) website. At the top
 page you’ll find a search bar:
 
-![YF Search](search-yf.png?raw=true "Example of search in YF")
+![YF
+Search](/inst/figures/search-yf.png?raw=true "Example of search in YF")
 
 From there, you’ll that a company can have many different stocks traded
 at different markets. As the example shows, Petrobras is traded at NYQ
@@ -162,16 +155,12 @@ df_yf <- yf_get(tickers = my_ticker,
 #> !    - not cached
 #> ✔    - cache saved successfully
 #> ✔    - got 21 valid rows (2022-05-02 --> 2022-05-31)
-<<<<<<< HEAD
-#> ✔    - got 100% of valid prices -- Nice!
-=======
-#> ✔    - got 100% of valid prices -- Time for some tea?
->>>>>>> 96f43b84423481ad71b0dd96012f3b2af6b2e857
+#> ✔    - got 100% of valid prices -- Got it!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
 #> ✔ Returned dataframe with 21 rows
-#> ✔ Using 6.0 kB at /tmp/RtmpjhNOQl/yf_cache for cache files
+#> ✔ Using 6.0 kB at /tmp/Rtmpmk9XC4/yf_cache for cache files
 #> ℹ Out of 1 tickers, you got 1
 #> ✔ You got data on 100% of requested tickers
 
@@ -192,219 +181,9 @@ head(df_yf)
 
 # Acknowledgements
 
-<<<<<<< HEAD
-``` r
-library(yfR)
-library(ggplot2)
-
-my_ticker <- c('FB', 'GM', 'MMM')
-first_date <- Sys.Date() - 100
-last_date <- Sys.Date()
-
-df_yf_multiple <- yf_get(tickers = my_ticker, 
-                              first_date = first_date,
-                              last_date = last_date)
-#> 
-#> ── Running yfR for 3 stocks | 2022-02-21 --> 2022-06-01 (100 days) ──
-#> 
-#> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/3) Fetching data for FB
-#> ✔    - found cache file (2022-05-02 --> 2022-05-31)
-#> !    - need new data (cache doesnt match query)
-#> ✔    - got 69 valid rows (2022-02-22 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Good stuff!
-#> ℹ (2/3) Fetching data for GM
-#> !    - not cached
-#> ✔    - cache saved successfully
-#> ✔    - got 69 valid rows (2022-02-22 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Nice!
-#> ℹ (3/3) Fetching data for MMM
-#> !    - not cached
-#> ✔    - cache saved successfully
-#> ✔    - got 69 valid rows (2022-02-22 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- All OK!
-#> ℹ Binding price data
-
-
-p <- ggplot(df_yf_multiple, 
-            aes(x = ref_date, y = price_adjusted,
-                color = ticker)) + 
-  geom_line()
-
-print(p)
-```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
-
-### Fetching collections of prices
-
-Collections are just a bundle of tickers pre-organized in the package.
-For example, collection `SP500` represents the current composition of
-the SP500 index.
-
-``` r
-library(yfR)
-
-df_yf <- yf_collection_get("SP500", 
-                           first_date = Sys.Date() - 30,
-                           last_date = Sys.Date())
-
-head(df_yf)
-```
-
-### Fetching daily/weekly/monthly/yearly price data
-
-``` r
-library(yfR)
-library(ggplot2)
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-
-my_ticker <- 'GE'
-first_date <- '2010-01-01'
-last_date <- Sys.Date()
-
-df_dailly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'daily') %>%
-  mutate(freq = 'daily')
-#> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-06-01 (4534 days) ──
-#> 
-#> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
-#> !    - not cached
-#> ✔    - cache saved successfully
-#> ✔    - got 3124 valid rows (2010-01-04 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- All OK!
-#> ℹ Binding price data
-
-
-df_weekly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'weekly') %>%
-  mutate(freq = 'weekly')
-#> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-06-01 (4534 days) ──
-#> 
-#> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
-#> ✔    - found cache file (2010-01-04 --> 2022-05-31)
-#> ✔    - got 3124 valid rows (2010-01-04 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Looking good!
-#> ℹ Binding price data
-
-df_monthly <- yf_get(tickers = my_ticker, 
-                          first_date, last_date, 
-                          freq_data = 'monthly') %>%
-  mutate(freq = 'monthly')
-#> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-06-01 (4534 days) ──
-#> 
-#> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
-#> ✔    - found cache file (2010-01-04 --> 2022-05-31)
-#> ✔    - got 3124 valid rows (2010-01-04 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Good job msperlin!
-#> ℹ Binding price data
-
-df_yearly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'yearly') %>%
-  mutate(freq = 'yearly')
-#> 
-#> ── Running yfR for 1 stocks | 2010-01-01 --> 2022-06-01 (4534 days) ──
-#> 
-#> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for GE
-#> ✔    - found cache file (2010-01-04 --> 2022-05-31)
-#> ✔    - got 3124 valid rows (2010-01-04 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Youre doing good!
-#> ℹ Binding price data
-
-df_allfreq <- bind_rows(
-  list(df_dailly, df_weekly, df_monthly, df_yearly)
-) %>%
-  mutate(freq = factor(freq, 
-                       levels = c('daily', 
-                                  'weekly',
-                                  'monthly',
-                                  'yearly'))) # make sure the order in plot is right
-
-p <- ggplot(df_allfreq, aes(x=ref_date, y = price_adjusted)) + 
-  geom_point() + geom_line() + facet_grid(freq ~ ticker) + 
-  theme_minimal() + 
-  labs(x = '', y = 'Adjusted Prices')
-
-print(p)
-```
-
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
-
-### Changing format to wide
-
-``` r
-library(yfR)
-library(ggplot2)
-library(kableExtra)
-#> 
-#> Attaching package: 'kableExtra'
-#> The following object is masked from 'package:dplyr':
-#> 
-#>     group_rows
-
-my_ticker <- c('FB', 'GM', 'MMM')
-first_date <- Sys.Date() - 100
-last_date <- Sys.Date()
-
-df_yf_multiple <- yf_get(tickers = my_ticker, 
-                              first_date = first_date,
-                              last_date = last_date)
-#> 
-#> ── Running yfR for 3 stocks | 2022-02-21 --> 2022-06-01 (100 days) ──
-#> 
-#> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/3) Fetching data for FB
-#> ✔    - found cache file (2022-02-22 --> 2022-05-31)
-#> ✔    - got 69 valid rows (2022-02-22 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Got it!
-#> ℹ (2/3) Fetching data for GM
-#> ✔    - found cache file (2022-02-22 --> 2022-05-31)
-#> ✔    - got 69 valid rows (2022-02-22 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- You got it msperlin!
-#> ℹ (3/3) Fetching data for MMM
-#> ✔    - found cache file (2022-02-22 --> 2022-05-31)
-#> ✔    - got 69 valid rows (2022-02-22 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Well done msperlin!
-#> ℹ Binding price data
-
-l_wide <- yf_convert_to_wide(df_yf_multiple)
-
-prices_wide <- l_wide$price_adjusted
-
-head(prices_wide)
-#> # A tibble: 6 × 4
-#>   ref_date      FB    GM   MMM
-#>   <date>     <dbl> <dbl> <dbl>
-#> 1 2022-02-22  202.  46.8  145.
-#> 2 2022-02-23  198.  46.4  143.
-#> 3 2022-02-24  208.  46.3  142.
-#> 4 2022-02-25  210.  47.4  149.
-#> 5 2022-02-28  211.  46.7  147.
-#> 6 2022-03-01  203.  44.5  143.
-```
-=======
 Package `yfR` is based on [quantmod](https://www.quantmod.com/)
 (@joshuaulrich) and uses one of its functions (`quantmod::getSymbols`)
 for fetching data from Yahoo Finance. As with any API, there is
 significant work in maintaining the code. Joshua was always fast and
 openminded in implemented required changes, and I’m very grateful for
 it.
->>>>>>> 96f43b84423481ad71b0dd96012f3b2af6b2e857
