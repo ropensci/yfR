@@ -73,7 +73,7 @@ PETR3.SA (B3/BR) is measured in Reais (Brazilian currency).
 The return dataframe contains the following columns:
 
 \describe{
-  \item{ticker}{The tickers (ids of companies)}
+  \item{ticker}{The requested tickers (ids of stocks)}
   \item{ref_date}{The reference day (this can also be year/month/week when
   using argument freq_data)}
   \item{price_open}{The opening price of the day/period}

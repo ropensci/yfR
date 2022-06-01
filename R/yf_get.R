@@ -62,8 +62,9 @@
 #' See <https://furrr.futureverse.org/> for more details.
 #' @param be_quiet Flag for not printing statements (default = FALSE)
 #'
-#' @return A dataframe with the financial data. All price data is
-#' \strong{measured} at the unit of the financial exchange. For example, price
+#' @return A dataframe with the financial data for working days, when markets
+#' are open. All price data is \strong{measured} at the unit of the financial
+#' exchange. For example, price
 #' data for FB (NYSE/US) is measures in dollars, while price data for
 #' PETR3.SA (B3/BR) is measured in Reais (Brazilian currency).
 #'
@@ -516,8 +517,8 @@ yf_get <- function(tickers,
   success_rate <- n_got/n_requested
 
   extra_msg <- paste0(
-    "You either inputed wrong tickers, or ranned into YF limit? If the last, wait",
-    " 15 minutes and try again."
+    "You either inputed wrong tickers, or ranned into YF call limit? My advice:",
+    " check tickers, wait 15 minutes and try again."
   )
   if (success_rate > 0.75) {
 

@@ -8,8 +8,8 @@ last_date <- Sys.Date()
 
 # fetch data
 df_yf <- yf_get(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                first_date = first_date,
+                last_date = last_date)
 
 # output is a tibble with data
 head(df_yf)
@@ -23,12 +23,12 @@ first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
 df_yf_multiple <- yf_get(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                         first_date = first_date,
+                         last_date = last_date)
 
 
 p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
-                       color = ticker)) + 
+                                color = ticker)) + 
   geom_line()
 
 p
@@ -44,24 +44,24 @@ first_date <- '2010-01-01'
 last_date <- Sys.Date()
 
 df_dailly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'daily') %>%
+                    first_date, last_date, 
+                    freq_data = 'daily') %>%
   mutate(freq = 'daily')
-  
-  
+
+
 df_weekly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'weekly') %>%
+                    first_date, last_date, 
+                    freq_data = 'weekly') %>%
   mutate(freq = 'weekly')
 
 df_monthly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'monthly') %>%
+                     first_date, last_date, 
+                     freq_data = 'monthly') %>%
   mutate(freq = 'monthly')
 
 df_yearly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'yearly') %>%
+                    first_date, last_date, 
+                    freq_data = 'yearly') %>%
   mutate(freq = 'yearly')
 
 df_allfreq <- bind_rows(
@@ -91,8 +91,8 @@ first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
 df_yf_multiple <- yf_get(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                         first_date = first_date,
+                         last_date = last_date)
 
 print(df_yf_multiple)
 

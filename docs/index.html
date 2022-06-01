@@ -52,9 +52,9 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/yf-diff-batchgetsymbols.html">yfR and BatchGetSymbols</a>
-    <a class="dropdown-item" href="articles/yf-getting-started.html">Getting Started</a>
-    <a class="dropdown-item" href="articles/yf-using-collections.html">Using Collections</a>
+    <a class="dropdown-item" href="articles/diff-batchgetsymbols.html">09-yfR and BatchGetSymbols</a>
+    <a class="dropdown-item" href="articles/getting-started.html">01-Getting Started</a>
+    <a class="dropdown-item" href="articles/using-collections.html">02-Using Collections</a>
   </div>
 </li>
 <li class="nav-item">
@@ -85,16 +85,46 @@
 <img src="logo.png" class="logo" alt=""><h1 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h1>
 </div>
-<p><code>yfR</code> facilitates importing data from Yahoo finance by organizing the data in the <code>tidy</code> format and speeding up the process using a cache system and parallel computing. <code>yfR</code> is the second and backwards-incompatible version of <a href="https://CRAN.R-project.org/package=BatchGetSymbols" class="external-link">BatchGetSymbols</a>, released in 2016 (see vignette “yfR and BatchGetSymbols”).</p>
-<p>In a nutshell, <a href="https://finance.yahoo.com/" class="external-link">Yahoo Finance</a> provides a vast repository of stock price data around the globe. It cover a signficant number of markets and assets, being used extensively in academic research and teaching. In order to import the financial data, all you need is a ticker (id of a stock, e.g. “FB” for <a href="https://finance.yahoo.com/quote/FB?p=FB&amp;.tsrc=fin-srch" class="external-link">Meta platforms</a>) and a time period.</p>
+<p><code>yfR</code> facilitates importing stock prices from Yahoo finance, organizing the data in the <code>tidy</code> format and speeding up the process using a cache system and parallel computing. <code>yfR</code> is the second and backwards-incompatible version of <a href="https://CRAN.R-project.org/package=BatchGetSymbols" class="external-link">BatchGetSymbols</a>, released in 2016 (see vignette “99-yfR and BatchGetSymbols”).</p>
+<p>In a nutshell, <a href="https://finance.yahoo.com/" class="external-link">Yahoo Finance</a> provides a vast repository of stock price data around the globe. It cover a signficant number of markets and assets, being used extensively in academic research and teaching. In order to import the financial data, all you need is a ticker (id of a stock, e.g. “GM” for <a href="https://finance.yahoo.com/quote/GM?p=GM&amp;.tsrc=fin-srch" class="external-link">General Motors</a>) and a time period (first and last date).</p>
+</div>
+<div class="section level1">
+<h1 id="the-data">The Data<a class="anchor" aria-label="anchor" href="#the-data"></a>
+</h1>
+<p>The main function of the package, <code><a href="reference/yf_get.html">yfR::yf_get</a></code>, returns a dataframe with the financial data. All price data is measured at the unit of the financial exchange. For example, price data for FB (NYSE/US) is measures in dollars, while price data for PETR3.SA (B3/BR) is measured in Reais (Brazilian currency).</p>
+<p>The return dataframe contains the following columns:</p>
+<p>ticker<br>
+The requested tickers (ids of stocks)</p>
+<p>ref_date<br>
+The reference day (this can also be year/month/week when using argument freq_data)</p>
+<p>price_open<br>
+The opening price of the day/period</p>
+<p>price_high<br>
+The highest price of the day/period</p>
+<p>price_close<br>
+The close/last price of the day/period</p>
+<p>volume<br>
+The financial volume of the day/period</p>
+<p>price_adjusted<br>
+The stock price adjusted for corporate events such as splits, dividends and others – this is usually what you want/need for studying stocks as it represents the actual financial performance of stockholders</p>
+<p>ret_adjusted_prices<br>
+The arithmetic or log return (see input type_return) for the adjusted stock prices</p>
+<p>ret_adjusted_prices<br>
+The arithmetic or log return (see input type_return) for the closing stock prices</p>
+<p>cumret_adjusted_prices<br>
+The accumulated arithmetic/log return for the period (starts at 100%)</p>
 </div>
 <div class="section level1">
 <h1 id="finding-tickers">Finding tickers<a class="anchor" aria-label="anchor" href="#finding-tickers"></a>
 </h1>
-<p>The easiest way to find the tickers of a company stock is to search for it in <a href="https://finance.yahoo.com/" class="external-link">Yahoo Finance’s</a> website. At the top page you’ll find a search bar.</p>
-<p><img src="search-yf.png?raw=true" title="Example of search in YF" alt="YF Search"> From there, you’ll that a company can have many different stocks traded at different markets. As the example shows, Petrobras is traded at NYQ (New York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE (Buenos Aires/Argentina Exchange), all with different symbols (tickers).</p>
+<p>The easiest way to find the tickers of a company stock is to search for it in <a href="https://finance.yahoo.com/" class="external-link">Yahoo Finance’s</a> website. At the top page you’ll find a search bar:</p>
+<div class="figure">
+<img src="search-yf.png?raw=true" title="Example of search in YF" alt=""><p class="caption">YF Search</p>
+</div>
+<p>From there, you’ll that a company can have many different stocks traded at different markets. As the example shows, Petrobras is traded at NYQ (New York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE (Buenos Aires/Argentina Exchange), all with different symbols (tickers).</p>
 <div class="section level2">
-<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+<h2 id="features-of-yfr">Features of <code>yfR</code>
+<a class="anchor" aria-label="anchor" href="#features-of-yfr"></a>
 </h2>
 <ul>
 <li><p>Fetchs daily/weekly/monthly/annual stock prices/returns from yahoo finance and outputs a dataframe (tibble) in the long format (stacked data);</p></li>
@@ -137,15 +167,21 @@
                      first_date <span class="op">=</span> <span class="va">first_date</span>,
                      last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 1 stocks | 2022-05-01 --&gt; 2022-05-31 (30 days) ──</span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2022-05-02 --&gt; 2022-06-01 (30 days) ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
 <span class="co">#&gt; ℹ (1/1) Fetching data for FB</span>
 <span class="co">#&gt; !    - not cached</span>
 <span class="co">#&gt; ✔    - cache saved successfully</span>
-<span class="co">#&gt; ✔    - got 20 valid rows (2022-05-02 --&gt; 2022-05-27)</span>
+<span class="co">#&gt; ✔    - got 21 valid rows (2022-05-02 --&gt; 2022-05-31)</span>
 <span class="co">#&gt; ✔    - got 100% of valid prices -- Time for some tea?</span>
 <span class="co">#&gt; ℹ Binding price data</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ── Diagnostics ─────────────────────────────────────────────────────────────────</span>
+<span class="co">#&gt; ✔ Returned dataframe with 21 rows</span>
+<span class="co">#&gt; ✔ Using 6.0 kB at /tmp/RtmpjhNOQl/yf_cache for cache files</span>
+<span class="co">#&gt; ℹ Out of 1 tickers, you got 1</span>
+<span class="co">#&gt; ✔ You got data on 100% of requested tickers</span>
 
 <span class="co"># output is a tibble with data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_yf</span><span class="op">)</span>
@@ -165,7 +201,7 @@
 <div class="section level1">
 <h1 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h1>
-<p>Package <code>yfR</code> is based on <a href="https://www.quantmod.com/" class="external-link">quantmod</a> (@joshuaulrich) and uses one of its functions (<code><a href="https://rdrr.io/pkg/quantmod/man/getSymbols.html" class="external-link">quantmod::getSymbols</a></code>) for fetching data from Yahoo Finance. I’m thankfull for the author for his work in keeping the package working properly.</p>
+<p>Package <code>yfR</code> is based on <a href="https://www.quantmod.com/" class="external-link">quantmod</a> (@joshuaulrich) and uses one of its functions (<code><a href="https://rdrr.io/pkg/quantmod/man/getSymbols.html" class="external-link">quantmod::getSymbols</a></code>) for fetching data from Yahoo Finance. As with any API, there is significant work in maintaining the code. Joshua was always fast and openminded in implemented required changes, and I’m very grateful for it.</p>
 </div>
 
   </main><aside class="col-md-3"><div class="links">

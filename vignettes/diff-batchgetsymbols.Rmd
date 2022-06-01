@@ -1,10 +1,10 @@
 ---
-title: "99-yfR and BatchGetSymbols"
+title: "09-yfR and BatchGetSymbols"
 author: "Marcelo Perlin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{99-yfR and BatchGetSymbols}
+  %\VignetteIndexEntry{09-yfR and BatchGetSymbols}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

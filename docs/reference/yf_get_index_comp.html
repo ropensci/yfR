@@ -24,9 +24,9 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/yf-diff-batchgetsymbols.html">yfR and BatchGetSymbols</a>
-    <a class="dropdown-item" href="../articles/yf-getting-started.html">Getting Started</a>
-    <a class="dropdown-item" href="../articles/yf-using-collections.html">Using Collections</a>
+    <a class="dropdown-item" href="../articles/diff-batchgetsymbols.html">09-yfR and BatchGetSymbols</a>
+    <a class="dropdown-item" href="../articles/getting-started.html">01-Getting Started</a>
+    <a class="dropdown-item" href="../articles/using-collections.html">02-Using Collections</a>
   </div>
 </li>
 <li class="nav-item">
@@ -62,7 +62,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">yf_get_index_comp</span><span class="op">(</span>
   <span class="va">mkt_index</span>,
   do_cache <span class="op">=</span> <span class="cn">TRUE</span>,
-  cache_folder <span class="op">=</span> <span class="fu">yf_get_default_cache_folder</span><span class="op">(</span><span class="op">)</span>
+  cache_folder <span class="op">=</span> <span class="fu"><a href="yf_get_default_cache_folder.html">yf_get_default_cache_folder</a></span><span class="op">(</span><span class="op">)</span>,
+  force_fallback <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -75,6 +76,9 @@
 <dt>cache_folder</dt>
 <dd><p>Where to save cache files?
 (default = yfR::yf_get_default_cache_folder() )</p></dd>
+<dt>force_fallback</dt>
+<dd><p>Logical (TRUE/FALSE). Forces the function to use the
+fallback system</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

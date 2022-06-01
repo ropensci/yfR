@@ -11,6 +11,18 @@ vignette: >
 
 ## Examples
 
+Here you'll find a series of example of calls to `yf_get()`. Most arguments
+are self-explanatory, but you can find more details at the help files.
+
+The steps of the algorithm are:
+
+1. check cache files for existing data
+2. if not in cache, fetch stock prices from YF and clean up the raw data
+3. write cache file if not available
+4. calculate all returns
+5. build diagnostics
+6. return the data to the user
+
 ### Fetching a single stock price
 
 ```{r, results='hold'}
@@ -23,12 +35,13 @@ last_date <- Sys.Date()
 
 # fetch data
 df_yf <- yf_get(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                first_date = first_date,
+                last_date = last_date)
 
 # output is a tibble with data
 head(df_yf)
 ```
+
 
 ### Fetching many stock prices
 
@@ -41,12 +54,12 @@ first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
 df_yf_multiple <- yf_get(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                         first_date = first_date,
+                         last_date = last_date)
 
 
 p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
-                       color = ticker)) + 
+                                color = ticker)) + 
   geom_line()
 
 p
@@ -66,24 +79,24 @@ first_date <- '2010-01-01'
 last_date <- Sys.Date()
 
 df_dailly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'daily') %>%
+                    first_date, last_date, 
+                    freq_data = 'daily') %>%
   mutate(freq = 'daily')
-  
-  
+
+
 df_weekly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'weekly') %>%
+                    first_date, last_date, 
+                    freq_data = 'weekly') %>%
   mutate(freq = 'weekly')
 
 df_monthly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'monthly') %>%
+                     first_date, last_date, 
+                     freq_data = 'monthly') %>%
   mutate(freq = 'monthly')
 
 df_yearly <- yf_get(tickers = my_ticker, 
-                         first_date, last_date, 
-                         freq_data = 'yearly') %>%
+                    first_date, last_date, 
+                    freq_data = 'yearly') %>%
   mutate(freq = 'yearly')
 
 df_allfreq <- bind_rows(
@@ -117,8 +130,8 @@ first_date <- Sys.Date() - 100
 last_date <- Sys.Date()
 
 df_yf_multiple <- yf_get(tickers = my_ticker, 
-                     first_date = first_date,
-                     last_date = last_date)
+                         first_date = first_date,
+                         last_date = last_date)
 
 print(df_yf_multiple)
 
