@@ -102,8 +102,6 @@ calc_cum_ret <- function(ret,
 }
 
 
-
-
 # 20220328 - removed startup message due to ropensci practices
 # https://devguide.ropensci.org/building.html
 
@@ -138,11 +136,4 @@ set_cli_msg <- function(msg_in, level = 0) {
   return(msg_in)
 }
 
-#' Returns the default folder for caching
-#' @noRd
-yf_get_default_cache_folder <- function() {
 
-  path_cache <- file.path(tempdir(), "yf_cache")
-
-  return(path_cache)
-}

@@ -36,6 +36,10 @@ yf_get_index_comp <- function(mkt_index,
 
     df_index <- yf_get_ftse_stocks()
 
+  } else if (mkt_index == "testthat-collection") {
+
+    df_index <- yf_get_test_stocks()
+
   }
 
   return(df_index)
@@ -47,18 +51,95 @@ yf_get_index_comp <- function(mkt_index,
 #' This funtion will return all available market indices that are registered
 #' in the package.
 #'
+#' @param print_description Logical (TRUE/FALSE) - flag for printing description of
+#' available colletions
+#'
 #' @return A vector of mkt indices
 #' @export
 #'
 #' @examples
 #'
-#' av_indices <- yf_get_available_indices()
-yf_get_available_indices <- function() {
-  available_indices <- c("SP500", "IBOV", "FTSE")
+#' indices <- yf_get_available_indices()
+#' indices
+yf_get_available_indices <- function(print_description = FALSE) {
+  available_indices <- c("SP500", "IBOV", "FTSE", "testthat-collection")
 
-  return(available_indices)
+  df_indices <- dplyr::tibble(
+    available_indices,
+    description = c(
+      "The SP500 index (US MARKET) - Ticker = ^GSPC",
+      "The Ibovespa index (BR MARKET) - Ticker = ^BVSP",
+      "The FTSE index (UK MARKET) - Ticker = ^FTSE",
+      "A (small) testing index for testthat() -- dev stuff, dont use it!"
+    )
+  )
+
+  if (print_description) {
+    cli::cli_h2("Description of Available Collections")
+
+    for (i_row in 1:nrow(df_indices)) {
+      cli::cli_alert_info(
+        "{df_indices$available_indices[i_row]}: {df_indices$description[i_row]}"
+        )
+
+    }
+  }
+
+  return(invisible(available_indices))
 }
 
+#' Function to download the current components of the
+#' FTSE100 index from Wikipedia
+#' @noRd
+yf_get_ftse_stocks <- function(do_cache = TRUE,
+                               cache_folder = yf_get_default_cache_folder()) {
+  cache_file <- file.path(
+    cache_folder,
+    paste0("yf_ftse100_Composition_", Sys.Date(), ".rds")
+  )
+
+  if (do_cache) {
+    # check if file exists
+    flag <- file.exists(cache_file)
+
+    if (flag) {
+      df_ftse <- readr::read_rds(cache_file)
+      return(df_ftse)
+    }
+  }
+
+  my_url <- "https://en.wikipedia.org/wiki/FTSE_100_Index"
+
+  my_xpath <- '//*[@id="mw-content-text"]/div/table[2]' # old xpath
+  my_xpath <- '//*[@id="constituents"]'
+  df_ftse <- my_url %>%
+    rvest::read_html() %>%
+    rvest::html_nodes(xpath = my_xpath) %>%
+    rvest::html_table()
+
+  df_ftse <- df_ftse[[1]]
+
+  df_ftse <- df_ftse %>%
+    dplyr::rename(
+      ticker = EPIC,
+      company = Company,
+      sector = names(df_ftse)[3]
+    ) %>%
+    dplyr::mutate(
+      index = "FTSE",
+      index_ticker = "^FTSE"
+    )
+
+  if (do_cache) {
+    if (!dir.exists(cache_folder)) dir.create(cache_folder)
+
+    readr::write_rds(df_ftse, cache_file)
+  }
+
+  yf_get_message_index("FTSE", nrow(df_ftse))
+
+  return(df_ftse)
+}
 
 #' Function to download the current components of the
 #' Ibovespa index from B3 website
@@ -118,14 +199,26 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
   return(df_ibov_comp)
 }
 
-#' Function to download the current components of the
-#' FTSE100 index from Wikipedia
+#' Function for fetching test tickers
 #' @noRd
-yf_get_ftse_stocks <- function(do_cache = TRUE,
+yf_get_test_stocks <- function(do_cache = TRUE,
                                cache_folder = yf_get_default_cache_folder()) {
+
+  df_test <- dplyr::tibble(
+    ticker = c("^GSPC", "^FTSE"),
+    index_ticker = "^GSPC" # simply keep it there for placeholder
+  )
+
+  return(df_test)
+}
+
+#' Function to download the current components of the SP500 index from Wikipedia
+#' @noRd
+yf_get_sp500_stocks <- function(do_cache = TRUE,
+                                cache_folder = yf_get_default_cache_folder()) {
   cache_file <- file.path(
     cache_folder,
-    paste0("yf_ftse100_Composition_", Sys.Date(), ".rds")
+    paste0("SP500_Composition_", Sys.Date(), ".rds")
   )
 
   if (do_cache) {
@@ -133,42 +226,43 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
     flag <- file.exists(cache_file)
 
     if (flag) {
-      df_ftse <- readr::read_rds(cache_file)
-      return(df_ftse)
+      df_sp500 <- readr::read_rds(cache_file)
+      return(df_sp500)
     }
   }
 
-  my_url <- "https://en.wikipedia.org/wiki/FTSE_100_Index"
+  my_url <- "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 
-  my_xpath <- '//*[@id="mw-content-text"]/div/table[2]' # old xpath
+  read_html <- 0 # fix for global variable nagging from BUILD
   my_xpath <- '//*[@id="constituents"]'
-  df_ftse <- my_url %>%
+  df_sp500 <- my_url %>%
     rvest::read_html() %>%
     rvest::html_nodes(xpath = my_xpath) %>%
-    rvest::html_table()
+    rvest::html_table(fill = TRUE)
 
-  df_ftse <- df_ftse[[1]]
+  df_sp500 <- df_sp500[[1]]
 
-  df_ftse <- df_ftse %>%
+  df_sp500 <- df_sp500  %>%
     dplyr::rename(
-      ticker = EPIC,
-      company = Company,
-      sector = names(df_ftse)[3]
+      ticker = Symbol,
+      company = Security,
+      sector = `GICS Sector`
     ) %>%
+    dplyr::select(ticker, company, sector) %>%
     dplyr::mutate(
-      index = "FTSE",
-      index_ticker = "^FTSE"
+      index = "SP500",
+      index_ticker = "^GSPC"
     )
+
 
   if (do_cache) {
     if (!dir.exists(cache_folder)) dir.create(cache_folder)
 
-    readr::write_rds(df_ftse, cache_file)
+    readr::write_rds(df_sp500, cache_file)
   }
 
-  yf_get_message_index("FTSE", nrow(df_ftse))
-
-  return(df_ftse)
+  yf_get_message_index("SP500", nrow(df_sp500))
+  return(df_sp500)
 }
 
 #' Function to download the current components of the SP500 index from Wikipedia

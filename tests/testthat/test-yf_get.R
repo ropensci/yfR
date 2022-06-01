@@ -41,6 +41,16 @@ test_that(desc = "Test of yf_get()", {
     do_cache = TRUE
   )
 
+  # with cache (other folder)
+  expect_warning({
+    df_yf <- yf_get(
+      tickers = my_tickers,
+      first_date = Sys.Date() - 60,
+      last_date = Sys.Date() - 30,
+      do_cache = TRUE,
+      cache_folder = file.path("~/other-folder")
+    )})
+
   test_yf_output(df_yf, my_tickers)
 
   # with cache (again, for testing caching system and
@@ -50,6 +60,16 @@ test_that(desc = "Test of yf_get()", {
     first_date = Sys.Date() - 90,
     last_date = Sys.Date(),
     do_cache = TRUE
+  )
+
+  test_yf_output(df_yf, my_tickers)
+
+  # no cache
+  df_yf <- yf_get(
+    tickers = my_tickers,
+    first_date = Sys.Date() - 90,
+    last_date = Sys.Date(),
+    do_cache = FALSE
   )
 
   test_yf_output(df_yf, my_tickers)

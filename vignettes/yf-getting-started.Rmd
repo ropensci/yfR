@@ -1,10 +1,10 @@
 ---
-title: "Using yfR"
+title: "01-Getting Started"
 author: "Marcelo Perlin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using yfR}
+  %\VignetteIndexEntry{01-Getting Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -51,19 +51,6 @@ p <- ggplot(df_yf_multiple, aes(x = ref_date, y = price_adjusted,
 
 p
 
-```
-
-
-### Fetching collections of prices
-
-Collections are just a bundle of tickers pre-organized in the package. For example, collection `SP500` represents the current composition of the SP500 index. 
-
-```{r, eval=FALSE}
-library(yfR)
-
-df_yf <- yf_collection_get("SP500")
-
-head(df_yf)
 ```
 
 
@@ -133,9 +120,12 @@ df_yf_multiple <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 
+print(df_yf_multiple)
+
 l_wide <- yf_convert_to_wide(df_yf_multiple)
 
-prices_wide <- l_wide$price_adjusted
+names(l_wide)
 
+prices_wide <- l_wide$price_adjusted
 head(prices_wide)
 ```

@@ -23,16 +23,18 @@ knitr::opts_chunk$set(
 
 # Motivation
 
-`yfR` facilitates importing data from Yahoo finance by organizing the data in the `tidy` format and speeding up the process using a cache system and parallel computing. `yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), released in 2016 (see vignette "yfR and BatchGetSymbols"). 
+`yfR` facilitates importing stock prices from Yahoo finance, organizing the data in the `tidy` format and speeding up the process using a cache system and parallel computing. `yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), released in 2016 (see vignette "yfR and BatchGetSymbols"). 
 
-In a nutshell, [Yahoo Finance](https://finance.yahoo.com/) provides a vast repository of stock price data around the globe. It cover a signficant number of markets and assets, being used extensively in academic research and teaching. In order to import the financial data, all you need is a ticker (id of a stock, e.g. "FB" for [Meta platforms](https://finance.yahoo.com/quote/FB?p=FB&.tsrc=fin-srch)) and a time period. 
+In a nutshell, [Yahoo Finance](https://finance.yahoo.com/) provides a vast repository of stock price data around the globe. It cover a signficant number of markets and assets, being used extensively in academic research and teaching. In order to import the financial data, all you need is a ticker (id of a stock, e.g. "GM" for [General Motors](https://finance.yahoo.com/quote/GM?p=GM&.tsrc=fin-srch)) and a time period. 
+
 
 # Finding tickers
 
-The easiest way to find the tickers of a company stock is to search for it in [Yahoo Finance's](https://finance.yahoo.com/) website. At the top page you'll find a search bar. 
+The easiest way to find the tickers of a company stock is to search for it in [Yahoo Finance's](https://finance.yahoo.com/) website. At the top page you'll find a search bar:
 
 ![YF Search](search-yf.png?raw=true "Example of search in YF")
-From there, you'll that a company can have many different stocks traded at different markets. As the example shows, Petrobras is traded at NYQ (New York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE (Buenos Aires/Argentina Exchange), all with different symbols (tickers).
+
+From there, you'll that a company can have many different stocks traded at different markets. As the example shows, Petrobras is traded at NYQ (New York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE (Buenos Aires/Argentina Exchange), all with different symbols (tickers). 
 
 
 ## Features

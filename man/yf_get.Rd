@@ -2,7 +2,7 @@
 % Please edit documentation in R/yf_get.R
 \name{yf_get}
 \alias{yf_get}
-\title{Main function to download financial data from Yahoo Finance}
+\title{Download financial data from Yahoo Finance}
 \usage{
 yf_get(
   tickers,
@@ -21,8 +21,8 @@ yf_get(
 )
 }
 \arguments{
-\item{tickers}{A vector of tickers. If not sure whether the ticker is
-available, search for it in yahoo finance <https://finance.yahoo.com/>.}
+\item{tickers}{A single or vector of tickers. If not sure whether the ticker is
+available, search for it in YF <https://finance.yahoo.com/>.}
 
 \item{first_date}{The first date of query (Date or character as YYYY-MM-DD)}
 
@@ -59,19 +59,66 @@ missing pairs of ticker-date will be replaced by NA or closest price
 (default = yfR::yf_get_default_cache_folder() )}
 
 \item{do_parallel}{Flag for using parallel or not (default = FALSE).
-Before using parallel, make sure you call function future::plan() first.}
+Before using parallel, make sure you call function future::plan() first.
+See <https://furrr.futureverse.org/> for more details.}
 
 \item{be_quiet}{Flag for not printing statements (default = FALSE)}
 }
 \value{
-A dataframe with stock prices.
+A dataframe with the financial data. All price data is
+\strong{measured} at the unit of the financial exchange. For example, price
+data for FB (NYSE/US) is measures in dollars, while price data for
+PETR3.SA (B3/BR) is measured in Reais (Brazilian currency).
+
+The return dataframe contains the following columns:
+
+\describe{
+  \item{ticker}{The tickers (ids of companies)}
+  \item{ref_date}{The reference day (this can also be year/month/week when
+  using argument freq_data)}
+  \item{price_open}{The opening price of the day/period}
+  \item{price_high}{The highest price of the day/period}
+  \item{price_close}{The close/last price of the day/period}
+  \item{volume}{The financial volume of the day/period}
+  \item{price_adjusted}{The stock price adjusted for corporate events such
+  as splits, dividends and others -- this is usually what you want/need for
+  studying stocks as it represents the actual financial performance of
+  stockholders}
+  \item{ret_adjusted_prices}{The arithmetic or log return (see input type_return) for
+  the adjusted stock prices}
+  \item{ret_adjusted_prices}{The arithmetic or log return (see input type_return) for
+  the closing stock prices}
+  \item{cumret_adjusted_prices}{The accumulated arithmetic/log return for the period (starts at 100\%)}
+  }
 }
 \description{
-Based primarly on a set of tickers and time period, this function will
-download stock price data from Yahoo Finance using
-\link[quantmod]{getSymbols}. It organizes the data in the long format and
-outputs a "stacked" dataframe.
+Based on a ticker (id of a stock) and time period, this function will
+download stock price data from Yahoo Finance and organizes it in the long
+format. Yahoo Finance <https://finance.yahoo.com/> provides a vast repository of
+stock price data around the globe. It cover a signficant number of markets
+and assets, being used extensively in academic research and teaching. In
+the website you can lookup the ticker of a company.
 }
+\section{The cache system}{
+
+
+The yfR`s cache system is basically a bunch of rds files that are saved every time
+data is imported from YF. It indexes all data by ticker and time period. Whenever
+a user asks for a dataset, it first checks if the ticker/time period exists in
+cache and, if it does, loads the data from the rds file.
+
+By default, a temporary folder is used (see function
+\link{yf_get_default_cache_folder}, which means that all cache files are
+session-persistent. In practice, whenever you restart your R/RStudio session,
+all cache files are lost. This is a choice I've made due to the fact that
+merging adjusted stock price data after corporate events (dividends/splits)
+is a mess and prone to errors. This only happens for stock price data,
+and not indices data.
+
+If you really need a persistent cache folder, which is Ok for indices data,
+ simply set a path with argument cache_folder (see warning section).
+}
+
 \section{Warning}{
 
 
@@ -85,14 +132,13 @@ a split or dividends event happens in between cache files.
 \dontrun{
 tickers <- c("FB", "MMM")
 
-first_date <- Sys.Date() - 15
+first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 
 df_yf <- yf_get(
   tickers = tickers,
   first_date = first_date,
-  last_date = last_date,
-  do_cache = FALSE
+  last_date = last_date
 )
 
 print(df_yf)

@@ -4,7 +4,11 @@
 \alias{yf_get_available_collections}
 \title{Returns available collections}
 \usage{
-yf_get_available_collections()
+yf_get_available_collections(print_description = FALSE)
+}
+\arguments{
+\item{print_description}{Logical (TRUE/FALSE) - flag for printing description of
+available colletions}
 }
 \value{
 A string vector with available collections
@@ -13,5 +17,6 @@ A string vector with available collections
 Returns available collections
 }
 \examples{
-yf_get_available_collections()
+
+print(yf_get_available_collections())
 }

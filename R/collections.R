@@ -15,11 +15,14 @@
 #' @examples
 #'
 #' \dontrun{
-#' df_yf <- yf_collection_get("IBOV")
+#' df_yf <- yf_collection_get(collection = "IBOV",
+#'                            first_date = Sys.Date() - 30,
+#'                            last_date = Sys.Date()
+#' )
 #' }
 #'
 yf_collection_get <- function(collection,
-                              first_date = Sys.Date() - 15,
+                              first_date = Sys.Date() - 30,
                               last_date = Sys.Date(),
                               do_parallel = FALSE,
                               do_cache = TRUE,
@@ -70,13 +73,15 @@ yf_collection_get <- function(collection,
 
 #' Returns available collections
 #'
+#' @inheritParams yf_get_available_indices
 #' @return A string vector with available collections
 #' @export
 #'
 #' @examples
-#' yf_get_available_collections()
-yf_get_available_collections <- function() {
-  available_indices <- yf_get_available_indices()
+#'
+#' print(yf_get_available_collections())
+yf_get_available_collections <- function(print_description = FALSE) {
+  available_indices <- yf_get_available_indices(print_description)
 
-  return(available_indices)
+  return(invisible(available_indices))
 }

@@ -26,7 +26,26 @@ test_that("Test of yf_get_index_comp()", {
 })
 
 
-test_that("Test of yf_collection_get()", {
+test_that("Test of yf_collection_get() -- single session", {
+
+  if (!covr::in_covr()) {
+    skip_if_offline()
+    skip_on_cran() # too heavy for cran
+  }
+
+  # parallel test for collections
+  to_test_collection <- "testthat-collection"
+
+  df <- yf_collection_get(collection = to_test_collection,
+                          first_date = Sys.Date() - 30,
+                          last_date = Sys.Date(),
+                          do_parallel = FALSE)
+
+  expect_true(nrow(df) > 0)
+
+})
+
+test_that("Test of yf_collection_get() -- multi-session", {
 
   # 20220501 yf now sets api limits, which invalidates any parallel computation
   skip(
@@ -57,4 +76,3 @@ test_that("Test of yf_collection_get()", {
   }
 
 })
-
