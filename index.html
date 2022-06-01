@@ -53,8 +53,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/diff-batchgetsymbols.html">09-yfR and BatchGetSymbols</a>
-    <a class="dropdown-item" href="articles/getting-started.html">01-Getting Started</a>
     <a class="dropdown-item" href="articles/using-collections.html">02-Using Collections</a>
+    <a class="dropdown-item" href="articles/yf-vignette.html">Using yfR</a>
   </div>
 </li>
 <li class="nav-item">
@@ -152,54 +152,259 @@ The accumulated arithmetic/log return for the period (starts at 100%)</p>
 <div class="section level2">
 <h2 id="a-simple-example-of-usage">A simple example of usage<a class="anchor" aria-label="anchor" href="#a-simple-example-of-usage"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/msperlin/yfR" class="external-link">yfR</a></span><span class="op">)</span>
-
-<span class="co"># set options for algorithm</span>
-<span class="va">my_ticker</span> <span class="op">&lt;-</span> <span class="st">'FB'</span>
-<span class="va">first_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span>
-<span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># fetch data</span>
-<span class="va">df_yf</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
-                     first_date <span class="op">=</span> <span class="va">first_date</span>,
-                     last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── Running yfR for 1 stocks | 2022-05-02 --&gt; 2022-06-01 (30 days) ──</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
-<span class="co">#&gt; ℹ (1/1) Fetching data for FB</span>
-<span class="co">#&gt; !    - not cached</span>
-<span class="co">#&gt; ✔    - cache saved successfully</span>
-<span class="co">#&gt; ✔    - got 21 valid rows (2022-05-02 --&gt; 2022-05-31)</span>
-<span class="co">#&gt; ✔    - got 100% of valid prices -- Time for some tea?</span>
-<span class="co">#&gt; ℹ Binding price data</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── Diagnostics ─────────────────────────────────────────────────────────────────</span>
-<span class="co">#&gt; ✔ Returned dataframe with 21 rows</span>
-<span class="co">#&gt; ✔ Using 6.0 kB at /tmp/RtmpjhNOQl/yf_cache for cache files</span>
-<span class="co">#&gt; ℹ Out of 1 tickers, you got 1</span>
-<span class="co">#&gt; ✔ You got data on 100% of requested tickers</span>
-
-<span class="co"># output is a tibble with data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_yf</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 × 11</span>
-<span class="co">#&gt;   ticker ref_date   price_open price_high price_low price_close   volume</span>
-<span class="co">#&gt;   &lt;chr&gt;  &lt;date&gt;          &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 FB     2022-05-02       201.       212.      201.        211. 49915300</span>
-<span class="co">#&gt; 2 FB     2022-05-03       210.       215.      208.        212. 41556300</span>
-<span class="co">#&gt; 3 FB     2022-05-04       211.       224.      207.        223. 41375900</span>
-<span class="co">#&gt; 4 FB     2022-05-05       219.       220.      206.        208. 41129200</span>
-<span class="co">#&gt; 5 FB     2022-05-06       207.       209.      201.        204. 34733600</span>
-<span class="co">#&gt; 6 FB     2022-05-09       200.       203.      196.        196. 36303200</span>
-<span class="co">#&gt; # … with 4 more variables: price_adjusted &lt;dbl&gt;, ret_adjusted_prices &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ret_closing_prices &lt;dbl&gt;, cumret_adjusted_prices &lt;dbl&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yfR)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># set options for algorithm</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>my_ticker <span class="ot">&lt;-</span> <span class="st">'FB'</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>first_date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>() <span class="sc">-</span> <span class="dv">30</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>last_date <span class="ot">&lt;-</span> <span class="fu">Sys.Date</span>()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># fetch data</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df_yf <span class="ot">&lt;-</span> <span class="fu">yf_get</span>(<span class="at">tickers =</span> my_ticker, </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">first_date =</span> first_date,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">last_date =</span> last_date)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Running yfR for 1 stocks | 2022-05-02 --&gt; 2022-06-01 (30 days) ──</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ (1/1) Fetching data for FB</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; !    - not cached</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔    - cache saved successfully</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔    - got 21 valid rows (2022-05-02 --&gt; 2022-05-31)</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;</span><span class="er">&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔    - got 100% of valid prices -- Nice!</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">=====</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔    - got 100% of valid prices -- Time for some tea?</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> 96f43b84423481ad71b0dd96012f3b2af6b2e857</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Binding price data</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Diagnostics ─────────────────────────────────────────────────────────────────</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Returned dataframe with 21 rows</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Using 6.0 kB at /tmp/RtmpjhNOQl/yf_cache for cache files</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Out of 1 tickers, you got 1</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ You got data on 100% of requested tickers</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># output is a tibble with data</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_yf)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 11</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ticker ref_date   price_open price_high price_low price_close   volume</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;date&gt;          &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 FB     2022-05-02       201.       212.      201.        211. 49915300</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 FB     2022-05-03       210.       215.      208.        212. 41556300</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 FB     2022-05-04       211.       224.      207.        223. 41375900</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 FB     2022-05-05       219.       220.      206.        208. 41129200</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 FB     2022-05-06       207.       209.      201.        204. 34733600</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 FB     2022-05-09       200.       203.      196.        196. 36303200</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 4 more variables: price_adjusted &lt;dbl&gt;, ret_adjusted_prices &lt;dbl&gt;,</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   ret_closing_prices &lt;dbl&gt;, cumret_adjusted_prices &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
 <h1 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h1>
-<p>Package <code>yfR</code> is based on <a href="https://www.quantmod.com/" class="external-link">quantmod</a> (@joshuaulrich) and uses one of its functions (<code><a href="https://rdrr.io/pkg/quantmod/man/getSymbols.html" class="external-link">quantmod::getSymbols</a></code>) for fetching data from Yahoo Finance. As with any API, there is significant work in maintaining the code. Joshua was always fast and openminded in implemented required changes, and I’m very grateful for it.</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/msperlin/yfR" class="external-link">yfR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+
+<span class="va">my_ticker</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'FB'</span>, <span class="st">'GM'</span>, <span class="st">'MMM'</span><span class="op">)</span>
+<span class="va">first_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">100</span>
+<span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">df_yf_multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+                              first_date <span class="op">=</span> <span class="va">first_date</span>,
+                              last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ── Running yfR for 3 stocks | 2022-02-21 --&gt; 2022-06-01 (100 days) ──</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
+<span class="co">#&gt; ℹ (1/3) Fetching data for FB</span>
+<span class="co">#&gt; ✔    - found cache file (2022-05-02 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; !    - need new data (cache doesnt match query)</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Good stuff!</span>
+<span class="co">#&gt; ℹ (2/3) Fetching data for GM</span>
+<span class="co">#&gt; !    - not cached</span>
+<span class="co">#&gt; ✔    - cache saved successfully</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Nice!</span>
+<span class="co">#&gt; ℹ (3/3) Fetching data for MMM</span>
+<span class="co">#&gt; !    - not cached</span>
+<span class="co">#&gt; ✔    - cache saved successfully</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- All OK!</span>
+<span class="co">#&gt; ℹ Binding price data</span>
+
+
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df_yf_multiple</span>, 
+            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ref_date</span>, y <span class="op">=</span> <span class="va">price_adjusted</span>,
+                color <span class="op">=</span> <span class="va">ticker</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+<div class="section level3">
+<h3 id="fetching-collections-of-prices">Fetching collections of prices<a class="anchor" aria-label="anchor" href="#fetching-collections-of-prices"></a>
+</h3>
+<p>Collections are just a bundle of tickers pre-organized in the package. For example, collection <code>SP500</code> represents the current composition of the SP500 index.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/msperlin/yfR" class="external-link">yfR</a></span><span class="op">)</span>
+
+<span class="va">df_yf</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_collection_get.html">yf_collection_get</a></span><span class="op">(</span><span class="st">"SP500"</span>, 
+                           first_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30</span>,
+                           last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_yf</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="fetching-dailyweeklymonthlyyearly-price-data">Fetching daily/weekly/monthly/yearly price data<a class="anchor" aria-label="anchor" href="#fetching-dailyweeklymonthlyyearly-price-data"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/msperlin/yfR" class="external-link">yfR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+
+<span class="va">my_ticker</span> <span class="op">&lt;-</span> <span class="st">'GE'</span>
+<span class="va">first_date</span> <span class="op">&lt;-</span> <span class="st">'2010-01-01'</span>
+<span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">df_dailly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+                         <span class="va">first_date</span>, <span class="va">last_date</span>, 
+                         freq_data <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days) ──</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
+<span class="co">#&gt; !    - not cached</span>
+<span class="co">#&gt; ✔    - cache saved successfully</span>
+<span class="co">#&gt; ✔    - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- All OK!</span>
+<span class="co">#&gt; ℹ Binding price data</span>
+
+
+<span class="va">df_weekly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+                         <span class="va">first_date</span>, <span class="va">last_date</span>, 
+                         freq_data <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days) ──</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
+<span class="co">#&gt; ✔    - found cache file (2010-01-04 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Looking good!</span>
+<span class="co">#&gt; ℹ Binding price data</span>
+
+<span class="va">df_monthly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+                          <span class="va">first_date</span>, <span class="va">last_date</span>, 
+                          freq_data <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days) ──</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
+<span class="co">#&gt; ✔    - found cache file (2010-01-04 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Good job msperlin!</span>
+<span class="co">#&gt; ℹ Binding price data</span>
+
+<span class="va">df_yearly</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+                         <span class="va">first_date</span>, <span class="va">last_date</span>, 
+                         freq_data <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ── Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days) ──</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
+<span class="co">#&gt; ℹ (1/1) Fetching data for GE</span>
+<span class="co">#&gt; ✔    - found cache file (2010-01-04 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Youre doing good!</span>
+<span class="co">#&gt; ℹ Binding price data</span>
+
+<span class="va">df_allfreq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">df_dailly</span>, <span class="va">df_weekly</span>, <span class="va">df_monthly</span>, <span class="va">df_yearly</span><span class="op">)</span>
+<span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">freq</span>, 
+                       levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'daily'</span>, 
+                                  <span class="st">'weekly'</span>,
+                                  <span class="st">'monthly'</span>,
+                                  <span class="st">'yearly'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># make sure the order in plot is right</span>
+
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df_allfreq</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">ref_date</span>, y <span class="op">=</span> <span class="va">price_adjusted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">freq</span> <span class="op">~</span> <span class="va">ticker</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">''</span>, y <span class="op">=</span> <span class="st">'Adjusted Prices'</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="changing-format-to-wide">Changing format to wide<a class="anchor" aria-label="anchor" href="#changing-format-to-wide"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/msperlin/yfR" class="external-link">yfR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'kableExtra'</span>
+<span class="co">#&gt; The following object is masked from 'package:dplyr':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     group_rows</span>
+
+<span class="va">my_ticker</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'FB'</span>, <span class="st">'GM'</span>, <span class="st">'MMM'</span><span class="op">)</span>
+<span class="va">first_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">100</span>
+<span class="va">last_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">df_yf_multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_get.html">yf_get</a></span><span class="op">(</span>tickers <span class="op">=</span> <span class="va">my_ticker</span>, 
+                              first_date <span class="op">=</span> <span class="va">first_date</span>,
+                              last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ── Running yfR for 3 stocks | 2022-02-21 --&gt; 2022-06-01 (100 days) ──</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ℹ Downloading data for benchmark ticker ^GSPC</span>
+<span class="co">#&gt; ℹ (1/3) Fetching data for FB</span>
+<span class="co">#&gt; ✔    - found cache file (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Got it!</span>
+<span class="co">#&gt; ℹ (2/3) Fetching data for GM</span>
+<span class="co">#&gt; ✔    - found cache file (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- You got it msperlin!</span>
+<span class="co">#&gt; ℹ (3/3) Fetching data for MMM</span>
+<span class="co">#&gt; ✔    - found cache file (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span>
+<span class="co">#&gt; ✔    - got 100% of valid prices -- Well done msperlin!</span>
+<span class="co">#&gt; ℹ Binding price data</span>
+
+<span class="va">l_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/yf_convert_to_wide.html">yf_convert_to_wide</a></span><span class="op">(</span><span class="va">df_yf_multiple</span><span class="op">)</span>
+
+<span class="va">prices_wide</span> <span class="op">&lt;-</span> <span class="va">l_wide</span><span class="op">$</span><span class="va">price_adjusted</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">prices_wide</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 6 × 4</span>
+<span class="co">#&gt;   ref_date      FB    GM   MMM</span>
+<span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 2022-02-22  202.  46.8  145.</span>
+<span class="co">#&gt; 2 2022-02-23  198.  46.4  143.</span>
+<span class="co">#&gt; 3 2022-02-24  208.  46.3  142.</span>
+<span class="co">#&gt; 4 2022-02-25  210.  47.4  149.</span>
+<span class="co">#&gt; 5 2022-02-28  211.  46.7  147.</span>
+<span class="co">#&gt; 6 2022-03-01  203.  44.5  143.</span></code></pre></div>
+<p>======= Package <code>yfR</code> is based on <a href="https://www.quantmod.com/" class="external-link">quantmod</a> (@joshuaulrich) and uses one of its functions (<code><a href="https://rdrr.io/pkg/quantmod/man/getSymbols.html" class="external-link">quantmod::getSymbols</a></code>) for fetching data from Yahoo Finance. As with any API, there is significant work in maintaining the code. Joshua was always fast and openminded in implemented required changes, and I’m very grateful for it. &gt;&gt;&gt;&gt;&gt;&gt;&gt; 96f43b84423481ad71b0dd96012f3b2af6b2e857</p>
+</div>
 </div>
 
   </main><aside class="col-md-3"><div class="links">

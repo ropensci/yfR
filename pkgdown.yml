@@ -3,9 +3,9 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   diff-batchgetsymbols: diff-batchgetsymbols.html
-  getting-started: getting-started.html
   using-collections: using-collections.html
-last_built: 2022-06-01T18:15Z
+  yf-vignette: yf-vignette.html
+last_built: 2022-06-01T18:24Z
 urls:
   reference: https://msperlin.github.io/yfR/reference
   article: https://msperlin.github.io/yfR/articles
