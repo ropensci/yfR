@@ -1,10 +1,10 @@
 ---
-title: "02-Using Collections"
+title: "Using Collections"
 author: "Marcelo Perlin"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{02-Using Collections}
+  %\VignetteIndexEntry{Using Collections}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -65,8 +65,9 @@ See <https://furrr.futureverse.org/> for more details.}
 \item{be_quiet}{Flag for not printing statements (default = FALSE)}
 }
 \value{
-A dataframe with the financial data. All price data is
-\strong{measured} at the unit of the financial exchange. For example, price
+A dataframe with the financial data for working days, when markets
+are open. All price data is \strong{measured} at the unit of the financial
+exchange. For example, price
 data for FB (NYSE/US) is measures in dollars, while price data for
 PETR3.SA (B3/BR) is measured in Reais (Brazilian currency).
 
