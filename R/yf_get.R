@@ -70,7 +70,7 @@
 #' The return dataframe contains the following columns:
 #'
 #' \describe{
-#'   \item{ticker}{The tickers (ids of companies)}
+#'   \item{ticker}{The requested tickers (ids of stocks)}
 #'   \item{ref_date}{The reference day (this can also be year/month/week when
 #'   using argument freq_data)}
 #'   \item{price_open}{The opening price of the day/period}
@@ -149,7 +149,7 @@ yf_get <- function(tickers,
   if (any(is.na(tickers))) {
     my_msg <- paste0(
       "Found NA value in ticker vector.",
-      "You need to remove it before running BatchGetSymbols."
+      "You need to remove it before running yfR::yf_get()."
     )
     stop(my_msg)
   }
@@ -473,12 +473,15 @@ yf_get <- function(tickers,
   if (!flag) {
     warning(stringr::str_glue(
       "\nIt seems you are using a non-default cache folder at {cache_folder}. ",
-      "Be aware that if any stock event -- split or dividend -- happens ",
-      "in between cache files, the resulting aggregate cache data will not ",
-      "correspond to reality as some part of the price data will not be ",
-      "adjusted to the event. For safety and reproducibility, my suggestion ",
-      "is to use cache system only for the current session with tempdir(), ",
-      "which is the default option."
+      "Be aware that, for individual stocks, yfR **does not** garantee price integrity ",
+      "in between days. Some stock events adjust prices recursively, meaning that one ",
+      "can have a different adjusted price for queries executed in different days. ",
+      "For safety and reproducibility, my suggestion ",
+      "is to use the default cache_folder at tempdir(). ",
+      "\n\n",
+      "This issue only affects individual stocks. For market indices, such as SP500,",
+      " I dont expect any problem in having a persistent cache folder, outside .",
+      "of tempdir()."
     ))
   }
 

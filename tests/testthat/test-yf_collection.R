@@ -8,7 +8,13 @@ test_that("Test of yf_get_available_indices()", {
   expect_true(class(available_indices) == 'character')
 })
 
-test_that("Test of yf_get_index_comp()", {
+testhat_index_comp <- function(df_in) {
+
+  expect_true(tibble::is_tibble(df_in))
+  expect_true(nrow(df_in) > 0)
+}
+
+test_that("Test of yf_get_index_comp() -- using web", {
 
   if (!covr::in_covr()) {
     skip_if_offline()
@@ -19,7 +25,24 @@ test_that("Test of yf_get_index_comp()", {
 
   for (i_index in available_indices) {
 
-    expect_true(tibble::is_tibble(yf_get_index_comp(i_index)))
+    df_index <- yf_get_index_comp(i_index,
+                                  force_fallback = FALSE)
+    testhat_index_comp(df_index)
+
+  }
+
+})
+
+test_that("Test of yf_get_index_comp() -- using fallback files", {
+
+  available_indices <- yf_get_available_indices()
+
+  for (i_index in available_indices) {
+
+    df_index <- yf_get_index_comp(i_index,
+                                  force_fallback = TRUE)
+    testhat_index_comp(df_index)
+
 
   }
 

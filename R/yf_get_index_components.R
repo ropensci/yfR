@@ -2,6 +2,8 @@
 #'
 #' @param mkt_index the index (e.g. IBOV, SP500, FTSE)
 #' @inheritParams yf_get
+#' @param force_fallback Logical (TRUE/FALSE). Forces the function to use the
+#' fallback system
 #'
 #' @return A dataframe with the index compositino (column might vary)
 #' @export
@@ -10,7 +12,8 @@
 #' df_sp500 <- yf_get_index_comp("SP500")
 yf_get_index_comp <- function(mkt_index,
                               do_cache = TRUE,
-                              cache_folder = yf_get_default_cache_folder()) {
+                              cache_folder = yf_get_default_cache_folder(),
+                              force_fallback = FALSE) {
 
   available_indices <- yf_get_available_indices()
   if (!any(mkt_index %in% available_indices)) {
@@ -20,31 +23,66 @@ yf_get_index_comp <- function(mkt_index,
     ))
   }
 
-  if (mkt_index == "IBOV") {
+  if (force_fallback) {
+    df_index <- read_fallback(mkt_index)
+    return(df_index)
+  }
 
-    df_index <- yf_get_ibov_stocks(
-      do_cache = do_cache,
-      cache_folder = cache_folder,
-      max_tries = 10
-    )
+  df_index <- data.frame()
+  try({
 
-  } else if (mkt_index == "SP500") {
+    if (mkt_index == "IBOV") {
 
-    df_index <- yf_get_sp500_stocks()
+      df_index <- yf_get_ibov_stocks(
+        do_cache = do_cache,
+        cache_folder = cache_folder,
+        max_tries = 10
+      )
 
-  } else if (mkt_index == "FTSE") {
+    } else if (mkt_index == "SP500") {
 
-    df_index <- yf_get_ftse_stocks()
+      df_index <- yf_get_sp500_stocks()
 
-  } else if (mkt_index == "testthat-collection") {
+    } else if (mkt_index == "FTSE") {
 
-    df_index <- yf_get_test_stocks()
+      df_index <- yf_get_ftse_stocks()
+
+    } else if (mkt_index == "testthat-collection") {
+
+      df_index <- yf_get_test_stocks()
+
+    }
+  })
+
+  if (nrow(df_index) == 0) {
+
+    cli::cli_alert_info("Failed to import current composition for {mkt_index}. Using fallback index")
+
+    df_index <- read_fallback(mkt_index)
 
   }
 
   return(df_index)
 }
 
+#' Read fallback/static market indices composition from package
+#'
+#' @noRd
+read_fallback <- function(mkt_index) {
+  this_fallback_file <- system.file(
+    stringr::str_glue("extdata/fallback-indices/{mkt_index}.rds"),
+    package = "yfR"
+  )
+
+  df_index <- readr::read_rds(this_fallback_file)
+  fallback_date <- df_index$fetched_at[1]
+
+  cli::cli_alert_success(
+    "Using fallback {mkt_index} composition from {fallback_date}"
+  )
+
+  return(df_index)
+}
 
 #' Get available indices in package
 #'
@@ -80,7 +118,7 @@ yf_get_available_indices <- function(print_description = FALSE) {
     for (i_row in 1:nrow(df_indices)) {
       cli::cli_alert_info(
         "{df_indices$available_indices[i_row]}: {df_indices$description[i_row]}"
-        )
+      )
 
     }
   }

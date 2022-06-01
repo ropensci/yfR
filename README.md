@@ -15,34 +15,80 @@ Review](https://badges.ropensci.org/523_status.svg)](https://github.com/ropensci
 
 # Motivation
 
-`yfR` facilitates importing data from Yahoo finance by organizing the
-data in the `tidy` format and speeding up the process using a cache
+`yfR` facilitates importing stock prices from Yahoo finance, organizing
+the data in the `tidy` format and speeding up the process using a cache
 system and parallel computing. `yfR` is the second and
 backwards-incompatible version of
 [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols),
-released in 2016 (see vignette “yfR and BatchGetSymbols”).
+released in 2016 (see vignette “99-yfR and BatchGetSymbols”).
 
 In a nutshell, [Yahoo Finance](https://finance.yahoo.com/) provides a
 vast repository of stock price data around the globe. It cover a
 signficant number of markets and assets, being used extensively in
 academic research and teaching. In order to import the financial data,
-all you need is a ticker (id of a stock, e.g. “FB” for [Meta
-platforms](https://finance.yahoo.com/quote/FB?p=FB&.tsrc=fin-srch)) and
-a time period.
+all you need is a ticker (id of a stock, e.g. “GM” for [General
+Motors](https://finance.yahoo.com/quote/GM?p=GM&.tsrc=fin-srch)) and a
+time period (first and last date).
+
+# The Data
+
+The main function of the package, `yfR::yf_get`, returns a dataframe
+with the financial data. All price data is measured at the unit of the
+financial exchange. For example, price data for FB (NYSE/US) is measures
+in dollars, while price data for PETR3.SA (B3/BR) is measured in Reais
+(Brazilian currency).
+
+The return dataframe contains the following columns:
+
+ticker  
+The requested tickers (ids of stocks)
+
+ref_date  
+The reference day (this can also be year/month/week when using argument
+freq_data)
+
+price_open  
+The opening price of the day/period
+
+price_high  
+The highest price of the day/period
+
+price_close  
+The close/last price of the day/period
+
+volume  
+The financial volume of the day/period
+
+price_adjusted  
+The stock price adjusted for corporate events such as splits, dividends
+and others – this is usually what you want/need for studying stocks as
+it represents the actual financial performance of stockholders
+
+ret_adjusted_prices  
+The arithmetic or log return (see input type_return) for the adjusted
+stock prices
+
+ret_adjusted_prices  
+The arithmetic or log return (see input type_return) for the closing
+stock prices
+
+cumret_adjusted_prices  
+The accumulated arithmetic/log return for the period (starts at 100%)
 
 # Finding tickers
 
 The easiest way to find the tickers of a company stock is to search for
 it in [Yahoo Finance’s](https://finance.yahoo.com/) website. At the top
-page you’ll find a search bar.
+page you’ll find a search bar:
 
-![YF Search](search-yf.png?raw=true "Example of search in YF") From
-there, you’ll that a company can have many different stocks traded at
-different markets. As the example shows, Petrobras is traded at NYQ (New
-York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE (Buenos
-Aires/Argentina Exchange), all with different symbols (tickers).
+![YF Search](search-yf.png?raw=true "Example of search in YF")
 
-## Features
+From there, you’ll that a company can have many different stocks traded
+at different markets. As the example shows, Petrobras is traded at NYQ
+(New York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE
+(Buenos Aires/Argentina Exchange), all with different symbols (tickers).
+
+## Features of `yfR`
 
 -   Fetchs daily/weekly/monthly/annual stock prices/returns from yahoo
     finance and outputs a dataframe (tibble) in the long format (stacked
@@ -109,15 +155,21 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-05-01 --> 2022-05-31 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-05-02 --> 2022-06-01 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 20 valid rows (2022-05-02 --> 2022-05-27)
+#> ✔    - got 21 valid rows (2022-05-02 --> 2022-05-31)
 #> ✔    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
+#> 
+#> ── Diagnostics ─────────────────────────────────────────────────────────────────
+#> ✔ Returned dataframe with 21 rows
+#> ✔ Using 6.0 kB at /tmp/RtmpjhNOQl/yf_cache for cache files
+#> ℹ Out of 1 tickers, you got 1
+#> ✔ You got data on 100% of requested tickers
 
 # output is a tibble with data
 head(df_yf)
@@ -138,5 +190,7 @@ head(df_yf)
 
 Package `yfR` is based on [quantmod](https://www.quantmod.com/)
 (@joshuaulrich) and uses one of its functions (`quantmod::getSymbols`)
-for fetching data from Yahoo Finance. I’m thankfull for the author for
-his work in keeping the package working properly.
+for fetching data from Yahoo Finance. As with any API, there is
+significant work in maintaining the code. Joshua was always fast and
+openminded in implemented required changes, and I’m very grateful for
+it.
