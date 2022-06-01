@@ -1,63 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://msperlin.github.io/yfR/404.html</loc>
   </url>
   <url>
-    <loc>/Contributing.html</loc>
+    <loc>https://msperlin.github.io/yfR/Contributing.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://msperlin.github.io/yfR/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://msperlin.github.io/yfR/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/diff-batchgetsymbols.html</loc>
   </url>
   <url>
-    <loc>/articles/yf-vignette.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/getting-started.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/index.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/using-collections.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/yf-diff-batchgetsymbols.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/yf-getting-started.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_collection_get.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/yf-using-collections.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_convert_to_wide.html</loc>
+    <loc>https://msperlin.github.io/yfR/articles/yf-vignette.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_converto_to_wide.html</loc>
+    <loc>https://msperlin.github.io/yfR/authors.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get.html</loc>
+    <loc>https://msperlin.github.io/yfR/index.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get_available_collections.html</loc>
+    <loc>https://msperlin.github.io/yfR/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get_available_indices.html</loc>
+    <loc>https://msperlin.github.io/yfR/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get_collection.html</loc>
+    <loc>https://msperlin.github.io/yfR/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get_data.html</loc>
+    <loc>https://msperlin.github.io/yfR/reference/yf_collection_get.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get_default_cache_folder.html</loc>
+    <loc>https://msperlin.github.io/yfR/reference/yf_convert_to_wide.html</loc>
   </url>
   <url>
-    <loc>/reference/yf_get_index_comp.html</loc>
+    <loc>https://msperlin.github.io/yfR/reference/yf_converto_to_wide.html</loc>
+  </url>
+  <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_get.html</loc>
+  </url>
+  <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_get_available_collections.html</loc>
+  </url>
+  <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_get_available_indices.html</loc>
+  </url>
+  <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_get_collection.html</loc>
+  </url>
+  <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_get_data.html</loc>
+  </url>
+  <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_get_default_cache_folder.html</loc>
+  </url>
+  <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_get_index_comp.html</loc>
   </url>
 </urlset>

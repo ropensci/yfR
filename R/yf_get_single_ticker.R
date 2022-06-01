@@ -16,7 +16,7 @@ yf_get_single_ticker <- function(ticker,
   }
 
   # do cache
-  if ((do_cache)) {
+  if (do_cache) {
 
     # check if data is in cache files
     my_cache_files <- list.files(cache_folder, full.names = TRUE)
