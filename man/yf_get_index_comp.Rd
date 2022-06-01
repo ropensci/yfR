@@ -7,7 +7,8 @@
 yf_get_index_comp(
   mkt_index,
   do_cache = TRUE,
-  cache_folder = yf_get_default_cache_folder()
+  cache_folder = yf_get_default_cache_folder(),
+  force_fallback = FALSE
 )
 }
 \arguments{
@@ -17,6 +18,9 @@ yf_get_index_comp(
 
 \item{cache_folder}{Where to save cache files?
 (default = yfR::yf_get_default_cache_folder() )}
+
+\item{force_fallback}{Logical (TRUE/FALSE). Forces the function to use the
+fallback system}
 }
 \value{
 A dataframe with the index compositino (column might vary)

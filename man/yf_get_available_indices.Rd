@@ -4,7 +4,11 @@
 \alias{yf_get_available_indices}
 \title{Get available indices in package}
 \usage{
-yf_get_available_indices()
+yf_get_available_indices(print_description = FALSE)
+}
+\arguments{
+\item{print_description}{Logical (TRUE/FALSE) - flag for printing description of
+available colletions}
 }
 \value{
 A vector of mkt indices
@@ -15,5 +19,6 @@ in the package.
 }
 \examples{
 
-av_indices <- yf_get_available_indices()
+indices <- yf_get_available_indices()
+indices
 }

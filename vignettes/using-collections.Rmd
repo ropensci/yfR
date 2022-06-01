@@ -1,0 +1,32 @@
+---
+title: "02-Using Collections"
+author: "Marcelo Perlin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{02-Using Collections}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Fetching collections of prices
+
+Collections are just a bundle of tickers pre-organized in the package. For example, collection `SP500` represents the current composition of the SP500 index. 
+
+The available collections are:
+
+```{r}
+yfR::yf_get_available_collections()
+```
+
+One can download the composition of the collection with `yf_collection_get`:
+
+```{r, eval=FALSE}
+library(yfR)
+
+df_yf <- yf_collection_get("SP500")
+
+head(df_yf)
+```
+
+

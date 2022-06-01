@@ -6,7 +6,7 @@
 \usage{
 yf_collection_get(
   collection,
-  first_date = Sys.Date() - 15,
+  first_date = Sys.Date() - 30,
   last_date = Sys.Date(),
   do_parallel = FALSE,
   do_cache = TRUE,
@@ -24,7 +24,8 @@ available collections}
 \item{last_date}{The last date of query (Date or character as YYYY-MM-DD)}
 
 \item{do_parallel}{Flag for using parallel or not (default = FALSE).
-Before using parallel, make sure you call function future::plan() first.}
+Before using parallel, make sure you call function future::plan() first.
+See <https://furrr.futureverse.org/> for more details.}
 
 \item{do_cache}{Use cache system? (default = TRUE)}
 
@@ -43,7 +44,10 @@ and will download all data from Yahoo Finance using \code{\link{yf_get}}.
 \examples{
 
 \dontrun{
-df_yf <- yf_collection_get("IBOV")
+df_yf <- yf_collection_get(collection = "IBOV",
+                           first_date = Sys.Date() - 30,
+                           last_date = Sys.Date()
+)
 }
 
 }

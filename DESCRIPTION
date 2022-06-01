@@ -25,10 +25,11 @@ Imports:
     rvest,
     dplyr,
     quantmod,
-    magrittr
+    magrittr,
+    humanize
 License: MIT + file LICENSE
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Suggests: 
     knitr,
     rmarkdown,

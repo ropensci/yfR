@@ -20,6 +20,9 @@ Transforms a long (stacked) dataframe into a list of wide dataframes
 
 my_f <- system.file("extdata/example_data_yfR.rds", package = "yfR")
 df_tickers <- readRDS(my_f)
+
+print(df_tickers)
+
 l_wide <- yf_convert_to_wide(df_tickers)
 l_wide
 }
