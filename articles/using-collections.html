@@ -97,11 +97,25 @@
 <p>Collections are just a bundle of tickers pre-organized in the package. For example, collection <code>SP500</code> represents the current composition of the SP500 index.</p>
 <p>The available collections are:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">yfR</span><span class="fu">::</span><span class="fu"><a href="../reference/yf_get_available_collections.html">yf_get_available_collections</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">available_collections</span> <span class="op">&lt;-</span> <span class="fu">yfR</span><span class="fu">::</span><span class="fu"><a href="../reference/yf_get_available_collections.html">yf_get_available_collections</a></span><span class="op">(</span>
+  print_description <span class="op">=</span> <span class="cn">TRUE</span>
+  <span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## </span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Description of Available Collections</span> ──</span></code></pre>
+<pre><code><span class="co">## </span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> SP500: The SP500 index (US MARKET) - Ticker = ^GSPC</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> IBOV: The Ibovespa index (BR MARKET) - Ticker = ^BVSP</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> FTSE: The FTSE index (UK MARKET) - Ticker = ^FTSE</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> testthat-collection: A (small) testing index for testthat() -- dev stuff, dont use it!</span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">available_collections</span></code></pre></div>
+<pre><code><span class="co">## [1] "SP500"               "IBOV"                "FTSE"               </span>
+<span class="co">## [4] "testthat-collection"</span></code></pre>
 <p>One can download the composition of the collection with <code>yf_collection_get</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/msperlin/yfR" class="external-link">yfR</a></span><span class="op">)</span>
 
+<span class="co"># be patient, it takes a while</span>
 <span class="va">df_yf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yf_collection_get.html">yf_collection_get</a></span><span class="op">(</span><span class="st">"SP500"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_yf</span><span class="op">)</span></code></pre></div>
