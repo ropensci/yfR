@@ -83,7 +83,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Getting Started</h1>
                         <h4 data-toc-skip class="author">Marcelo Perlin</h4>
             
-            <h4 data-toc-skip class="date">2022-06-01</h4>
+            <h4 data-toc-skip class="date">2022-06-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/msperlin/yfR/blob/HEAD/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
@@ -120,19 +120,19 @@
                 first_date <span class="op">=</span> <span class="va">first_date</span>,
                 last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span></code></pre>
-<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2022-05-02 --&gt; 2022-06-01 (30 days)</span> ──</span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2022-05-07 --&gt; 2022-06-06 (30 days)</span> ──</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Downloading data for benchmark ticker ^GSPC</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (1/1) Fetching data for FB</span></code></pre>
 <pre><code><span class="co">## <span style="color: #BBBB00;">!</span>  - not cached</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - cache saved successfully</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 21 valid rows (2022-05-02 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Looking good!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 19 valid rows (2022-05-09 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- All OK!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Binding price data</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Diagnostics</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 21 rows</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 6.0 kB at /tmp/RtmptW53SL/yf_cache for cache files</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 19 rows</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 5.6 kB at /tmp/RtmpqzBOwF/yf_cache for cache files</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Out of 1 tickers, you got 1</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> You got data on 100% of requested tickers</span></code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -141,12 +141,12 @@
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 11</span></span>
 <span class="co">##   ticker ref_date   price_open price_high price_low price_close   volume</span>
 <span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> FB     2022-05-02       201.       212.      201.        211. 49<span style="text-decoration: underline;">915</span>300</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> FB     2022-05-03       210.       215.      208.        212. 41<span style="text-decoration: underline;">556</span>300</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> FB     2022-05-04       211.       224.      207.        223. 41<span style="text-decoration: underline;">375</span>900</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> FB     2022-05-05       219.       220.      206.        208. 41<span style="text-decoration: underline;">129</span>200</span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> FB     2022-05-06       207.       209.      201.        204. 34<span style="text-decoration: underline;">733</span>600</span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> FB     2022-05-09       200.       203.      196.        196. 36<span style="text-decoration: underline;">303</span>200</span>
+<span class="co">## <span style="color: #BCBCBC;">1</span> FB     2022-05-09       200.       203.      196.        196. 36<span style="text-decoration: underline;">303</span>200</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> FB     2022-05-10       200.       203.      194.        198. 34<span style="text-decoration: underline;">452</span>500</span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> FB     2022-05-11       196.       201.      188.        189. 31<span style="text-decoration: underline;">153</span>400</span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> FB     2022-05-12       187.       198.      185.        191. 38<span style="text-decoration: underline;">262</span>200</span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> FB     2022-05-13       193.       200.      191.        199. 24<span style="text-decoration: underline;">549</span>800</span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> FB     2022-05-16       197.       205.      196.        200. 27<span style="text-decoration: underline;">112</span>600</span>
 <span class="co">## <span style="color: #949494;"># … with 4 more variables: price_adjusted &lt;dbl&gt;, ret_adjusted_prices &lt;dbl&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   ret_closing_prices &lt;dbl&gt;, cumret_adjusted_prices &lt;dbl&gt;</span></span></code></pre>
 </div>
@@ -165,29 +165,29 @@
                          first_date <span class="op">=</span> <span class="va">first_date</span>,
                          last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span></code></pre>
-<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 3 stocks | 2022-02-21 --&gt; 2022-06-01 (100 days)</span> ──</span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 3 stocks | 2022-02-26 --&gt; 2022-06-06 (100 days)</span> ──</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Downloading data for benchmark ticker ^GSPC</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (1/3) Fetching data for FB</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-05-02 --&gt; 2022-05-31)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-05-09 --&gt; 2022-06-03)</span></code></pre>
 <pre><code><span class="co">## <span style="color: #BBBB00;">!</span>  - need new data (cache doesnt match query)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Good job runner!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 68 valid rows (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Got it!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (2/3) Fetching data for GM</span></code></pre>
 <pre><code><span class="co">## <span style="color: #BBBB00;">!</span>  - not cached</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - cache saved successfully</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- All OK!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 68 valid rows (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Time for some tea?</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (3/3) Fetching data for MMM</span></code></pre>
 <pre><code><span class="co">## <span style="color: #BBBB00;">!</span>  - not cached</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - cache saved successfully</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- All OK!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 68 valid rows (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Looking good!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Binding price data</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Diagnostics</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 207 rows</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 30.5 kB at /tmp/RtmptW53SL/yf_cache for cache files</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 204 rows</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 30.1 kB at /tmp/RtmpqzBOwF/yf_cache for cache files</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Out of 3 tickers, you got 3</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> You got data on 100% of requested tickers</span></code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
@@ -223,19 +223,19 @@
                     freq_data <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'daily'</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span></code></pre>
-<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days)</span> ──</span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-06 (4539 days)</span> ──</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Downloading data for benchmark ticker ^GSPC</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (1/1) Fetching data for GE</span></code></pre>
 <pre><code><span class="co">## <span style="color: #BBBB00;">!</span>  - not cached</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - cache saved successfully</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Youre doing good!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3127 valid rows (2010-01-04 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Time for some tea?</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Binding price data</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Diagnostics</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 3124 rows</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 642.9 kB at /tmp/RtmptW53SL/yf_cache for cache files</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 3127 rows</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 643.2 kB at /tmp/RtmpqzBOwF/yf_cache for cache files</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Out of 1 tickers, you got 1</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> You got data on 100% of requested tickers</span></code></pre>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
@@ -244,18 +244,18 @@
                     freq_data <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'weekly'</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span></code></pre>
-<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days)</span> ──</span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-06 (4539 days)</span> ──</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Downloading data for benchmark ticker ^GSPC</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (1/1) Fetching data for GE</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2010-01-04 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Got it!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2010-01-04 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3127 valid rows (2010-01-04 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- All OK!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Binding price data</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Diagnostics</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 648 rows</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 642.8 kB at /tmp/RtmptW53SL/yf_cache for cache files</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 643.1 kB at /tmp/RtmpqzBOwF/yf_cache for cache files</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Out of 1 tickers, you got 1</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> You got data on 100% of requested tickers</span></code></pre>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
@@ -264,18 +264,18 @@
                      freq_data <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'monthly'</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span></code></pre>
-<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days)</span> ──</span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-06 (4539 days)</span> ──</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Downloading data for benchmark ticker ^GSPC</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (1/1) Fetching data for GE</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2010-01-04 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2010-01-04 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3127 valid rows (2010-01-04 --&gt; 2022-06-03)</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- All OK!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Binding price data</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Diagnostics</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 149 rows</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 642.8 kB at /tmp/RtmptW53SL/yf_cache for cache files</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 150 rows</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 643.1 kB at /tmp/RtmpqzBOwF/yf_cache for cache files</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Out of 1 tickers, you got 1</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> You got data on 100% of requested tickers</span></code></pre>
 <div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
@@ -284,18 +284,18 @@
                     freq_data <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="st">'yearly'</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span></code></pre>
-<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-01 (4534 days)</span> ──</span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 1 stocks | 2010-01-01 --&gt; 2022-06-06 (4539 days)</span> ──</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Downloading data for benchmark ticker ^GSPC</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (1/1) Fetching data for GE</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2010-01-04 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3124 valid rows (2010-01-04 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Got it!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2010-01-04 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 3127 valid rows (2010-01-04 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Boa!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Binding price data</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Diagnostics</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 13 rows</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 642.8 kB at /tmp/RtmptW53SL/yf_cache for cache files</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 643.1 kB at /tmp/RtmpqzBOwF/yf_cache for cache files</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Out of 1 tickers, you got 1</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> You got data on 100% of requested tickers</span></code></pre>
 <div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
@@ -333,44 +333,44 @@
                          first_date <span class="op">=</span> <span class="va">first_date</span>,
                          last_date <span class="op">=</span> <span class="va">last_date</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## </span></code></pre>
-<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 3 stocks | 2022-02-21 --&gt; 2022-06-01 (100 days)</span> ──</span></code></pre>
+<pre><code><span class="co">## ── <span style="font-weight: bold;">Running yfR for 3 stocks | 2022-02-26 --&gt; 2022-06-06 (100 days)</span> ──</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Downloading data for benchmark ticker ^GSPC</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (1/3) Fetching data for FB</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Nice!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 68 valid rows (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Got it!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (2/3) Fetching data for GM</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Good stuff!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 68 valid rows (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Got it!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> (3/3) Fetching data for MMM</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 69 valid rows (2022-02-22 --&gt; 2022-05-31)</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- All OK!</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - found cache file (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 68 valid rows (2022-02-28 --&gt; 2022-06-03)</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span>  - got 100% of valid prices -- Good stuff!</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Binding price data</span></code></pre>
 <pre><code><span class="co">## </span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Diagnostics</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────────────────</span></span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 207 rows</span></code></pre>
-<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 642.5 kB at /tmp/RtmptW53SL/yf_cache for cache files</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Returned dataframe with 204 rows</span></code></pre>
+<pre><code><span class="co">## <span style="color: #00BB00;">✔</span> Using 642.8 kB at /tmp/RtmpqzBOwF/yf_cache for cache files</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BBBB;">ℹ</span> Out of 3 tickers, you got 3</span></code></pre>
 <pre><code><span class="co">## <span style="color: #00BB00;">✔</span> You got data on 100% of requested tickers</span></code></pre>
 <div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df_yf_multiple</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 207 × 11</span></span>
+<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 204 × 11</span></span>
 <span class="co">##    ticker ref_date   price_open price_high price_low price_close   volume</span>
 <span class="co">##  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;"> 1</span> FB     2022-02-22       202.       207.      200.        202. 39<span style="text-decoration: underline;">852</span>400</span>
-<span class="co">## <span style="color: #BCBCBC;"> 2</span> FB     2022-02-23       204.       207.      198.        198. 44<span style="text-decoration: underline;">481</span>400</span>
-<span class="co">## <span style="color: #BCBCBC;"> 3</span> FB     2022-02-24       191.       208.      190.        208. 49<span style="text-decoration: underline;">957</span>200</span>
-<span class="co">## <span style="color: #BCBCBC;"> 4</span> FB     2022-02-25       205.       211.      203.        210. 37<span style="text-decoration: underline;">627</span>600</span>
-<span class="co">## <span style="color: #BCBCBC;"> 5</span> FB     2022-02-28       208.       213.      207.        211. 34<span style="text-decoration: underline;">239</span>800</span>
-<span class="co">## <span style="color: #BCBCBC;"> 6</span> FB     2022-03-01       210.       212.      202.        203. 27<span style="text-decoration: underline;">094</span>900</span>
-<span class="co">## <span style="color: #BCBCBC;"> 7</span> FB     2022-03-02       205.       209.      202.        208. 29<span style="text-decoration: underline;">452</span>100</span>
-<span class="co">## <span style="color: #BCBCBC;"> 8</span> FB     2022-03-03       209.       209.      201.        203. 27<span style="text-decoration: underline;">263</span>500</span>
-<span class="co">## <span style="color: #BCBCBC;"> 9</span> FB     2022-03-04       202.       206.      199.        200. 32<span style="text-decoration: underline;">130</span>900</span>
-<span class="co">## <span style="color: #BCBCBC;">10</span> FB     2022-03-07       201.       201.      187.        187. 38<span style="text-decoration: underline;">560</span>600</span>
-<span class="co">## <span style="color: #949494;"># … with 197 more rows, and 4 more variables: price_adjusted &lt;dbl&gt;,</span></span>
+<span class="co">## <span style="color: #BCBCBC;"> 1</span> FB     2022-02-28       208.       213.      207.        211. 34<span style="text-decoration: underline;">239</span>800</span>
+<span class="co">## <span style="color: #BCBCBC;"> 2</span> FB     2022-03-01       210.       212.      202.        203. 27<span style="text-decoration: underline;">094</span>900</span>
+<span class="co">## <span style="color: #BCBCBC;"> 3</span> FB     2022-03-02       205.       209.      202.        208. 29<span style="text-decoration: underline;">452</span>100</span>
+<span class="co">## <span style="color: #BCBCBC;"> 4</span> FB     2022-03-03       209.       209.      201.        203. 27<span style="text-decoration: underline;">263</span>500</span>
+<span class="co">## <span style="color: #BCBCBC;"> 5</span> FB     2022-03-04       202.       206.      199.        200. 32<span style="text-decoration: underline;">130</span>900</span>
+<span class="co">## <span style="color: #BCBCBC;"> 6</span> FB     2022-03-07       201.       201.      187.        187. 38<span style="text-decoration: underline;">560</span>600</span>
+<span class="co">## <span style="color: #BCBCBC;"> 7</span> FB     2022-03-08       188.       197.      186.        190. 37<span style="text-decoration: underline;">508</span>100</span>
+<span class="co">## <span style="color: #BCBCBC;"> 8</span> FB     2022-03-09       196.       199.      194.        198. 31<span style="text-decoration: underline;">894</span>700</span>
+<span class="co">## <span style="color: #BCBCBC;"> 9</span> FB     2022-03-10       195.       196.      191.        195. 24<span style="text-decoration: underline;">853</span>000</span>
+<span class="co">## <span style="color: #BCBCBC;">10</span> FB     2022-03-11       193.       194.      187.        188. 34<span style="text-decoration: underline;">694</span>500</span>
+<span class="co">## <span style="color: #949494;"># … with 194 more rows, and 4 more variables: price_adjusted &lt;dbl&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   ret_adjusted_prices &lt;dbl&gt;, ret_closing_prices &lt;dbl&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   cumret_adjusted_prices &lt;dbl&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
@@ -386,12 +386,12 @@
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 6 × 4</span></span>
 <span class="co">##   ref_date      FB    GM   MMM</span>
 <span class="co">##   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> 2022-02-22  202.  46.8  145.</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> 2022-02-23  198.  46.4  143.</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> 2022-02-24  208.  46.3  142.</span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> 2022-02-25  210.  47.4  149.</span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> 2022-02-28  211.  46.7  147.</span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> 2022-03-01  203.  44.5  143.</span></code></pre>
+<span class="co">## <span style="color: #BCBCBC;">1</span> 2022-02-28  211.  46.7  147.</span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> 2022-03-01  203.  44.5  143.</span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> 2022-03-02  208.  46.3  146.</span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> 2022-03-03  203.  44.9  147.</span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> 2022-03-04  200.  42.4  145.</span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> 2022-03-07  187.  39.8  142.</span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
