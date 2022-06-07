@@ -1,7 +1,7 @@
-available <- yfR::yf_get_available_indices()
+available <- yfR::yf_index_list()
 
 for (i_available in available) {
-  df <- yfR::yf_get_index_comp(i_available)
+  df <- yfR::yf_index_composition(i_available)
 
   df$fetched_at <- Sys.Date()
 

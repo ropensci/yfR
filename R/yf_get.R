@@ -15,7 +15,7 @@
 #' cache and, if it does, loads the data from the rds file.
 #'
 #' By default, a temporary folder is used (see function
-#' \link{yf_get_default_cache_folder}, which means that all cache files are
+#' \link{yf_cachefolder_get}, which means that all cache files are
 #' session-persistent. In practice, whenever you restart your R/RStudio session,
 #' all cache files are lost. This is a choice I've made due to the fact that
 #' merging adjusted stock price data after corporate events (dividends/splits)
@@ -56,7 +56,7 @@
 #' (see input do_fill_missing_prices). Default = FALSE.
 #' @param do_cache Use cache system? (default = TRUE)
 #' @param cache_folder Where to save cache files?
-#' (default = yfR::yf_get_default_cache_folder() )
+#' (default = yfR::yf_cachefolder_get() )
 #' @param do_parallel Flag for using parallel or not (default = FALSE).
 #' Before using parallel, make sure you call function future::plan() first.
 #' See <https://furrr.futureverse.org/> for more details.
@@ -117,13 +117,13 @@ yf_get <- function(tickers,
                    how_to_aggregate = "last",
                    do_complete_data = FALSE,
                    do_cache = TRUE,
-                   cache_folder = yf_get_default_cache_folder(),
+                   cache_folder = yf_cachefolder_get(),
                    do_parallel = FALSE,
                    be_quiet = FALSE) {
 
   # check for internet
   if (!curl::has_internet()) {
-    stop("Cant find an active internet connection...")
+    stop("Can't find an active internet connection...")
   }
 
   # check cache folder
@@ -166,11 +166,11 @@ yf_get <- function(tickers,
   last_date <- as.Date(last_date)
 
   if (class(first_date) != "Date") {
-    stop("ERROR: cant change class of first_date to 'Date'")
+    stop("can't change class of first_date to 'Date'")
   }
 
   if (class(last_date) != "Date") {
-    stop("ERROR: cant change class of last_date to 'Date'")
+    stop("can't change class of last_date to 'Date'")
   }
 
   if (last_date <= first_date) {
@@ -192,8 +192,18 @@ yf_get <- function(tickers,
     stop("Input thresh_bad_data should be a proportion between 0 and 1")
   }
 
-  # disable dplyr group message
+  # disable dplyr group message and respect user choice
+  # will be null if options is not set
+  default_dplyr_summ <- options("dplyr.summarise.inform")[[1]]
+
+  # disable and enable at end with on exit
   options(dplyr.summarise.inform = FALSE)
+
+  on.exit({
+    if (is.logical(default_dplyr_summ)) {
+      options(dplyr.summarise.inform = default_dplyr_summ)
+    }
+  })
 
   # check if using do_parallel = TRUE
   # 20220501 Yahoo finance started setting limits to api calls, which
@@ -235,7 +245,7 @@ yf_get <- function(tickers,
   }
 
   # get benchmark ticker data
-  df_bench <- yf_get_single_ticker(
+  df_bench <- yf_data_single(
     ticker = bench_ticker,
     i_ticker = 1,
     length_tickers = 1,
@@ -263,22 +273,18 @@ yf_get <- function(tickers,
   if (!do_parallel) {
     my_l <- purrr::pmap(
       .l = l_args,
-      .f = yf_get_single_ticker
+      .f = yf_data_single
     )
   } else {
 
-    # 20220328 DOES not work (cant find way to fetch used workds from plan())
-
-    #formals_parallel <- formals(future::plan())
-    #used_workers <- formals_parallel$workers
-
     # available cores in R session
     available_cores <- future::availableCores()
+    used_cores <- future::nbrOfWorkers()
 
     if (!be_quiet) {
 
       cli::cli_h3(
-        'Running yfR with parallel backend ({available_cores} cores available)')
+        'Running yfR with parallel backend (using {used_cores} of {available_cores} available cores)')
 
     }
 
@@ -304,7 +310,7 @@ yf_get <- function(tickers,
 
     my_l <- furrr::future_pmap(
       .l = l_args,
-      .f = yf_get_single_ticker,
+      .f = yf_data_single,
       .progress = TRUE,
       # fixes warnings about seed
       .options = furrr::furrr_options(seed = TRUE)
@@ -320,6 +326,16 @@ yf_get <- function(tickers,
   cli::cli_alert_info('Binding price data')
   df_tickers <- dplyr::bind_rows(purrr::map(my_l, 1))
   df_control <- dplyr::bind_rows(purrr::map(my_l, 2))
+
+  # make sure data is in the output
+  if (nrow(df_tickers) == 0) {
+    stop(
+      paste0(
+        "Resulting data has 0 rows.. Are your tickers correct?",
+        " Search your ticker at <https://finance.yahoo.com/>."
+      )
+    )
+  }
 
   # remove tickers with bad data
   tickers_to_keep <- df_control$ticker[df_control$threshold_decision == "KEEP"]
@@ -350,17 +366,19 @@ yf_get <- function(tickers,
 
     # find the first monday (see issue #19 in BatchGetsymbols)
     # https://github.com/msperlin/BatchGetSymbols/issues/19
-    temp_dates <- seq(as.Date(paste0(
+    min_year <- as.Date(paste0(
       lubridate::year(min(df_tickers$ref_date)),
       "-01-01"
     )
-    ),
-    as.Date(paste0(
+    )
+    max_year <- as.Date(paste0(
       lubridate::year(max(df_tickers$ref_date)) + 1,
       "-12-31"
     )
-    ),
-    by = "1 day"
+    )
+
+    temp_dates <- seq(min_year, max_year,
+                      by = "1 day"
     )
 
     temp_weekdays <- lubridate::wday(temp_dates, week_start = 1)
@@ -376,6 +394,7 @@ yf_get <- function(tickers,
                       ),
                       by = str_freq
       )
+
     } else {
 
       # every other case
@@ -492,16 +511,20 @@ yf_get <- function(tickers,
 
   attributes(df_out)$df_control <- df_control
 
-  # enable dplyr group message
-  options(dplyr.summarise.inform = TRUE)
-
   # last messages
   cli::cli_h1("Diagnostics")
 
   n_requested <- length(tickers)
   n_got <- dplyr::n_distinct(df_out$ticker)
 
-  cli::cli_alert_success("Returned dataframe with {nrow(df_out)} rows")
+  this_morale <- get_morale_boost()
+
+  cli::cli_alert_success(
+    paste0(
+      "Returned dataframe with {nrow(df_out)} rows",
+      " -- {this_morale}"
+    )
+  )
 
   # check cache size
   if (do_cache) {
@@ -509,42 +532,39 @@ yf_get <- function(tickers,
     size_files <- sum(sapply(cache_files, file.size))
 
     size_str <- humanize::natural_size(size_files)
-    cli::cli_alert_success("Using {size_str} at {cache_folder} for cache files")
-  }
+    n_files <- length(list.dirs(cache_folder))
 
-  cli::cli_alert_info("Out of {n_requested} tickers, you got {n_got}")
+    cli::cli_alert_info("Using {size_str} at {cache_folder} for {n_files} cache files")
+  }
 
   success_rate <- n_got/n_requested
 
-  extra_msg <- paste0(
-    "You either inputed wrong tickers, or ranned into YF call limit? My advice:",
-    " check tickers, wait 15 minutes and try again."
+  cli::cli_alert_info(
+    paste0("Out of {n_requested} requested tickers, you got {n_got}",
+           " ({scales::percent(success_rate)})")
   )
-  if (success_rate > 0.75) {
 
-    cli::cli_alert_success(
-      'You got data on {scales::percent(success_rate)} of requested tickers'
+  if (success_rate < 0.75) {
+
+    extra_msg <- paste0(
+      "You either inputed wrong tickers, or ranned into YF call limit? My advice:",
+      " check your input tickers, wait 15 minutes and try again."
     )
-
-  } else if (success_rate > 0.5) {
-    cli::cli_alert_info(
-      paste0(
-        'Only got data on  {scales::percent(success_rate)} of requested tickers.',
-        "{extra_msg}"
-      )
-    )
-
-  } else {
-
     cli::cli_alert_danger(
       paste0(
-        'You got data on less than {scales::percent(0.5)} of requested tickers. ',
+        'You got data on less than {scales::percent(0.75)} of requested tickers. ',
         "{extra_msg}"
       )
     )
+
+    idx <- !tickers %in% unique(df_tickers$ticker)
+    missing_tickers <- tickers[idx]
+    cli::cli_alert_info(
+      paste0("Missing tickers: ",
+             paste0(missing_tickers, collapse = ", "))
+    )
+
   }
-
-
 
   return(df_out)
 }

@@ -1,3 +1,6 @@
+## ---- include=FALSE-----------------------------------------------------------
+knitr::opts_chunk$set(message = FALSE)
+
 ## ---- results='hold'----------------------------------------------------------
 library(yfR)
 
@@ -40,14 +43,13 @@ library(ggplot2)
 library(dplyr)
 
 my_ticker <- 'GE'
-first_date <- '2010-01-01'
+first_date <- '2005-01-01'
 last_date <- Sys.Date()
 
 df_dailly <- yf_get(tickers = my_ticker, 
                     first_date, last_date, 
                     freq_data = 'daily') %>%
   mutate(freq = 'daily')
-
 
 df_weekly <- yf_get(tickers = my_ticker, 
                     first_date, last_date, 
@@ -64,6 +66,7 @@ df_yearly <- yf_get(tickers = my_ticker,
                     freq_data = 'yearly') %>%
   mutate(freq = 'yearly')
 
+# bind it all together for plotting
 df_allfreq <- bind_rows(
   list(df_dailly, df_weekly, df_monthly, df_yearly)
 ) %>%
@@ -73,8 +76,7 @@ df_allfreq <- bind_rows(
                                   'monthly',
                                   'yearly'))) # make sure the order in plot is right
 
-p <- ggplot(df_allfreq, aes(x=ref_date, y = price_adjusted)) + 
-  geom_point() + 
+p <- ggplot(df_allfreq, aes(x = ref_date, y = price_adjusted)) + 
   geom_line() + 
   facet_grid(freq ~ ticker) + 
   theme_minimal() + 

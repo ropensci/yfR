@@ -6,8 +6,8 @@
 #' @export
 #'
 #' @examples
-#' print(yf_get_default_cache_folder())
-yf_get_default_cache_folder <- function() {
+#' print(yf_cachefolder_get())
+yf_cachefolder_get <- function() {
 
   path_cache <- file.path(tempdir(), "yf_cache")
 

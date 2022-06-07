@@ -9,7 +9,7 @@
 #' @param ... Other arguments passed to \code{\link{yf_get}}
 #' @inheritParams yf_get
 #'
-#' @return A dataframe with financial prices from collection
+#' @return A data frame with financial prices from collection
 #' @export
 #'
 #' @examples
@@ -26,7 +26,7 @@ yf_collection_get <- function(collection,
                               last_date = Sys.Date(),
                               do_parallel = FALSE,
                               do_cache = TRUE,
-                              cache_folder = yf_get_default_cache_folder(),
+                              cache_folder = yf_cachefolder_get(),
                               ...) {
 
   cli::cli_h1('Fetching price collection for {collection}')
@@ -39,7 +39,7 @@ yf_collection_get <- function(collection,
     )
   }
 
-  df_collection <- yf_get_index_comp(mkt_index = collection)
+  df_collection <- yf_index_composition(mkt_index = collection)
 
   ticker_index <- df_collection$index_ticker[1]
 
@@ -73,7 +73,7 @@ yf_collection_get <- function(collection,
 
 #' Returns available collections
 #'
-#' @inheritParams yf_get_available_indices
+#' @inheritParams yf_index_list
 #' @return A string vector with available collections
 #' @export
 #'
@@ -81,7 +81,7 @@ yf_collection_get <- function(collection,
 #'
 #' print(yf_get_available_collections())
 yf_get_available_collections <- function(print_description = FALSE) {
-  available_indices <- yf_get_available_indices(print_description)
+  available_indices <- yf_index_list(print_description)
 
   return(invisible(available_indices))
 }

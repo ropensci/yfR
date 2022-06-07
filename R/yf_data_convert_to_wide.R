@@ -1,4 +1,4 @@
-#' Transforms a long (stacked) dataframe into a list of wide dataframes
+#' Transforms a long (stacked) data frame into a list of wide data frames
 #'
 #' @param df_in dataframe in the long format (probably the output of yf_get())
 #'
@@ -28,9 +28,7 @@ yf_convert_to_wide <- function(df_in) {
     # always fetch first ocurrence
     temp_df <- unique(temp_df)
 
-
-
-
+    # convert
     temp_df_wide <- tidyr::pivot_wider(
       data = temp_df,
       names_from = ticker,
@@ -44,6 +42,8 @@ yf_convert_to_wide <- function(df_in) {
   l_out <- lapply(my_cols,
                   fct_format_wide,
                   df_in = df_in)
+
+  # fix names in columns
   names(l_out) <- my_cols
 
   return(l_out)

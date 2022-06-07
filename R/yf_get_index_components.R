@@ -9,13 +9,13 @@
 #' @export
 #'
 #' @examples
-#' df_sp500 <- yf_get_index_comp("SP500")
-yf_get_index_comp <- function(mkt_index,
+#' df_sp500 <- yf_index_composition("SP500")
+yf_index_composition <- function(mkt_index,
                               do_cache = TRUE,
-                              cache_folder = yf_get_default_cache_folder(),
+                              cache_folder = yf_cachefolder_get(),
                               force_fallback = FALSE) {
 
-  available_indices <- yf_get_available_indices()
+  available_indices <- yf_index_list()
   if (!any(mkt_index %in% available_indices)) {
     stop(stringr::str_glue(
       "Index {mkt_index} is no available within the options: ",
@@ -33,7 +33,7 @@ yf_get_index_comp <- function(mkt_index,
 
     if (mkt_index == "IBOV") {
 
-      df_index <- yf_get_ibov_stocks(
+      df_index <- yf_index_ibov(
         do_cache = do_cache,
         cache_folder = cache_folder,
         max_tries = 10
@@ -41,15 +41,15 @@ yf_get_index_comp <- function(mkt_index,
 
     } else if (mkt_index == "SP500") {
 
-      df_index <- yf_get_sp500_stocks()
+      df_index <- yf_index_sp500()
 
     } else if (mkt_index == "FTSE") {
 
-      df_index <- yf_get_ftse_stocks()
+      df_index <- yf_index_ftse()
 
     } else if (mkt_index == "testthat-collection") {
 
-      df_index <- yf_get_test_stocks()
+      df_index <- yf_index_test()
 
     }
   })
@@ -90,16 +90,16 @@ read_fallback <- function(mkt_index) {
 #' in the package.
 #'
 #' @param print_description Logical (TRUE/FALSE) - flag for printing description of
-#' available colletions
+#' available indices/collections
 #'
 #' @return A vector of mkt indices
 #' @export
 #'
 #' @examples
 #'
-#' indices <- yf_get_available_indices()
+#' indices <- yf_index_list()
 #' indices
-yf_get_available_indices <- function(print_description = FALSE) {
+yf_index_list <- function(print_description = FALSE) {
   available_indices <- c("SP500", "IBOV", "FTSE", "testthat-collection")
 
   df_indices <- dplyr::tibble(
@@ -129,8 +129,8 @@ yf_get_available_indices <- function(print_description = FALSE) {
 #' Function to download the current components of the
 #' FTSE100 index from Wikipedia
 #' @noRd
-yf_get_ftse_stocks <- function(do_cache = TRUE,
-                               cache_folder = yf_get_default_cache_folder()) {
+yf_index_ftse <- function(do_cache = TRUE,
+                               cache_folder = yf_cachefolder_get()) {
   cache_file <- file.path(
     cache_folder,
     paste0("yf_ftse100_Composition_", Sys.Date(), ".rds")
@@ -174,7 +174,7 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
     readr::write_rds(df_ftse, cache_file)
   }
 
-  yf_get_message_index("FTSE", nrow(df_ftse))
+  yf_index_format_msg("FTSE", nrow(df_ftse))
 
   return(df_ftse)
 }
@@ -182,8 +182,8 @@ yf_get_ftse_stocks <- function(do_cache = TRUE,
 #' Function to download the current components of the
 #' Ibovespa index from B3 website
 #' @noRd
-yf_get_ibov_stocks <- function(do_cache = TRUE,
-                               cache_folder = yf_get_default_cache_folder(),
+yf_index_ibov <- function(do_cache = TRUE,
+                               cache_folder = yf_cachefolder_get(),
                                max_tries = 10) {
   cache_file <- file.path(
     cache_folder,
@@ -232,15 +232,15 @@ yf_get_ibov_stocks <- function(do_cache = TRUE,
     readr::write_rds(df_ibov_comp, cache_file)
   }
 
-  yf_get_message_index("Ibovespa", nrow(df_ibov_comp))
+  yf_index_format_msg("Ibovespa", nrow(df_ibov_comp))
 
   return(df_ibov_comp)
 }
 
 #' Function for fetching test tickers
 #' @noRd
-yf_get_test_stocks <- function(do_cache = TRUE,
-                               cache_folder = yf_get_default_cache_folder()) {
+yf_index_test <- function(do_cache = TRUE,
+                               cache_folder = yf_cachefolder_get()) {
 
   df_test <- dplyr::tibble(
     ticker = c("^GSPC", "^FTSE"),
@@ -252,8 +252,8 @@ yf_get_test_stocks <- function(do_cache = TRUE,
 
 #' Function to download the current components of the SP500 index from Wikipedia
 #' @noRd
-yf_get_sp500_stocks <- function(do_cache = TRUE,
-                                cache_folder = yf_get_default_cache_folder()) {
+yf_index_sp500 <- function(do_cache = TRUE,
+                                cache_folder = yf_cachefolder_get()) {
   cache_file <- file.path(
     cache_folder,
     paste0("SP500_Composition_", Sys.Date(), ".rds")
@@ -299,66 +299,14 @@ yf_get_sp500_stocks <- function(do_cache = TRUE,
     readr::write_rds(df_sp500, cache_file)
   }
 
-  yf_get_message_index("SP500", nrow(df_sp500))
+  yf_index_format_msg("SP500", nrow(df_sp500))
   return(df_sp500)
 }
 
-#' Function to download the current components of the SP500 index from Wikipedia
-#' @noRd
-yf_get_sp500_stocks <- function(do_cache = TRUE,
-                                cache_folder = yf_get_default_cache_folder()) {
-  cache_file <- file.path(
-    cache_folder,
-    paste0("SP500_Composition_", Sys.Date(), ".rds")
-  )
-
-  if (do_cache) {
-    # check if file exists
-    flag <- file.exists(cache_file)
-
-    if (flag) {
-      df_sp500 <- readr::read_rds(cache_file)
-      return(df_sp500)
-    }
-  }
-
-  my_url <- "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
-
-  read_html <- 0 # fix for global variable nagging from BUILD
-  my_xpath <- '//*[@id="constituents"]'
-  df_sp500 <- my_url %>%
-    rvest::read_html() %>%
-    rvest::html_nodes(xpath = my_xpath) %>%
-    rvest::html_table(fill = TRUE)
-
-  df_sp500 <- df_sp500[[1]]
-
-  df_sp500 <- df_sp500  %>%
-    dplyr::rename(
-      ticker = Symbol,
-      company = Security,
-      sector = `GICS Sector`
-    ) %>%
-    dplyr::select(ticker, company, sector) %>%
-    dplyr::mutate(
-      index = "SP500",
-      index_ticker = "^GSPC"
-    )
-
-
-  if (do_cache) {
-    if (!dir.exists(cache_folder)) dir.create(cache_folder)
-
-    readr::write_rds(df_sp500, cache_file)
-  }
-
-  yf_get_message_index("SP500", nrow(df_sp500))
-  return(df_sp500)
-}
 
 #' Builds index message
 #' @noRd
-yf_get_message_index <- function(index_in, my_n) {
+yf_index_format_msg <- function(index_in, my_n) {
   cli::cli_alert_success("Got {index_in} composition with {my_n} rows")
   return(invisible(TRUE))
 }
