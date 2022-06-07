@@ -1,12 +1,12 @@
 #' function to import a single ticker
 #' @noRd
-yf_get_single_ticker <- function(ticker,
+yf_data_single <- function(ticker,
                                  i_ticker,
                                  length_tickers,
                                  first_date,
                                  last_date,
                                  do_cache = TRUE,
-                                 cache_folder = yf_get_default_cache_folder(),
+                                 cache_folder = yf_cachefolder_get(),
                                  df_bench = NULL,
                                  be_quiet = FALSE,
                                  thresh_bad_data) {
@@ -97,7 +97,7 @@ yf_get_single_ticker <- function(ticker,
                             -max_diff_dates)
         df_out_bef <- data.frame()
         if (flag_date_bef) {
-          df_out_bef <- yf_get_clean_data(
+          df_out_bef <- yf_data_get_raw(
             ticker,
             first_date,
             temp_cache$first_date
@@ -107,7 +107,7 @@ yf_get_single_ticker <- function(ticker,
         flag_date_aft <- ((last_date - temp_cache$last_date) > max_diff_dates)
         df_out_aft <- data.frame()
         if (flag_date_aft) {
-          df_out_aft <- yf_get_clean_data(
+          df_out_aft <- yf_data_get_raw(
             ticker,
             temp_cache$last_date,
             last_date
@@ -162,7 +162,7 @@ yf_get_single_ticker <- function(ticker,
         last_date, ".rds"
       )
 
-      df_out <- yf_get_clean_data(
+      df_out <- yf_data_get_raw(
         ticker,
         first_date,
         last_date
@@ -180,7 +180,7 @@ yf_get_single_ticker <- function(ticker,
       }
     }
   } else {
-    df_out <- yf_get_clean_data(
+    df_out <- yf_data_get_raw(
       ticker,
       first_date,
       last_date

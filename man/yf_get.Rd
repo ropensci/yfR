@@ -15,7 +15,7 @@ yf_get(
   how_to_aggregate = "last",
   do_complete_data = FALSE,
   do_cache = TRUE,
-  cache_folder = yf_get_default_cache_folder(),
+  cache_folder = yf_cachefolder_get(),
   do_parallel = FALSE,
   be_quiet = FALSE
 )
@@ -56,7 +56,7 @@ missing pairs of ticker-date will be replaced by NA or closest price
 \item{do_cache}{Use cache system? (default = TRUE)}
 
 \item{cache_folder}{Where to save cache files?
-(default = yfR::yf_get_default_cache_folder() )}
+(default = yfR::yf_cachefolder_get() )}
 
 \item{do_parallel}{Flag for using parallel or not (default = FALSE).
 Before using parallel, make sure you call function future::plan() first.
@@ -109,7 +109,7 @@ a user asks for a dataset, it first checks if the ticker/time period exists in
 cache and, if it does, loads the data from the rds file.
 
 By default, a temporary folder is used (see function
-\link{yf_get_default_cache_folder}, which means that all cache files are
+\link{yf_cachefolder_get}, which means that all cache files are
 session-persistent. In practice, whenever you restart your R/RStudio session,
 all cache files are lost. This is a choice I've made due to the fact that
 merging adjusted stock price data after corporate events (dividends/splits)
