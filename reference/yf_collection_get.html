@@ -12,7 +12,7 @@ and will download all data from Yahoo Finance using yf_get."><meta property="og:
     
     <a class="navbar-brand me-2" href="../index.html">yfR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ and will download all data from Yahoo Finance using yf_get."><meta property="og:
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Downloads a collection of data from Yahoo Finance</h1>
-      <small class="dont-index">Source: <a href="https://github.com/msperlin/yfR/blob/HEAD/R/collections.R" class="external-link"><code>R/collections.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/msperlin/yfR/blob/HEAD/R/yf_collections.R" class="external-link"><code>R/yf_collections.R</code></a></small>
       <div class="d-none name"><code>yf_collection_get.Rd</code></div>
     </div>
 
@@ -68,7 +68,7 @@ and will download all data from Yahoo Finance using <code><a href="yf_get.html">
   last_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>,
   do_parallel <span class="op">=</span> <span class="cn">FALSE</span>,
   do_cache <span class="op">=</span> <span class="cn">TRUE</span>,
-  cache_folder <span class="op">=</span> <span class="fu"><a href="yf_get_default_cache_folder.html">yf_get_default_cache_folder</a></span><span class="op">(</span><span class="op">)</span>,
+  cache_folder <span class="op">=</span> <span class="fu"><a href="yf_cachefolder_get.html">yf_cachefolder_get</a></span><span class="op">(</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -91,13 +91,13 @@ See &lt;https://furrr.futureverse.org/&gt; for more details.</p></dd>
 <dd><p>Use cache system? (default = TRUE)</p></dd>
 <dt>cache_folder</dt>
 <dd><p>Where to save cache files?
-(default = yfR::yf_get_default_cache_folder() )</p></dd>
+(default = yfR::yf_cachefolder_get() )</p></dd>
 <dt>...</dt>
 <dd><p>Other arguments passed to <code><a href="yf_get.html">yf_get</a></code></p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A dataframe with financial prices from collection</p>
+    <p>A data frame with financial prices from collection</p>
     </div>
 
     <div class="section level2">

@@ -40,6 +40,9 @@
     <loc>https://msperlin.github.io/yfR/reference/pipe.html</loc>
   </url>
   <url>
+    <loc>https://msperlin.github.io/yfR/reference/yf_cachefolder_get.html</loc>
+  </url>
+  <url>
     <loc>https://msperlin.github.io/yfR/reference/yf_collection_get.html</loc>
   </url>
   <url>
@@ -52,12 +55,9 @@
     <loc>https://msperlin.github.io/yfR/reference/yf_get_available_collections.html</loc>
   </url>
   <url>
-    <loc>https://msperlin.github.io/yfR/reference/yf_get_available_indices.html</loc>
+    <loc>https://msperlin.github.io/yfR/reference/yf_index_composition.html</loc>
   </url>
   <url>
-    <loc>https://msperlin.github.io/yfR/reference/yf_get_default_cache_folder.html</loc>
-  </url>
-  <url>
-    <loc>https://msperlin.github.io/yfR/reference/yf_get_index_comp.html</loc>
+    <loc>https://msperlin.github.io/yfR/reference/yf_index_list.html</loc>
   </url>
 </urlset>

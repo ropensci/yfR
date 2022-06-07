@@ -20,7 +20,7 @@ the website you can lookup the ticker of a company."><meta property="og:image" c
     
     <a class="navbar-brand me-2" href="../index.html">yfR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@ the website you can lookup the ticker of a company.</p>
   how_to_aggregate <span class="op">=</span> <span class="st">"last"</span>,
   do_complete_data <span class="op">=</span> <span class="cn">FALSE</span>,
   do_cache <span class="op">=</span> <span class="cn">TRUE</span>,
-  cache_folder <span class="op">=</span> <span class="fu"><a href="yf_get_default_cache_folder.html">yf_get_default_cache_folder</a></span><span class="op">(</span><span class="op">)</span>,
+  cache_folder <span class="op">=</span> <span class="fu"><a href="yf_cachefolder_get.html">yf_cachefolder_get</a></span><span class="op">(</span><span class="op">)</span>,
   do_parallel <span class="op">=</span> <span class="cn">FALSE</span>,
   be_quiet <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
@@ -129,7 +129,7 @@ missing pairs of ticker-date will be replaced by NA or closest price
 <dd><p>Use cache system? (default = TRUE)</p></dd>
 <dt>cache_folder</dt>
 <dd><p>Where to save cache files?
-(default = yfR::yf_get_default_cache_folder() )</p></dd>
+(default = yfR::yf_cachefolder_get() )</p></dd>
 <dt>do_parallel</dt>
 <dd><p>Flag for using parallel or not (default = FALSE).
 Before using parallel, make sure you call function future::plan() first.
@@ -192,7 +192,7 @@ data is imported from YF. It indexes all data by ticker and time period. Wheneve
 a user asks for a dataset, it first checks if the ticker/time period exists in
 cache and, if it does, loads the data from the rds file.</p>
 <p>By default, a temporary folder is used (see function
-<a href="yf_get_default_cache_folder.html">yf_get_default_cache_folder</a>, which means that all cache files are
+<a href="yf_cachefolder_get.html">yf_cachefolder_get</a>, which means that all cache files are
 session-persistent. In practice, whenever you restart your R/RStudio session,
 all cache files are lost. This is a choice I've made due to the fact that
 merging adjusted stock price data after corporate events (dividends/splits)
