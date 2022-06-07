@@ -24,7 +24,7 @@ Imports:
     readr,
     rvest,
     dplyr,
-    quantmod,
+    quantmod (>= 0.4.20),
     magrittr,
     humanize
 License: MIT + file LICENSE

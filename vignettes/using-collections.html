@@ -12,9 +12,9 @@
 
 <meta name="author" content="Marcelo Perlin" />
 
-<meta name="date" content="2022-06-01" />
+<meta name="date" content="2022-06-07" />
 
-<title>02-Using Collections</title>
+<title>Using Collections</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -332,9 +332,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">02-Using Collections</h1>
+<h1 class="title toc-ignore">Using Collections</h1>
 <h4 class="author">Marcelo Perlin</h4>
-<h4 class="date">2022-06-01</h4>
+<h4 class="date">2022-06-07</h4>
 
 
 
@@ -344,14 +344,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 package. For example, collection <code>SP500</code> represents the
 current composition of the SP500 index.</p>
 <p>The available collections are:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>yfR<span class="sc">::</span><span class="fu">yf_get_available_collections</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>available_collections <span class="ot">&lt;-</span> yfR<span class="sc">::</span><span class="fu">yf_get_available_collections</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">print_description =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## </code></pre>
+<pre><code>## ── Description of Available Collections ──</code></pre>
+<pre><code>## </code></pre>
+<pre><code>## ℹ SP500: The SP500 index (US MARKET) - Ticker = ^GSPC</code></pre>
+<pre><code>## ℹ IBOV: The Ibovespa index (BR MARKET) - Ticker = ^BVSP</code></pre>
+<pre><code>## ℹ FTSE: The FTSE index (UK MARKET) - Ticker = ^FTSE</code></pre>
+<pre><code>## ℹ testthat-collection: A (small) testing index for testthat() -- dev stuff, dont use it!</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>available_collections</span></code></pre></div>
+<pre><code>## [1] &quot;SP500&quot;               &quot;IBOV&quot;                &quot;FTSE&quot;               
+## [4] &quot;testthat-collection&quot;</code></pre>
 <p>One can download the composition of the collection with
 <code>yf_collection_get</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yfR)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df_yf <span class="ot">&lt;-</span> <span class="fu">yf_collection_get</span>(<span class="st">&quot;SP500&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_yf)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yfR)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># be patient, it takes a while</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>df_yf <span class="ot">&lt;-</span> <span class="fu">yf_collection_get</span>(<span class="st">&quot;SP500&quot;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_yf)</span></code></pre></div>
 </div>
 
 
