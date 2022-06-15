@@ -79,25 +79,40 @@ and will download all data from Yahoo Finance using <code><a href="yf_get.html">
 <dd><p>A collection to fetch data (e.g. "SP500", "IBOV", "FTSE" ).
 See function <code><a href="yf_get_available_collections.html">yf_get_available_collections</a></code> for finding all
 available collections</p></dd>
+
+
 <dt>first_date</dt>
 <dd><p>The first date of query (Date or character as YYYY-MM-DD)</p></dd>
+
+
 <dt>last_date</dt>
 <dd><p>The last date of query (Date or character as YYYY-MM-DD)</p></dd>
+
+
 <dt>do_parallel</dt>
 <dd><p>Flag for using parallel or not (default = FALSE).
 Before using parallel, make sure you call function future::plan() first.
 See &lt;https://furrr.futureverse.org/&gt; for more details.</p></dd>
+
+
 <dt>do_cache</dt>
 <dd><p>Use cache system? (default = TRUE)</p></dd>
+
+
 <dt>cache_folder</dt>
 <dd><p>Where to save cache files?
 (default = yfR::yf_cachefolder_get() )</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed to <code><a href="yf_get.html">yf_get</a></code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with financial prices from collection</p>
+    
+
+<p>A data frame with financial prices from collection</p>
     </div>
 
     <div class="section level2">
@@ -121,7 +136,7 @@ See &lt;https://furrr.futureverse.org/&gt; for more details.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
