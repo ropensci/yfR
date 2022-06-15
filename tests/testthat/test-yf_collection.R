@@ -1,9 +1,9 @@
 library(testthat)
 library(yfR)
 
-test_that("Test of yf_get_available_indices()", {
+test_that("Test of yf_index_list()", {
 
-  available_indices <- yf_get_available_indices()
+  available_indices <- yf_index_list()
 
   expect_true(class(available_indices) == 'character')
 })
@@ -14,18 +14,18 @@ testhat_index_comp <- function(df_in) {
   expect_true(nrow(df_in) > 0)
 }
 
-test_that("Test of yf_get_index_comp() -- using web", {
+test_that("Test of yf_index_composition() -- using web", {
 
   if (!covr::in_covr()) {
     skip_if_offline()
     skip_on_cran() # too heavy for cran
   }
 
-  available_indices <- yf_get_available_indices()
+  available_indices <- yf_index_list()
 
   for (i_index in available_indices) {
 
-    df_index <- yf_get_index_comp(i_index,
+    df_index <- yf_index_composition(i_index,
                                   force_fallback = FALSE)
     testhat_index_comp(df_index)
 
@@ -33,13 +33,13 @@ test_that("Test of yf_get_index_comp() -- using web", {
 
 })
 
-test_that("Test of yf_get_index_comp() -- using fallback files", {
+test_that("Test of yf_index_composition() -- using fallback files", {
 
-  available_indices <- yf_get_available_indices()
+  available_indices <- yf_index_list()
 
   for (i_index in available_indices) {
 
-    df_index <- yf_get_index_comp(i_index,
+    df_index <- yf_index_composition(i_index,
                                   force_fallback = TRUE)
     testhat_index_comp(df_index)
 
