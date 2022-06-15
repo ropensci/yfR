@@ -8,11 +8,7 @@ yf_index_list(print_description = FALSE)
 }
 \arguments{
 \item{print_description}{Logical (TRUE/FALSE) - flag for printing description of
-<<<<<<< HEAD:man/yf_get_available_indices.Rd
-available collections}
-=======
 available indices/collections}
->>>>>>> 584c21959369064ad6fffe23a1444392e3c6cfc9:man/yf_index_list.Rd
 }
 \value{
 A vector of mkt indices

@@ -90,11 +90,7 @@ read_fallback <- function(mkt_index) {
 #' in the package.
 #'
 #' @param print_description Logical (TRUE/FALSE) - flag for printing description of
-<<<<<<< HEAD
-#' available collections
-=======
 #' available indices/collections
->>>>>>> 584c21959369064ad6fffe23a1444392e3c6cfc9
 #'
 #' @return A vector of mkt indices
 #' @export

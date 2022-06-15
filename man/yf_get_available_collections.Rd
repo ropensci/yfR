@@ -8,11 +8,7 @@ yf_get_available_collections(print_description = FALSE)
 }
 \arguments{
 \item{print_description}{Logical (TRUE/FALSE) - flag for printing description of
-<<<<<<< HEAD
-available collections}
-=======
 available indices/collections}
->>>>>>> 584c21959369064ad6fffe23a1444392e3c6cfc9
 }
 \value{
 A string vector with available collections
