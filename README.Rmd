@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 `yfR` facilitates importing stock prices from Yahoo finance, organizing the data in the `tidy` format and speeding up the process using a cache system and parallel computing. `yfR` is the second and backwards-incompatible version of [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols), released in 2016 (see vignette [yfR and BatchGetSymbols](https://msperlin.github.io/yfR/articles/diff-batchgetsymbols.html) for details). 
 
-In a nutshell, [Yahoo Finance (YF)](https://finance.yahoo.com/) provides a vast repository of stock price data around the globe. It covers a signficant number of markets and assets, being used extensively in academic research and teaching. In order to import the financial data from YF, all you need is a ticker (id of a stock, e.g. "GM" for [General Motors](https://finance.yahoo.com/quote/GM?p=GM&.tsrc=fin-srch)) and a time period -- first and last date. 
+In a nutshell, [Yahoo Finance (YF)](https://finance.yahoo.com/) provides a vast repository of stock price data around the globe. It covers a significant number of markets and assets, being used extensively in academic research and teaching. In order to import the financial data from YF, all you need is a ticker (id of a stock, e.g. "GM" for [General Motors](https://finance.yahoo.com/quote/GM?p=GM&.tsrc=fin-srch)) and a time period -- first and last date. 
 
 
 # The Data
@@ -74,7 +74,7 @@ For market indices, a list of tickers is available [here](https://finance.yahoo.
 
 ## Features of `yfR`
 
-- Fetchs daily/weekly/monthly/annual stock prices/returns from yahoo finance and outputs a dataframe (tibble) in the long format (stacked data);
+- Fetches daily/weekly/monthly/annual stock prices/returns from yahoo finance and outputs a dataframe (tibble) in the long format (stacked data);
 
 - A new feature called **collections** facilitates download of multiple tickers from a particular market/index. You can, for example, download data for all stocks in the SP500 index with a simple call to `yf_collection_get("SP500")`;
 

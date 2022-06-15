@@ -5,7 +5,7 @@
 #' @param force_fallback Logical (TRUE/FALSE). Forces the function to use the
 #' fallback system
 #'
-#' @return A dataframe with the index compositino (column might vary)
+#' @return A dataframe with the index composition (column might vary)
 #' @export
 #'
 #' @examples
@@ -86,11 +86,11 @@ read_fallback <- function(mkt_index) {
 
 #' Get available indices in package
 #'
-#' This funtion will return all available market indices that are registered
+#' This function will return all available market indices that are registered
 #' in the package.
 #'
 #' @param print_description Logical (TRUE/FALSE) - flag for printing description of
-#' available colletions
+#' available collections
 #'
 #' @return A vector of mkt indices
 #' @export

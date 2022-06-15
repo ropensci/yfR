@@ -35,6 +35,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     ggplot2,
-    covr
+    covr,
+    spelling
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Language: en-US

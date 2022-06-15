@@ -8,13 +8,13 @@ yf_get_available_indices(print_description = FALSE)
 }
 \arguments{
 \item{print_description}{Logical (TRUE/FALSE) - flag for printing description of
-available colletions}
+available collections}
 }
 \value{
 A vector of mkt indices
 }
 \description{
-This funtion will return all available market indices that are registered
+This function will return all available market indices that are registered
 in the package.
 }
 \examples{

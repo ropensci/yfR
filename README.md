@@ -20,52 +20,55 @@ the data in the `tidy` format and speeding up the process using a cache
 system and parallel computing. `yfR` is the second and
 backwards-incompatible version of
 [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols),
-released in 2016 (see vignette “99-yfR and BatchGetSymbols”).
+released in 2016 (see vignette [yfR and
+BatchGetSymbols](https://msperlin.github.io/yfR/articles/diff-batchgetsymbols.html)
+for details).
 
-In a nutshell, [Yahoo Finance](https://finance.yahoo.com/) provides a
-vast repository of stock price data around the globe. It cover a
-signficant number of markets and assets, being used extensively in
-academic research and teaching. In order to import the financial data,
-all you need is a ticker (id of a stock, e.g. “GM” for [General
+In a nutshell, [Yahoo Finance (YF)](https://finance.yahoo.com/) provides
+a vast repository of stock price data around the globe. It covers a
+significant number of markets and assets, being used extensively in
+academic research and teaching. In order to import the financial data
+from YF, all you need is a ticker (id of a stock, e.g. “GM” for [General
 Motors](https://finance.yahoo.com/quote/GM?p=GM&.tsrc=fin-srch)) and a
-time period (first and last date).
+time period – first and last date.
 
 # The Data
 
 The main function of the package, `yfR::yf_get`, returns a dataframe
 with the financial data. All price data is measured at the unit of the
-financial exchange. For example, price data for FB (NYSE/US) is measures
-in dollars, while price data for PETR3.SA (B3/BR) is measured in Reais
-(Brazilian currency).
+financial exchange. For example, price data for GM (NASDAQ/US) is
+measured in dollars, while price data for PETR3.SA (B3/BR) is measured
+in Reais (Brazilian currency).
 
-The return dataframe contains the following columns:
+The returned data contains the following columns:
 
-**ticker**: The requested tickers (ids of stocks)
+**ticker**: The requested tickers (ids of stocks);
 
 **ref_date**: The reference day (this can also be year/month/week when
-using argument freq_data)
+using argument freq_data);
 
-**price_open**: The opening price of the day/period
+**price_open**: The opening price of the day/period;
 
-**price_high**: The highest price of the day/period
+**price_high**: The highest price of the day/period;
 
-**price_close**: The close/last price of the day/period
+**price_close**: The close/last price of the day/period;
 
-**volume**: The financial volume of the day/period
+**volume**: The financial volume of the day/period, in the unit of the
+exchange;
 
 **price_adjusted**: The stock price adjusted for corporate events such
 as splits, dividends and others – this is usually what you want/need for
-studying stocks as it represents the actual financial performance of
-stockholders
+studying stocks as it represents the real financial performance of
+stockholders;
 
 **ret_adjusted_prices**: The arithmetic or log return (see input
-type_return) for the adjusted stock prices
+type_return) for the adjusted stock prices;
 
 **ret_adjusted_prices**: The arithmetic or log return (see input
-type_return) for the closing stock prices
+type_return) for the closing stock prices;
 
 **cumret_adjusted_prices**: The accumulated arithmetic/log return for
-the period (starts at 100%)
+the period (starts at 100%).
 
 # Finding tickers
 
@@ -76,21 +79,23 @@ page you’ll find a search bar:
 ![YF
 Search](/inst/figures/search-yf.png?raw=true "Example of search in YF")
 
-From there, you’ll that a company can have many different stocks traded
-at different markets. As the example shows, Petrobras is traded at NYQ
+A company can have many different stocks traded at different markets
+(see picture above). As the example shows, Petrobras is traded at NYQ
 (New York Exchange), SAO (Sao Paulo/Brazil - B3 exchange) and BUE
 (Buenos Aires/Argentina Exchange), all with different symbols (tickers).
+For market indices, a list of tickers is available
+[here](https://finance.yahoo.com/world-indices).
 
 ## Features of `yfR`
 
--   Fetchs daily/weekly/monthly/annual stock prices/returns from yahoo
+-   Fetches daily/weekly/monthly/annual stock prices/returns from yahoo
     finance and outputs a dataframe (tibble) in the long format (stacked
     data);
 
--   A new feature called “collections” facilitates download of multiple
-    tickers from a particular market/index. You can, for example,
-    download data for all stocks in the SP500 index with a simple call
-    to `yf_collection_get()`;
+-   A new feature called **collections** facilitates download of
+    multiple tickers from a particular market/index. You can, for
+    example, download data for all stocks in the SP500 index with a
+    simple call to `yf_collection_get("SP500")`;
 
 -   A session-persistent smart cache system is available by default.
     This means that the data is saved locally and only missing portions
@@ -99,7 +104,7 @@ at different markets. As the example shows, Petrobras is traded at NYQ
 -   All dates are compared to a benchmark ticker such as SP500 and,
     whenever an individual asset does not have a sufficient number of
     dates, the software drops it from the output. This means you can
-    choose to ignore tickers with high number of missing dates.
+    choose to ignore tickers with a high proportion of missing dates.
 
 -   A customized function called `yf_convert_to_wide()` can transform
     the long dataframe into a wide format (tickers as columns), much
@@ -148,19 +153,19 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-05-02 --> 2022-06-01 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-05-16 --> 2022-06-15 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 21 valid rows (2022-05-02 --> 2022-05-31)
-#> ✔    - got 100% of valid prices -- Got it!
+#> ✔    - got 21 valid rows (2022-05-16 --> 2022-06-14)
+#> ✔    - got 100% of valid prices -- Nice!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
 #> ✔ Returned dataframe with 21 rows
-#> ✔ Using 6.0 kB at /tmp/Rtmpmk9XC4/yf_cache for cache files
+#> ✔ Using 6.0 kB at /tmp/Rtmp82qFDE/yf_cache for cache files
 #> ℹ Out of 1 tickers, you got 1
 #> ✔ You got data on 100% of requested tickers
 
@@ -169,12 +174,12 @@ head(df_yf)
 #> # A tibble: 6 × 11
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 FB     2022-05-02       201.       212.      201.        211. 49915300
-#> 2 FB     2022-05-03       210.       215.      208.        212. 41556300
-#> 3 FB     2022-05-04       211.       224.      207.        223. 41375900
-#> 4 FB     2022-05-05       219.       220.      206.        208. 41129200
-#> 5 FB     2022-05-06       207.       209.      201.        204. 34733600
-#> 6 FB     2022-05-09       200.       203.      196.        196. 36303200
+#> 1 FB     2022-05-16       197.       205.      196.        200. 27112595
+#> 2 FB     2022-05-17       202.       205.      198.        203. 24872729
+#> 3 FB     2022-05-18       200        201       192.        192. 23959966
+#> 4 FB     2022-05-19       191.       195.      190.        191. 24446938
+#> 5 FB     2022-05-20       195.       198.      188.        194. 31465570
+#> 6 FB     2022-05-23       195.       197.      191.        196. 25059161
 #> # … with 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
 #> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
 ```
@@ -183,7 +188,7 @@ head(df_yf)
 
 Package `yfR` is based on [quantmod](https://www.quantmod.com/)
 (@joshuaulrich) and uses one of its functions (`quantmod::getSymbols`)
-for fetching data from Yahoo Finance. As with any API, there is
+for fetching raw data from Yahoo Finance. As with any API, there is
 significant work in maintaining the code. Joshua was always fast and
 openminded in implemented required changes, and I’m very grateful for
 it.

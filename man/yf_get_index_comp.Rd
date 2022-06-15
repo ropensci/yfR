@@ -23,7 +23,7 @@ yf_get_index_comp(
 fallback system}
 }
 \value{
-A dataframe with the index compositino (column might vary)
+A dataframe with the index composition (column might vary)
 }
 \description{
 Get current composition of stock indices

@@ -13,3 +13,4 @@ pkgdown
 ^docs$
 ^pkgdown$
 search-yf.png
+^\.httr-oauth$

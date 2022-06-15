@@ -3,7 +3,7 @@
 #' Based on a ticker (id of a stock) and time period, this function will
 #' download stock price data from Yahoo Finance and organizes it in the long
 #' format. Yahoo Finance <https://finance.yahoo.com/> provides a vast repository of
-#' stock price data around the globe. It cover a signficant number of markets
+#' stock price data around the globe. It cover a significant number of markets
 #' and assets, being used extensively in academic research and teaching. In
 #' the website you can lookup the ticker of a company.
 #'
@@ -39,7 +39,7 @@
 #' My suggestion is to use the main stock index of the market from where the
 #' data is coming from (default = ^GSPC (SP500, US market))
 #' @param type_return Type of price return to calculate:
-#' 'arit' - aritmetic (default), 'log' - log returns.
+#' 'arit' - arithmetic (default), 'log' - log returns.
 #' @param freq_data Frequency of financial data: 'daily' (default),
 #' 'weekly', 'monthly', 'yearly'
 #' @param how_to_aggregate Defines whether to aggregate the data using the
