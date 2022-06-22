@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Codecov test coverage](https://codecov.io/gh/msperlin/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/yfR?branch=main)
-[![R build (rcmdcheck)](https://github.com/msperlin/yfR/workflows/R-CMD-check/badge.svg)](https://github.com/msperlin/yfR/actions)
+[![Codecov test coverage](https://codecov.io/gh/ropensci/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/yfR?branch=main)
+[![R build (rcmdcheck)](https://github.com/ropensci/yfR/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/yfR/actions)
 [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/523_status.svg)](https://github.com/ropensci/software-review/issues/523)
 <!-- badges: end -->
 
@@ -99,7 +99,10 @@ For market indices, a list of tickers is available [here](https://finance.yahoo.
 #install.packages('yfR')
 
 # Github (dev version)
-devtools::install_github('msperlin/yfR')
+devtools::install_github('ropensci/yfR')
+
+# ropensci
+install.packages("yfR", repos = "https://ropensci.r-universe.dev")
 ```
 
 
