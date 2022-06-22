@@ -41,3 +41,7 @@ ret
 tempdir
 tibble
 yf
+cachefolder
+github
+repo
+ropensci

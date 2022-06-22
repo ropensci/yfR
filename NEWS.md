@@ -5,7 +5,7 @@
 
 ## Version 0.0.5 (2022-06-07)
 
-- Many changes for rsciopen
+- Many changes for ropensci
 
 ## Version 0.0.3 (2022-05-03)
 
