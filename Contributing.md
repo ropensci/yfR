@@ -6,12 +6,12 @@ First, thanks for the interest in the package and apraisal for contributing to t
 
 While I am an academic, my R projects have no official funding. It is always nice to have the community helping maintaing the code. Here are the main links for contributing:
 
-[repo]: https://github.com/msperlin/yfR
-[issues]: https://github.com/msperlin/yfR/issues
+[repo]: https://github.com/ropensci/yfR
+[issues]: https://github.com/ropensci/yfR/issues
 [email]: mailto:marceloperlin@gmail.com
-[new_issue]: https://github.com/msperlin/yfR/issues/new
-[website]: https://msperlin.github.io/yfR
-[citation]: https://msperlin.github.io/yfR/authors.html
+[new_issue]: https://github.com/ropensci/yfR/issues/new
+[website]: https://ropensci.github.io/yfR
+[citation]: https://ropensci.github.io/yfR/authors.html
 
 
 ## Code of conduct
