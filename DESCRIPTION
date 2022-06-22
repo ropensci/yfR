@@ -1,7 +1,13 @@
 Package: yfR
 Title: Downloads and Organizes Financial Data from Yahoo Finance
 Version: 1.0.0
-Authors@R: person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre"))
+Authors@R: c(person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre")),
+             person("Nic", "Crane", role = "rev",
+                    comment = "Nic reviewed the package (v. 0.0.5) for 
+                    rOpenSci, see <https://github.com/ropensci/software-review/issues/523>"),
+            person("Alexander", "Fischer", role = "rev",
+                    comment = "Alexander reviewed the package (v. 0.0.5) for 
+                    rOpenSci, see <https://github.com/ropensci/software-review/issues/523>"))  
 Description: Facilitates download of financial data from Yahoo Finance <https://finance.yahoo.com/>, 
  a vast repository of stock price data across multiple financial exchanges. The package offers a local caching system
  and support for parallel computation.

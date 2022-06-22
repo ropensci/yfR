@@ -100,6 +100,9 @@ For market indices, a list of tickers is available [here](https://finance.yahoo.
 
 # Github (dev version)
 devtools::install_github('ropensci/yfR')
+
+# ropensci
+install.packages("yfR", repos = "https://ropensci.r-universe.dev")
 ```
 
 
