@@ -1,3 +1,8 @@
+## Version 1.0.0 (2022-06-22)
+
+- many pkg changes after [ropensci approval](https://github.com/ropensci/software-review/issues/523)
+- github repo is now under <https://github.com/ropensci/yfR>
+
 ## Version 0.0.5 (2022-06-07)
 
 - Many changes for rsciopen

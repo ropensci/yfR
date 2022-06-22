@@ -6,9 +6,9 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Codecov test
-coverage](https://codecov.io/gh/msperlin/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/msperlin/yfR?branch=main)
+coverage](https://codecov.io/gh/ropensci/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/yfR?branch=main)
 [![R build
-(rcmdcheck)](https://github.com/msperlin/yfR/workflows/R-CMD-check/badge.svg)](https://github.com/msperlin/yfR/actions)
+(rcmdcheck)](https://github.com/ropensci/yfR/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/yfR/actions)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/523_status.svg)](https://github.com/ropensci/software-review/issues/523)
 <!-- badges: end -->
@@ -136,7 +136,7 @@ For market indices, a list of tickers is available
     #install.packages('yfR')
 
     # Github (dev version)
-    devtools::install_github('msperlin/yfR')
+    devtools::install_github('ropensci/yfR')
 
 ## A simple example of usage
 
@@ -153,33 +153,32 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-05-16 --> 2022-06-15 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-05-23 --> 2022-06-22 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 21 valid rows (2022-05-16 --> 2022-06-14)
-#> ✔    - got 100% of valid prices -- Nice!
+#> ✔    - got 20 valid rows (2022-05-23 --> 2022-06-21)
+#> ✔    - got 100% of valid prices -- All OK!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 21 rows
-#> ✔ Using 6.0 kB at /tmp/Rtmp82qFDE/yf_cache for cache files
-#> ℹ Out of 1 tickers, you got 1
-#> ✔ You got data on 100% of requested tickers
+#> ✔ Returned dataframe with 20 rows -- Well done msperlin!
+#> ℹ Using 5.8 kB at /tmp/RtmpT4Ys6I/yf_cache for 1 cache files
+#> ℹ Out of 1 requested tickers, you got 1 (100%)
 
 # output is a tibble with data
 head(df_yf)
 #> # A tibble: 6 × 11
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 FB     2022-05-16       197.       205.      196.        200. 27112595
-#> 2 FB     2022-05-17       202.       205.      198.        203. 24872729
-#> 3 FB     2022-05-18       200        201       192.        192. 23959966
-#> 4 FB     2022-05-19       191.       195.      190.        191. 24446938
-#> 5 FB     2022-05-20       195.       198.      188.        194. 31465570
-#> 6 FB     2022-05-23       195.       197.      191.        196. 25059161
+#> 1 FB     2022-05-23       195.       197.      191.        196. 25059161
+#> 2 FB     2022-05-24       181.       184.      176.        181. 50406273
+#> 3 FB     2022-05-25       180.       185.      179.        184. 28030194
+#> 4 FB     2022-05-26       183.       193.      182.        192. 23056455
+#> 5 FB     2022-05-27       191.       195.      190.        195. 22562727
+#> 6 FB     2022-05-31       195.       198.      192.        194. 26131103
 #> # … with 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
 #> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
 ```
