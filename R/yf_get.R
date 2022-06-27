@@ -165,11 +165,11 @@ yf_get <- function(tickers,
   first_date <- as.Date(first_date)
   last_date <- as.Date(last_date)
 
-  if (class(first_date) != "Date") {
+  if (!methods::is(first_date, "Date")) {
     stop("can't change class of first_date to 'Date'")
   }
 
-  if (class(last_date) != "Date") {
+  if (!methods::is(last_date, "Date")) {
     stop("can't change class of last_date to 'Date'")
   }
 
@@ -182,7 +182,7 @@ yf_get <- function(tickers,
   if (!is.null(tickers)) {
     tickers <- as.character(tickers)
 
-    if (class(tickers) != "character") {
+    if (!methods::is(tickers, "character")) {
       stop("The input tickers should be a character object.")
     }
   }

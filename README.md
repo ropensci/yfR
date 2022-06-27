@@ -21,7 +21,7 @@ system and parallel computing. `yfR` is the second and
 backwards-incompatible version of
 [BatchGetSymbols](https://CRAN.R-project.org/package=BatchGetSymbols),
 released in 2016 (see vignette [yfR and
-BatchGetSymbols](https://msperlin.github.io/yfR/articles/diff-batchgetsymbols.html)
+BatchGetSymbols](https://docs.ropensci.org/yfR/articles/diff-batchgetsymbols.html)
 for details).
 
 In a nutshell, [Yahoo Finance (YF)](https://finance.yahoo.com/) provides
@@ -138,6 +138,9 @@ For market indices, a list of tickers is available
     # Github (dev version)
     devtools::install_github('ropensci/yfR')
 
+    # ropensci
+    install.packages("yfR", repos = "https://ropensci.r-universe.dev")
+
 ## A simple example of usage
 
 ``` r
@@ -153,19 +156,19 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-05-23 --> 2022-06-22 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-05-28 --> 2022-06-27 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 20 valid rows (2022-05-23 --> 2022-06-21)
-#> ✔    - got 100% of valid prices -- All OK!
+#> ✔    - got 18 valid rows (2022-05-31 --> 2022-06-24)
+#> ✔    - got 100% of valid prices -- Feliz que nem lambari de sanga!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 20 rows -- Well done msperlin!
-#> ℹ Using 5.8 kB at /tmp/RtmpT4Ys6I/yf_cache for 1 cache files
+#> ✔ Returned dataframe with 18 rows -- Looking good!
+#> ℹ Using 5.4 kB at /tmp/Rtmpoa1adQ/yf_cache for 1 cache files
 #> ℹ Out of 1 requested tickers, you got 1 (100%)
 
 # output is a tibble with data
@@ -173,12 +176,12 @@ head(df_yf)
 #> # A tibble: 6 × 11
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 FB     2022-05-23       195.       197.      191.        196. 25059161
-#> 2 FB     2022-05-24       181.       184.      176.        181. 50406273
-#> 3 FB     2022-05-25       180.       185.      179.        184. 28030194
-#> 4 FB     2022-05-26       183.       193.      182.        192. 23056455
-#> 5 FB     2022-05-27       191.       195.      190.        195. 22562727
-#> 6 FB     2022-05-31       195.       198.      192.        194. 26131103
+#> 1 FB     2022-05-31       195.       198.      192.        194. 26131103
+#> 2 FB     2022-06-01       197.       200.      185         189. 36623495
+#> 3 FB     2022-06-02       188.       201.      188.        199. 31951582
+#> 4 FB     2022-06-03       196.       197.      190.        191. 19464993
+#> 5 FB     2022-06-06       194.       197.      188.        194. 30574242
+#> 6 FB     2022-06-07       192.       197.      191.        196. 18828687
 #> # … with 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
 #> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
 ```
