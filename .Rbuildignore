@@ -14,3 +14,4 @@ pkgdown
 ^pkgdown$
 search-yf.png
 ^\.httr-oauth$
+^CRAN-SUBMISSION$
