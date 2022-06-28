@@ -43,7 +43,7 @@ and will download all data from Yahoo Finance using \code{\link{yf_get}}.
 }
 \examples{
 
-\dontrun{
+\donttest{
 df_yf <- yf_collection_get(collection = "IBOV",
                            first_date = Sys.Date() - 30,
                            last_date = Sys.Date()

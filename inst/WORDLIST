@@ -45,3 +45,5 @@ cachefolder
 github
 repo
 ropensci
+dontrun
+donttest

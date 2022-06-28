@@ -1,7 +1,9 @@
-## Version 1.0.0 (2022-06-22)
+## Version 1.0.0 (2022-06-22) -- CRAN SUBMISSION
 
 - many pkg changes after [ropensci approval](https://github.com/ropensci/software-review/issues/523)
 - github repo is now under <https://github.com/ropensci/yfR>
+- changed all \dontrun by \donttest (as suggested by CRAN team)
+- used n_cores = 2 (as suggested by CRAN)
 
 ## Version 0.0.5 (2022-06-07)
 

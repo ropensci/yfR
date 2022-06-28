@@ -93,7 +93,7 @@
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' tickers <- c("FB", "MMM")
 #'
 #' first_date <- Sys.Date() - 30

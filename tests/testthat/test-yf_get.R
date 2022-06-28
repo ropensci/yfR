@@ -95,14 +95,15 @@ test_that(desc = "Test of yf_get(): do_parallel = TRUE", {
   }
 
   # detect cores and skip if < 2
-  n_cores <- parallel::detectCores()
+  n_cores <- 2
 
-  if (n_cores < 2) {
-    skip('Not enough cores for parallel computations (< 2)')
-  }
+  # 20220628 redundant as n_cores is set to 2
+  #if (n_cores < 2) {
+  #  skip('Not enough cores for parallel computations (< 2)')
+  #}
 
   future::plan(future::multisession,
-               workers = floor(n_cores/2))
+               workers = n_cores)
 
   my_tickers <- c("^BVSP", "^GSPC", 'FB',
                   "MMM", "GM", "AAPL")
