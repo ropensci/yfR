@@ -132,8 +132,8 @@ For market indices, a list of tickers is available
 
 ## Installation
 
-    # CRAN (not yet available)
-    #install.packages('yfR')
+    # CRAN (stable)
+    install.packages('yfR')
 
     # Github (dev version)
     devtools::install_github('ropensci/yfR')
@@ -156,19 +156,19 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-05-28 --> 2022-06-27 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-06-01 --> 2022-07-01 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for FB
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 18 valid rows (2022-05-31 --> 2022-06-24)
-#> ✔    - got 100% of valid prices -- Feliz que nem lambari de sanga!
+#> ✔    - got 21 valid rows (2022-06-01 --> 2022-06-30)
+#> ✔    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 18 rows -- Looking good!
-#> ℹ Using 5.4 kB at /tmp/Rtmpoa1adQ/yf_cache for 1 cache files
+#> ✔ Returned dataframe with 21 rows -- Good job msperlin!
+#> ℹ Using 6.0 kB at /tmp/RtmpbPwCL1/yf_cache for 1 cache files
 #> ℹ Out of 1 requested tickers, you got 1 (100%)
 
 # output is a tibble with data
@@ -176,12 +176,12 @@ head(df_yf)
 #> # A tibble: 6 × 11
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 FB     2022-05-31       195.       198.      192.        194. 26131103
-#> 2 FB     2022-06-01       197.       200.      185         189. 36623495
-#> 3 FB     2022-06-02       188.       201.      188.        199. 31951582
-#> 4 FB     2022-06-03       196.       197.      190.        191. 19464993
-#> 5 FB     2022-06-06       194.       197.      188.        194. 30574242
-#> 6 FB     2022-06-07       192.       197.      191.        196. 18828687
+#> 1 FB     2022-06-01       197.       200.      185         189. 36623495
+#> 2 FB     2022-06-02       188.       201.      188.        199. 31951582
+#> 3 FB     2022-06-03       196.       197.      190.        191. 19464993
+#> 4 FB     2022-06-06       194.       197.      188.        194. 30574242
+#> 5 FB     2022-06-07       192.       197.      191.        196. 18828687
+#> 6 FB     2022-06-08       195.       202.      194.        197. 22267154
 #> # … with 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
 #> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
 ```

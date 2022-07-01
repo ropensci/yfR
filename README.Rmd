@@ -95,8 +95,8 @@ For market indices, a list of tickers is available [here](https://finance.yahoo.
 ## Installation
 
 ```
-# CRAN (not yet available)
-#install.packages('yfR')
+# CRAN (stable)
+install.packages('yfR')
 
 # Github (dev version)
 devtools::install_github('ropensci/yfR')
