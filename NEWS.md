@@ -1,4 +1,4 @@
-## Version 1.0.1 (2022-08-15) -- bug fixex
+## Version 1.0.1 (2022-08-15) -- bug fixes
 
 - fixed bug with FB ticker (change to TSLA)
 

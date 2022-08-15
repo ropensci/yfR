@@ -131,7 +131,7 @@ a split or dividends event happens in between cache files.
 \examples{
 
 \donttest{
-tickers <- c("FB", "MMM")
+tickers <- c("TSLA", "MMM")
 
 first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
