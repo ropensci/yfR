@@ -94,7 +94,7 @@
 #' @examples
 #'
 #' \donttest{
-#' tickers <- c("FB", "MMM")
+#' tickers <- c("TSLA", "MMM")
 #'
 #' first_date <- Sys.Date() - 30
 #' last_date <- Sys.Date()
