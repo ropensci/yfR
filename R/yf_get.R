@@ -187,6 +187,9 @@ yf_get <- function(tickers,
     }
   }
 
+  # sort tickers (makes sure acum ret is correct)
+  tickers <- sort(tickers)
+
   # check threshold
   if ((thresh_bad_data < 0) | (thresh_bad_data > 1)) {
     stop("Input thresh_bad_data should be a proportion between 0 and 1")

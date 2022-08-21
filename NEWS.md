@@ -1,3 +1,8 @@
+## Version 1.0.2 (2022-08-21) -- bug fixes
+
+- fixed bug in calculation of log acum returns
+- fixed bug in order of tickers (now it makes sure the ticker symbol is sorted)
+
 ## Version 1.0.1 (2022-08-15) -- bug fixes
 
 - fixed bug with FB ticker (change to TSLA)

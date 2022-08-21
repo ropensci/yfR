@@ -85,7 +85,7 @@ calc_cum_ret <- function(ret,
   calc_cum <- function(x, type_return) {
     this_cum_ret <- switch(type_return,
                            "arit" = cumprod(1 + x),
-                           "log" = cumsum(1 + x))
+                           "log" = 1 + cumsum(x))
 
     return(this_cum_ret)
   }
