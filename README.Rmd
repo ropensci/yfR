@@ -112,7 +112,7 @@ install.packages("yfR", repos = "https://ropensci.r-universe.dev")
 library(yfR)
 
 # set options for algorithm
-my_ticker <- 'FB'
+my_ticker <- 'META'
 first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 

@@ -105,7 +105,7 @@ test_that(desc = "Test of yf_get(): do_parallel = TRUE", {
   future::plan(future::multisession,
                workers = n_cores)
 
-  my_tickers <- c("^BVSP", "^GSPC", 'FB',
+  my_tickers <- c("^BVSP", "^GSPC", 'META',
                   "MMM", "GM", "AAPL")
 
   df_yf <- yf_get(

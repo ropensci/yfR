@@ -156,34 +156,35 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-06-01 --> 2022-07-01 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-07-26 --> 2022-08-25 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for META
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 21 valid rows (2022-06-01 --> 2022-06-30)
-#> ✔    - got 100% of valid prices -- Well done msperlin!
+#> ✔    - got 22 valid rows (2022-07-26 --> 2022-08-24)
+#> ✔    - got 100% of valid prices -- Nice!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 21 rows -- Good job msperlin!
-#> ℹ Using 6.0 kB at /tmp/RtmpbPwCL1/yf_cache for 1 cache files
+#> ✔ Returned dataframe with 22 rows -- Time for some tea?
+#> ℹ Using 6.3 kB at /tmp/RtmplZdn0T/yf_cache for 1 cache files
 #> ℹ Out of 1 requested tickers, you got 1 (100%)
 
 # output is a tibble with data
 head(df_yf)
 #> # A tibble: 6 × 11
-#>   ticker ref_date   price_open price_high price_low price_close   volume
-#>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 META     2022-06-01       197.       200.      185         189. 36623495
-#> 2 META     2022-06-02       188.       201.      188.        199. 31951582
-#> 3 META     2022-06-03       196.       197.      190.        191. 19464993
-#> 4 META     2022-06-06       194.       197.      188.        194. 30574242
-#> 5 META     2022-06-07       192.       197.      191.        196. 18828687
-#> 6 META     2022-06-08       195.       202.      194.        197. 22267154
-#> # … with 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
-#> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
+#>   ticker ref_date   price_open price_h…¹ price…² price…³ volume price…⁴ ret_ad…⁵
+#>   <chr>  <date>          <dbl>     <dbl>   <dbl>   <dbl>  <dbl>   <dbl>    <dbl>
+#> 1 META   2022-07-26       166.      166     158.    159. 2.85e7    159. NA      
+#> 2 META   2022-07-27       163.      171.    162.    170. 4.38e7    170.  0.0655 
+#> 3 META   2022-07-28       161.      162.    155.    161. 7.32e7    161. -0.0522 
+#> 4 META   2022-07-29       158.      160.    155.    159. 4.21e7    159. -0.0101 
+#> 5 META   2022-08-01       157.      165.    155.    160. 4.06e7    160.  0.00522
+#> 6 META   2022-08-02       158.      162.    158.    160. 2.74e7    160.  0.00163
+#> # … with 2 more variables: ret_closing_prices <dbl>,
+#> #   cumret_adjusted_prices <dbl>, and abbreviated variable names ¹​price_high,
+#> #   ²​price_low, ³​price_close, ⁴​price_adjusted, ⁵​ret_adjusted_prices
 ```
 
 # Acknowledgements

@@ -1,6 +1,7 @@
 ## Version 1.0.2 (2022-08-21) -- bug fixes
 
-- fixed bug in calculation of log acum returns
+- changed FB ticker to META
+- fixed bug in calculation of log accumulated returns
 - fixed bug in order of tickers (now it makes sure the ticker symbol is sorted)
 
 ## Version 1.0.1 (2022-08-15) -- bug fixes

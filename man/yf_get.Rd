@@ -68,7 +68,7 @@ See <https://furrr.futureverse.org/> for more details.}
 A dataframe with the financial data for working days, when markets
 are open. All price data is \strong{measured} at the unit of the financial
 exchange. For example, price
-data for FB (NYSE/US) is measures in dollars, while price data for
+data for META (NYSE/US) is measures in dollars, while price data for
 PETR3.SA (B3/BR) is measured in Reais (Brazilian currency).
 
 The return dataframe contains the following columns:
