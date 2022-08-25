@@ -147,7 +147,7 @@ For market indices, a list of tickers is available
 library(yfR)
 
 # set options for algorithm
-my_ticker <- 'FB'
+my_ticker <- 'META'
 first_date <- Sys.Date() - 30
 last_date <- Sys.Date()
 
@@ -159,7 +159,7 @@ df_yf <- yf_get(tickers = my_ticker,
 #> ── Running yfR for 1 stocks | 2022-06-01 --> 2022-07-01 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
-#> ℹ (1/1) Fetching data for FB
+#> ℹ (1/1) Fetching data for META
 #> !    - not cached
 #> ✔    - cache saved successfully
 #> ✔    - got 21 valid rows (2022-06-01 --> 2022-06-30)
@@ -176,12 +176,12 @@ head(df_yf)
 #> # A tibble: 6 × 11
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 FB     2022-06-01       197.       200.      185         189. 36623495
-#> 2 FB     2022-06-02       188.       201.      188.        199. 31951582
-#> 3 FB     2022-06-03       196.       197.      190.        191. 19464993
-#> 4 FB     2022-06-06       194.       197.      188.        194. 30574242
-#> 5 FB     2022-06-07       192.       197.      191.        196. 18828687
-#> 6 FB     2022-06-08       195.       202.      194.        197. 22267154
+#> 1 META     2022-06-01       197.       200.      185         189. 36623495
+#> 2 META     2022-06-02       188.       201.      188.        199. 31951582
+#> 3 META     2022-06-03       196.       197.      190.        191. 19464993
+#> 4 META     2022-06-06       194.       197.      188.        194. 30574242
+#> 5 META     2022-06-07       192.       197.      191.        196. 18828687
+#> 6 META     2022-06-08       195.       202.      194.        197. 22267154
 #> # … with 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
 #> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
 ```
