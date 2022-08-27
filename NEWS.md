@@ -8,7 +8,6 @@
 
 - fixed bug with FB ticker (change to TSLA)
 
-
 ## Version 1.0.0 (2022-06-22) -- CRAN SUBMISSION
 
 - many pkg changes after [ropensci approval](https://github.com/ropensci/software-review/issues/523)
