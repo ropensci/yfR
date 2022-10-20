@@ -535,7 +535,7 @@ yf_get <- function(tickers,
     size_files <- sum(sapply(cache_files, file.size))
 
     size_str <- humanize::natural_size(size_files)
-    n_files <- length(list.dirs(cache_folder))
+    n_files <- length(list.files(cache_folder))
 
     cli::cli_alert_info("Using {size_str} at {cache_folder} for {n_files} cache files")
   }
