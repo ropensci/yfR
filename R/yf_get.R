@@ -122,7 +122,7 @@ yf_get <- function(tickers,
                    be_quiet = FALSE) {
 
   # check for internet
-  if (!curl::has_internet()) {
+  if (is.null(curl::nslookup("finance.yahoo.com", error = FALSE))) {
     stop("Can't find an active internet connection...")
   }
 
