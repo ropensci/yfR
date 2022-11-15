@@ -1,6 +1,6 @@
 Package: yfR
 Title: Downloads and Organizes Financial Data from Yahoo Finance
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: c(person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre")),
              person("Nic", "Crane", role = "rev",
                     comment = "Nic reviewed the package (v. 0.0.5) for 
@@ -14,11 +14,11 @@ Description: Facilitates download of financial data from Yahoo Finance <https://
 URL: https://github.com/ropensci/yfR,
     https://docs.ropensci.org/yfR/
 BugReports: https://github.com/ropensci/yfR/issues
+Encoding: UTF-8
 Depends:
     R (>= 4.0.0)
 Imports: 
     stringr,
-    curl,
     tidyr,
     lubridate,
     furrr,
@@ -33,10 +33,11 @@ Imports:
     quantmod (>= 0.4.20),
     magrittr,
     humanize,
-    methods
+    methods,
+    pingr
 License: MIT + file LICENSE
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Suggests: 
     knitr,
     rmarkdown,

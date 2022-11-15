@@ -1,3 +1,7 @@
+## Version 1.0.4 (2022-11-15) -- bug fixes
+
+- switched curl::has_internet by pingr::is_online() -- the first doesn't seem to work on restricted networks. Fixes [#20](https://github.com/ropensci/yfR/issues/20)
+
 ## Version 1.0.3 (2022-10-20) -- bug fixes
 
 - fixed bug on number of files at cache folder

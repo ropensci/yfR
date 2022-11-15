@@ -122,7 +122,7 @@ yf_get <- function(tickers,
                    be_quiet = FALSE) {
 
   # check for internet
-  if (!curl::has_internet()) {
+  if (!pingr::is_online()) {
     stop("Can't find an active internet connection...")
   }
 
