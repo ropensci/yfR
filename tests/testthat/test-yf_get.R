@@ -184,11 +184,11 @@ test_that(desc = "Test of yf_get(): one trading day", {
 
   my_tickers <- c("^GSPC")
 
-  single_day <- '2022-11-14'
+  single_day <- as.Date('2022-11-14')
   df_yf <- yf_get(
     tickers = my_tickers,
     single_day,
-    single_day,
+    single_day + 1,
     be_quiet = TRUE
   )
 

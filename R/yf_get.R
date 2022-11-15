@@ -508,6 +508,8 @@ yf_get <- function(tickers,
     ))
   }
 
+  # check number of rows of requested data
+
   # setup final output (ungrouped tibble)
   df_out <- df_tickers %>%
     dplyr::ungroup()
