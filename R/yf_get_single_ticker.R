@@ -1,15 +1,15 @@
 #' function to import a single ticker
 #' @noRd
 yf_data_single <- function(ticker,
-                                 i_ticker,
-                                 length_tickers,
-                                 first_date,
-                                 last_date,
-                                 do_cache = TRUE,
-                                 cache_folder = yf_cachefolder_get(),
-                                 df_bench = NULL,
-                                 be_quiet = FALSE,
-                                 thresh_bad_data) {
+                           i_ticker,
+                           length_tickers,
+                           first_date,
+                           last_date,
+                           do_cache = TRUE,
+                           cache_folder = yf_cachefolder_get(),
+                           df_bench = NULL,
+                           be_quiet = FALSE,
+                           thresh_bad_data) {
   if (!be_quiet) {
     my_msg <- set_cli_msg("({i_ticker}/{length_tickers}) Fetching data for {ticker}")
     cli::cli_alert_info(my_msg)
@@ -72,7 +72,7 @@ yf_data_single <- function(ticker,
         this_ld <- as.character(max(df_cache$ref_date))
 
         my_msg <- set_cli_msg("found cache file ({this_fd} --> {this_ld})",
-          level = 1
+                              level = 1
         )
         cli::cli_alert_success(my_msg)
       }
@@ -87,7 +87,7 @@ yf_data_single <- function(ticker,
       if (flag_dates) {
         if (!be_quiet) {
           my_msg <- set_cli_msg("need new data (cache doesnt match query)",
-            level = 1
+                                level = 1
           )
 
           cli::cli_alert_warning(my_msg)
@@ -149,7 +149,7 @@ yf_data_single <- function(ticker,
     } else {
       if (!be_quiet) {
         my_msg <- set_cli_msg("not cached",
-          level = 1
+                              level = 1
         )
 
         cli::cli_alert_warning(my_msg)
@@ -172,7 +172,7 @@ yf_data_single <- function(ticker,
       if (nrow(df_out) > 1) {
         if (!be_quiet) {
           my_msg <- set_cli_msg("cache saved successfully",
-            level = 1
+                                level = 1
           )
           cli::cli_alert_success(my_msg)
         }
@@ -197,7 +197,7 @@ yf_data_single <- function(ticker,
     df_out <- data.frame()
     if (!be_quiet) {
       my_msg <- set_cli_msg("error in download..",
-        level = 1
+                            level = 1
       )
       cli::cli_alert_danger(my_msg)
     }
@@ -255,15 +255,21 @@ yf_data_single <- function(ticker,
     }
 
     df_control <- tibble::tibble(
-        ticker = ticker,
-        dl_status,
-        n_rows,
-        perc_benchmark_dates,
-        threshold_decision
-      )
+      ticker = ticker,
+      dl_status,
+      n_rows,
+      perc_benchmark_dates,
+      threshold_decision
+    )
 
     l_out <- list(df_tickers = df_out,
                   df_control = df_control)
+
+    # check if returned dataframe only has one row
+    if (nrow(df_out)) {
+      cli::cli_warn("Returned dataframe for {ticker} ({first_date}--{last_date}) has only ONE row. ",
+                    " Check your inputs dates?")
+    }
 
     return(l_out)
   }

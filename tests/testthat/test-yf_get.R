@@ -174,3 +174,24 @@ test_that(desc = "Test of yf_get(): be_quiet", {
   test_yf_output(df_yf, my_tickers)
 
 })
+
+test_that(desc = "Test of yf_get(): one trading day", {
+
+  if (!covr::in_covr()) {
+    skip_if_offline()
+    skip_on_cran() # too heavy for cran
+  }
+
+  my_tickers <- c("^GSPC")
+
+  single_day <- '2022-11-14'
+  df_yf <- yf_get(
+    tickers = my_tickers,
+    single_day,
+    single_day,
+    be_quiet = TRUE
+  )
+
+  test_yf_output(df_yf, my_tickers)
+
+})
