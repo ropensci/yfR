@@ -157,5 +157,4 @@ substitute_tickers <- function(df_index) {
   df_index$ticker[idx] <- df_fix$new
 
   return(df_index)
-
 }
