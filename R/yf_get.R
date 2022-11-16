@@ -326,7 +326,8 @@ yf_get <- function(tickers,
   idx <- l_classes != "list"
   my_l[idx] <- NULL
 
-  cli::cli_alert_info('Binding price data')
+  if (!be_quiet) cli::cli_alert_info('Binding price data')
+
   df_tickers <- dplyr::bind_rows(purrr::map(my_l, 1))
   df_control <- dplyr::bind_rows(purrr::map(my_l, 2))
 
@@ -334,7 +335,7 @@ yf_get <- function(tickers,
   if (nrow(df_tickers) == 0) {
     stop(
       paste0(
-        "Resulting data has 0 rows.. Are your tickers correct?",
+        "Resulting data has 0 rows.. Are your tickers and date ranges correct?",
         " Search your ticker at <https://finance.yahoo.com/>."
       )
     )
@@ -516,59 +517,61 @@ yf_get <- function(tickers,
 
   attributes(df_out)$df_control <- df_control
 
-  # last messages
-  cli::cli_h1("Diagnostics")
+  # last message -- Diagnostics
+  if (!be_quiet) {
+    cli::cli_h1("Diagnostics")
 
-  n_requested <- length(tickers)
-  n_got <- dplyr::n_distinct(df_out$ticker)
+    n_requested <- length(tickers)
+    n_got <- dplyr::n_distinct(df_out$ticker)
 
-  this_morale <- get_morale_boost()
+    this_morale <- get_morale_boost()
 
-  cli::cli_alert_success(
-    paste0(
-      "Returned dataframe with {nrow(df_out)} rows",
-      " -- {this_morale}"
-    )
-  )
-
-  # check cache size
-  if (do_cache) {
-    cache_files <- list.files(cache_folder, full.names = TRUE)
-    size_files <- sum(sapply(cache_files, file.size))
-
-    size_str <- humanize::natural_size(size_files)
-    n_files <- length(list.files(cache_folder))
-
-    cli::cli_alert_info("Using {size_str} at {cache_folder} for {n_files} cache files")
-  }
-
-  success_rate <- n_got/n_requested
-
-  cli::cli_alert_info(
-    paste0("Out of {n_requested} requested tickers, you got {n_got}",
-           " ({scales::percent(success_rate)})")
-  )
-
-  if (success_rate < 0.75) {
-
-    extra_msg <- paste0(
-      "You either inputed wrong tickers, or ranned into YF call limit? My advice:",
-      " check your input tickers, wait 15 minutes and try again."
-    )
-    cli::cli_alert_danger(
+    cli::cli_alert_success(
       paste0(
-        'You got data on less than {scales::percent(0.75)} of requested tickers. ',
-        "{extra_msg}"
+        "Returned dataframe with {nrow(df_out)} rows",
+        " -- {this_morale}"
       )
     )
 
-    idx <- !tickers %in% unique(df_tickers$ticker)
-    missing_tickers <- tickers[idx]
+    # check cache size
+    if (do_cache) {
+      cache_files <- list.files(cache_folder, full.names = TRUE)
+      size_files <- sum(sapply(cache_files, file.size))
+
+      size_str <- humanize::natural_size(size_files)
+      n_files <- length(list.files(cache_folder))
+
+      cli::cli_alert_info("Using {size_str} at {cache_folder} for {n_files} cache files")
+    }
+
+    success_rate <- n_got/n_requested
+
     cli::cli_alert_info(
-      paste0("Missing tickers: ",
-             paste0(missing_tickers, collapse = ", "))
+      paste0("Out of {n_requested} requested tickers, you got {n_got}",
+             " ({scales::percent(success_rate)})")
     )
 
+    if (success_rate < 0.75) {
+
+      extra_msg <- paste0(
+        "You either inputed wrong tickers, or ranned into YF call limit? My advice:",
+        " check your input tickers, wait 15 minutes and try again."
+      )
+      cli::cli_alert_danger(
+        paste0(
+          'You got data on less than {scales::percent(0.75)} of requested tickers. ',
+          "{extra_msg}"
+        )
+      )
+
+      idx <- !tickers %in% unique(df_tickers$ticker)
+      missing_tickers <- tickers[idx]
+      cli::cli_alert_info(
+        paste0("Missing tickers: ",
+               paste0(missing_tickers, collapse = ", "))
+      )
+
+    }
   }
 
   return(df_out)

@@ -26,7 +26,7 @@ test_that("Test of yf_index_composition() -- using web", {
   for (i_index in available_indices) {
 
     df_index <- yf_index_composition(i_index,
-                                  force_fallback = FALSE)
+                                     force_fallback = FALSE)
     testhat_index_comp(df_index)
 
   }
@@ -40,7 +40,7 @@ test_that("Test of yf_index_composition() -- using fallback files", {
   for (i_index in available_indices) {
 
     df_index <- yf_index_composition(i_index,
-                                  force_fallback = TRUE)
+                                     force_fallback = TRUE)
     testhat_index_comp(df_index)
 
 
@@ -62,7 +62,8 @@ test_that("Test of yf_collection_get() -- single session", {
   df <- yf_collection_get(collection = to_test_collection,
                           first_date = Sys.Date() - 30,
                           last_date = Sys.Date(),
-                          do_parallel = FALSE)
+                          do_parallel = FALSE,
+                          be_quiet = TRUE)
 
   expect_true(nrow(df) > 0)
 
@@ -92,7 +93,8 @@ test_that("Test of yf_collection_get() -- multi-session", {
     df <- yf_collection_get(collection = i_collection,
                             first_date = Sys.Date() - 30,
                             last_date = Sys.Date(),
-                            do_parallel = TRUE)
+                            do_parallel = TRUE,
+                            be_quiet = TRUE)
 
     expect_true(nrow(df) > 0)
 

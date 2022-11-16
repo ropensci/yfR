@@ -13,7 +13,8 @@ test_that(desc = "Test of yf_convert_to_wide()", {
   df <- yf_get(
     tickers = my_tickers,
     first_date = Sys.Date() - 30,
-    last_date = Sys.Date()
+    last_date = Sys.Date(),
+    be_quiet = TRUE
   )
 
   l_out <- yf_convert_to_wide(df)

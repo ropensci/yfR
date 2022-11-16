@@ -1,6 +1,8 @@
 library(testthat)
 library(yfR)
 
+options(be_quiet = TRUE)
+
 # Functions for testing output from calls to yf_get
 test_yf_output <- function(df_yf, tickers) {
 
@@ -28,7 +30,8 @@ test_that(desc = "Test of yf_get()", {
 
   # vanilla call
   df_yf <- yf_get(
-    tickers = my_tickers
+    tickers = my_tickers,
+    be_quiet = TRUE
   )
 
   test_yf_output(df_yf, my_tickers)
@@ -38,7 +41,8 @@ test_that(desc = "Test of yf_get()", {
     tickers = my_tickers,
     first_date = Sys.Date() - 60,
     last_date = Sys.Date() - 30,
-    do_cache = TRUE
+    do_cache = TRUE,
+    be_quiet = TRUE
   )
 
   # with cache (other folder)
@@ -48,7 +52,8 @@ test_that(desc = "Test of yf_get()", {
       first_date = Sys.Date() - 60,
       last_date = Sys.Date() - 30,
       do_cache = TRUE,
-      cache_folder = file.path("~/other-folder")
+      cache_folder = file.path("~/other-folder"),
+      be_quiet = TRUE
     )})
 
   test_yf_output(df_yf, my_tickers)
@@ -59,7 +64,8 @@ test_that(desc = "Test of yf_get()", {
     tickers = my_tickers,
     first_date = Sys.Date() - 90,
     last_date = Sys.Date(),
-    do_cache = TRUE
+    do_cache = TRUE,
+    be_quiet = TRUE
   )
 
   test_yf_output(df_yf, my_tickers)
@@ -69,7 +75,8 @@ test_that(desc = "Test of yf_get()", {
     tickers = my_tickers,
     first_date = Sys.Date() - 90,
     last_date = Sys.Date(),
-    do_cache = FALSE
+    do_cache = FALSE,
+    be_quiet = TRUE
   )
 
   test_yf_output(df_yf, my_tickers)
@@ -77,7 +84,8 @@ test_that(desc = "Test of yf_get()", {
   # with do_complete_data = TRUE
   df_yf <- yf_get(
     tickers = my_tickers,
-    do_complete_data = TRUE
+    do_complete_data = TRUE,
+    be_quiet = TRUE
   )
 
   test_yf_output(df_yf, my_tickers)
@@ -112,7 +120,8 @@ test_that(desc = "Test of yf_get(): do_parallel = TRUE", {
     tickers = my_tickers,
     first_date = Sys.Date() - 30,
     last_date = Sys.Date(),
-    do_parallel = TRUE
+    do_parallel = TRUE,
+    be_quiet = TRUE
   )
 
   test_yf_output(df_yf, my_tickers)
@@ -148,7 +157,8 @@ test_that(desc = "Test of yf_get(): aggregations", {
       first_date = first_date,
       last_date = last_date,
       freq_data = freq_data,
-      how_to_aggregate = how_to_aggregate
+      how_to_aggregate = how_to_aggregate,
+      be_quiet = TRUE
     )
 
     test_yf_output(df_yf, my_tickers)
@@ -185,13 +195,14 @@ test_that(desc = "Test of yf_get(): one trading day", {
   my_tickers <- c("^GSPC")
 
   single_day <- as.Date('2022-11-14')
-  df_yf <- yf_get(
-    tickers = my_tickers,
-    single_day,
-    single_day + 1,
-    be_quiet = TRUE
-  )
 
-  test_yf_output(df_yf, my_tickers)
+  expect_error({
+    df_yf <- yf_get(
+      tickers = my_tickers,
+      single_day-1,
+      single_day,
+      be_quiet = TRUE
+    )
+  })
 
 })
