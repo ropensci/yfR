@@ -88,3 +88,18 @@ test_that(desc = "Test of set_cli_msg()", {
   expect_true(class(my_msg) == "character")
 
 })
+
+
+test_that(desc = "Test of substitute_tickers()", {
+
+  # use wrong ticker
+  my_tib <- dplyr::tibble(
+    ticker = c('BF.B')
+  )
+
+  df_index <- substitute_tickers(my_tib)
+
+  # check if substitution works
+  expect_true(df_index$ticker[1] == "BF-B")
+
+})

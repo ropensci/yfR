@@ -136,4 +136,26 @@ set_cli_msg <- function(msg_in, level = 0) {
   return(msg_in)
 }
 
+#' Fixes ticker manually
+#'
+#' This function will be used as a dictionary to fix wrong tickers from index compositions
+#'
+#' @param df_index
+#'
+#' @return Another dataframe
+#'
+#' @noRd
+substitute_tickers <- function(df_index) {
 
+  df_fix <- dplyr::tibble(
+    old = c("BF.B"),
+    new = c("BF-B")
+  )
+
+  idx <- match(df_fix$old, df_index$ticker)
+
+  df_index$ticker[idx] <- df_fix$new
+
+  return(df_index)
+
+}

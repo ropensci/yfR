@@ -62,6 +62,9 @@ yf_index_composition <- function(mkt_index,
 
   }
 
+  # fix tickers manually (isse #18)
+  df_index <- substitute_tickers(df_index)
+
   return(df_index)
 }
 
