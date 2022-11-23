@@ -1,6 +1,6 @@
 Package: yfR
 Title: Downloads and Organizes Financial Data from Yahoo Finance
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: c(person("Marcelo", "Perlin", email = "marceloperlin@gmail.com", role = c("aut", "cre")),
              person("Nic", "Crane", role = "rev",
                     comment = "Nic reviewed the package (v. 0.0.5) for 
@@ -34,7 +34,8 @@ Imports:
     magrittr,
     humanize,
     methods,
-    pingr
+    pingr,
+    tidyselect
 License: MIT + file LICENSE
 LazyData: true
 RoxygenNote: 7.2.2
