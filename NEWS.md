@@ -1,6 +1,10 @@
-## Version 1.0.5 (2022-12-06) -- bug fixes
+## Version 1.0.6 (2022-12-06) -- bug fixes
 
 - fix for when user is requesting one trading day. Now it gives a warning and not an error -- [fixes #23](https://github.com/ropensci/yfR/issues/23)
+
+## Version 1.0.5 (2022-11-23) -- bug fixes
+
+- now using tidyselect::all_of() (fixes [issue #22](https://github.com/ropensci/yfR/issues/22))
 
 ## Version 1.0.4 (2022-11-15) -- bug fixes
 

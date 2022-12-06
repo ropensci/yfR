@@ -32,7 +32,7 @@ yf_convert_to_wide <- function(df_in) {
     temp_df_wide <- tidyr::pivot_wider(
       data = temp_df,
       names_from = ticker,
-      values_from = tidyr::all_of(name_in)
+      values_from = tidyselect::all_of(name_in)
       )
 
     return(temp_df_wide)
