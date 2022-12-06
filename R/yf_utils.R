@@ -59,6 +59,10 @@ calc_ret <- function(P,
                      type_return = "arit") {
   my_length <- length(P)
 
+  if (my_length == 1) {
+    return(NA)
+  }
+
   ret <- switch(type_return,
                 "arit" = P / dplyr::lag(P) - 1,
                 "log" = log(P / dplyr::lag(P))

@@ -196,7 +196,7 @@ test_that(desc = "Test of yf_get(): one trading day", {
 
   single_day <- as.Date('2022-11-14')
 
-  expect_error({
+  expect_warning({
     df_yf <- yf_get(
       tickers = my_tickers,
       single_day-1,

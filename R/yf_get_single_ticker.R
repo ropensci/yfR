@@ -267,7 +267,7 @@ yf_data_single <- function(ticker,
 
     # check if returned dataframe only has one row
     if (nrow(df_out) == 1) {
-      cli::cli_abort(
+      cli::cli_warn(
         paste0(
           "Returned dataframe for {ticker} between  {first_date} and {last_date} has only ONE row. ",
           " Perhaps you should check your inputs dates?")

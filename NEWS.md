@@ -1,3 +1,7 @@
+## Version 1.0.5 (2022-12-06) -- bug fixes
+
+- fix for when user is requesting one trading day. Now it gives a warning and not an error -- [fixes #23](https://github.com/ropensci/yfR/issues/23)
+
 ## Version 1.0.4 (2022-11-15) -- bug fixes
 
 - switched curl::has_internet by pingr::is_online() -- the first doesn't seem to work on restricted networks. Fixes [#20](https://github.com/ropensci/yfR/issues/20)
