@@ -1,6 +1,7 @@
 ## Version 1.0.6 (2022-12-06) -- bug fixes
 
 - fix for when user is requesting one trading day. Now it gives a warning and not an error -- [fixes #23](https://github.com/ropensci/yfR/issues/23)
+- added new market index DOW (^DJI)
 
 ## Version 1.0.5 (2022-11-23) -- bug fixes
 

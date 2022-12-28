@@ -88,47 +88,47 @@ For market indices, a list of tickers is available
 
 ## Features of `yfR`
 
--   Fetches daily/weekly/monthly/annual stock prices/returns from yahoo
-    finance and outputs a dataframe (tibble) in the long format (stacked
-    data);
+- Fetches daily/weekly/monthly/annual stock prices/returns from yahoo
+  finance and outputs a dataframe (tibble) in the long format (stacked
+  data);
 
--   A new feature called **collections** facilitates download of
-    multiple tickers from a particular market/index. You can, for
-    example, download data for all stocks in the SP500 index with a
-    simple call to `yf_collection_get("SP500")`;
+- A new feature called **collections** facilitates download of multiple
+  tickers from a particular market/index. You can, for example, download
+  data for all stocks in the SP500 index with a simple call to
+  `yf_collection_get("SP500")`;
 
--   A session-persistent smart cache system is available by default.
-    This means that the data is saved locally and only missing portions
-    are downloaded, if needed.
+- A session-persistent smart cache system is available by default. This
+  means that the data is saved locally and only missing portions are
+  downloaded, if needed.
 
--   All dates are compared to a benchmark ticker such as SP500 and,
-    whenever an individual asset does not have a sufficient number of
-    dates, the software drops it from the output. This means you can
-    choose to ignore tickers with a high proportion of missing dates.
+- All dates are compared to a benchmark ticker such as SP500 and,
+  whenever an individual asset does not have a sufficient number of
+  dates, the software drops it from the output. This means you can
+  choose to ignore tickers with a high proportion of missing dates.
 
--   A customized function called `yf_convert_to_wide()` can transform
-    the long dataframe into a wide format (tickers as columns), much
-    used in portfolio optimization. The output is a list where each
-    element is a different target variable (prices, returns, volumes).
+- A customized function called `yf_convert_to_wide()` can transform the
+  long dataframe into a wide format (tickers as columns), much used in
+  portfolio optimization. The output is a list where each element is a
+  different target variable (prices, returns, volumes).
 
--   Parallel computing with package `furrr` is available, speeding up
-    the data importation process.
+- Parallel computing with package `furrr` is available, speeding up the
+  data importation process.
 
 ## Warnings
 
--   Yahoo finance data is far from perfect or reliable, specially for
-    individual stocks. In my experience, using it for research code with
-    stock **indices** is fine and I can match it with other data
-    sources. But, adjusted stock prices for **individual assets** is
-    messy as stock events such as splits or dividends are not properly
-    registered. I was never able to match it with other data sources,
-    specially for long time periods with lots of corporate events. My
-    advice is to **never use the yahoo finance data of individual stocks
-    in production** (research papers or academic documents – thesis and
-    dissertations). If adjusted price data of individual stocks is
-    important for your research, **use other data sources** such as
-    [EOD](https://eodhistoricaldata.com/), [SimFin](https://simfin.com/)
-    or [Economática](https://economatica.com/).
+- Yahoo finance data is far from perfect or reliable, specially for
+  individual stocks. In my experience, using it for research code with
+  stock **indices** is fine and I can match it with other data sources.
+  But, adjusted stock prices for **individual assets** is messy as stock
+  events such as splits or dividends are not properly registered. I was
+  never able to match it with other data sources, specially for long
+  time periods with lots of corporate events. My advice is to **never
+  use the yahoo finance data of individual stocks in production**
+  (research papers or academic documents – thesis and dissertations). If
+  adjusted price data of individual stocks is important for your
+  research, **use other data sources** such as
+  [EOD](https://eodhistoricaldata.com/), [SimFin](https://simfin.com/)
+  or [Economática](https://economatica.com/).
 
 ## Installation
 
@@ -156,19 +156,19 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2022-07-26 --> 2022-08-25 (30 days) ──
+#> ── Running yfR for 1 stocks | 2022-11-28 --> 2022-12-28 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for META
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 22 valid rows (2022-07-26 --> 2022-08-24)
-#> ✔    - got 100% of valid prices -- Nice!
+#> ✔    - got 21 valid rows (2022-11-28 --> 2022-12-27)
+#> ✔    - got 100% of valid prices -- You got it msperlin!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 22 rows -- Time for some tea?
-#> ℹ Using 6.3 kB at /tmp/RtmplZdn0T/yf_cache for 1 cache files
+#> ✔ Returned dataframe with 21 rows -- Time for some tea?
+#> ℹ Using 6.1 kB at /tmp/Rtmpa606SQ/yf_cache for 2 cache files
 #> ℹ Out of 1 requested tickers, you got 1 (100%)
 
 # output is a tibble with data
@@ -176,12 +176,12 @@ head(df_yf)
 #> # A tibble: 6 × 11
 #>   ticker ref_date   price_open price_h…¹ price…² price…³ volume price…⁴ ret_ad…⁵
 #>   <chr>  <date>          <dbl>     <dbl>   <dbl>   <dbl>  <dbl>   <dbl>    <dbl>
-#> 1 META   2022-07-26       166.      166     158.    159. 2.85e7    159. NA      
-#> 2 META   2022-07-27       163.      171.    162.    170. 4.38e7    170.  0.0655 
-#> 3 META   2022-07-28       161.      162.    155.    161. 7.32e7    161. -0.0522 
-#> 4 META   2022-07-29       158.      160.    155.    159. 4.21e7    159. -0.0101 
-#> 5 META   2022-08-01       157.      165.    155.    160. 4.06e7    160.  0.00522
-#> 6 META   2022-08-02       158.      162.    158.    160. 2.74e7    160.  0.00163
+#> 1 META   2022-11-28       111.      112.    108.    109. 2.33e7    109. NA      
+#> 2 META   2022-11-29       110.      111.    109.    109. 2.39e7    109.  0.00625
+#> 3 META   2022-11-30       110.      118.    109.    118. 4.33e7    118.  0.0789 
+#> 4 META   2022-12-01       119.      121.    118.    120. 3.66e7    120.  0.0198 
+#> 5 META   2022-12-02       118.      124.    118.    123. 3.99e7    123.  0.0253 
+#> 6 META   2022-12-05       122.      125.    121.    122. 3.55e7    122. -0.00858
 #> # … with 2 more variables: ret_closing_prices <dbl>,
 #> #   cumret_adjusted_prices <dbl>, and abbreviated variable names ¹​price_high,
 #> #   ²​price_low, ³​price_close, ⁴​price_adjusted, ⁵​ret_adjusted_prices

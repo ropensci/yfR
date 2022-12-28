@@ -47,6 +47,10 @@ yf_index_composition <- function(mkt_index,
 
       df_index <- yf_index_ftse()
 
+    } else if (mkt_index == "DOW") {
+
+      df_index <- yf_index_dow()
+
     } else if (mkt_index == "testthat-collection") {
 
       df_index <- yf_index_test()
@@ -103,7 +107,9 @@ read_fallback <- function(mkt_index) {
 #' indices <- yf_index_list()
 #' indices
 yf_index_list <- function(print_description = FALSE) {
-  available_indices <- c("SP500", "IBOV", "FTSE", "testthat-collection")
+  available_indices <- c("SP500", "IBOV", "FTSE",
+                         "DOW",
+                         "testthat-collection")
 
   df_indices <- dplyr::tibble(
     available_indices,
@@ -111,6 +117,7 @@ yf_index_list <- function(print_description = FALSE) {
       "The SP500 index (US MARKET) - Ticker = ^GSPC",
       "The Ibovespa index (BR MARKET) - Ticker = ^BVSP",
       "The FTSE index (UK MARKET) - Ticker = ^FTSE",
+      "The DOW index (US MARKET) - Ticker = ^DJI",
       "A (small) testing index for testthat() -- dev stuff, dont use it!"
     )
   )
@@ -304,6 +311,60 @@ yf_index_sp500 <- function(do_cache = TRUE,
 
   yf_index_format_msg("SP500", nrow(df_sp500))
   return(df_sp500)
+}
+
+#' Function to download the current components of the dOW index from Wikipedia
+#' @noRd
+yf_index_dow <- function(do_cache = TRUE,
+                           cache_folder = yf_cachefolder_get()) {
+  cache_file <- file.path(
+    cache_folder,
+    paste0("DOW30_Composition_", Sys.Date(), ".rds")
+  )
+
+  if (do_cache) {
+    # check if file exists
+    flag <- file.exists(cache_file)
+
+    if (flag) {
+      df_dow <- readr::read_rds(cache_file)
+      return(df_dow)
+    }
+  }
+
+  my_url <- "https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average#Components"
+
+  read_html <- 0 # fix for global variable nagging from BUILD
+  my_xpath <- '//*[@id="constituents"]'
+  df_dow <- my_url %>%
+    rvest::read_html() %>%
+    rvest::html_nodes(xpath = my_xpath) %>%
+    rvest::html_table(fill = TRUE)
+
+  df_dow <- df_dow[[1]]
+
+  df_dow <- df_dow  %>%
+    dplyr::rename(
+      ticker = Symbol,
+      company = Company,
+      sector = Industry
+    ) %>%
+    dplyr::select(ticker, company, sector) %>%
+    dplyr::mutate(
+      index = "DOW",
+      index_ticker = "^DJI"
+    )
+
+
+  if (do_cache) {
+    if (!dir.exists(cache_folder)) dir.create(cache_folder)
+
+    readr::write_rds(df_dow, cache_file)
+  }
+
+  yf_index_format_msg("DOW", nrow(df_dow))
+
+  return(df_dow)
 }
 
 
