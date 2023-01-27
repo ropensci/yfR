@@ -30,7 +30,9 @@ yf_live_prices <- function(ticker){
       dplyr::select(
         ticker = symbol,
         time_stamp  = regularMarketTime,
-        price = regularMarketPrice) |>
+        price = regularMarketPrice,
+        last_price = previousClose) |>
+      dplyr::mutate(daily_change = (price - last_price)/last_price) |>
       dplyr::mutate(time_stamp = (as.POSIXct(time_stamp, origin="1970-01-01")))
   })
 
