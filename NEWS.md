@@ -1,3 +1,7 @@
+## Version 1.0.7 (2023-01-27) -- extra function yf_live_prices()
+
+- added function yf_live_prices() (see this [pr](https://github.com/ropensci/yfR/pull/24))
+
 ## Version 1.0.6 (2023-01-06) -- bug fixes and CRAN submission
 
 - fix for when user is requesting one trading day. Now it gives a warning and not an error -- [fixes #23](https://github.com/ropensci/yfR/issues/23)

@@ -4,16 +4,16 @@
 \alias{yf_live_prices}
 \title{Yahoo Finance Live Prices}
 \usage{
-yf_live_prices(.ticker)
+yf_live_prices(ticker)
 }
 \arguments{
-\item{.ticker}{Ticker de interesse}
+\item{ticker}{a single ticker symbol}
 }
 \value{
-Tibble
+a tibble with live prices
 }
 \description{
-Yahoo Finance Live Prices
+This function will use the json api to retrieve live prices from Yahoo finance.
 }
 \examples{
 yfR::yf_live_prices("PETR4.SA")
