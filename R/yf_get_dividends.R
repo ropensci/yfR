@@ -1,4 +1,4 @@
-#' Yahoo Finance Dividends
+#' Get Yahoo Finance Dividends from a single stock
 #'
 #' This function will use the json api to retrieve dividends from Yahoo finance.
 #'
@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' yfR::yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
+#' yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
 #'
 yf_get_dividends <- function(ticker, first_date, last_date) {
 

@@ -19,11 +19,11 @@ test_that(desc = "Test of yf_get_dividends()", {
     skip_on_cran() # too heavy for cran
   }
 
-  df_live <- yf_get_dividends(ticker = "VALE3.SA",
+  df_div <- yf_get_dividends(ticker = "VALE3.SA",
                               first_date = "2000-01-01",
-                              last_date = "2023-01-01")
+                              last_date = Sys.Date())
 
-  test_df(df_live)
+  test_df(df_div)
 
 })
 

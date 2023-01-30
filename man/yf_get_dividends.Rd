@@ -2,7 +2,7 @@
 % Please edit documentation in R/yf_get_dividends.R
 \name{yf_get_dividends}
 \alias{yf_get_dividends}
-\title{Yahoo Finance Dividends}
+\title{Get Yahoo Finance Dividends from a single stock}
 \usage{
 yf_get_dividends(ticker, first_date, last_date)
 }
@@ -20,6 +20,6 @@ a tibble with dividends
 This function will use the json api to retrieve dividends from Yahoo finance.
 }
 \examples{
-yfR::yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
+yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
 
 }
