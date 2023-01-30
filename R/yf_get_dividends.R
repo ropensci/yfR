@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' yfR::yf_get_dividends("PETR4.SA")
+#' yfR::yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
 #'
 yf_get_dividends <- function(ticker, first_date, last_date) {
 
@@ -51,16 +51,16 @@ yf_get_dividends <- function(ticker, first_date, last_date) {
   dividends <- tibble::tibble()
 
   dividends <- try({
-    httr::GET(url = link) |>
+    httr::RETRY(verb = "GET",url = link,) |>
       httr::content("text") |>
       jsonlite::fromJSON() |>
       purrr::pluck("chart", "result", "events", "dividends")
   })
 
   if(base::is.null(dividends)){
-    cli::cli_abort("Can't find ticker {ticker} or don´t have dividends..")
+    cli::cli_abort("Can't find ticker {ticker} or don\u00B4t have dividends..")
   } else if (base::nrow(dividends) == 0) {
-    cli::cli_abort("Can't find ticker {ticker} or don´t have dividends..")
+    cli::cli_abort("Can't find ticker {ticker} or don\u00B4t have dividends..")
   } else {
     dividends <- dividends |>
       purrr::map_dfr(
@@ -80,6 +80,3 @@ yf_get_dividends <- function(ticker, first_date, last_date) {
 
   return(dividends)
 }
-
-
-

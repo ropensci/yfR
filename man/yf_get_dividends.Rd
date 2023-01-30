@@ -20,6 +20,6 @@ a tibble with dividends
 This function will use the json api to retrieve dividends from Yahoo finance.
 }
 \examples{
-yfR::yf_get_dividends("PETR4.SA")
+yfR::yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
 
 }
