@@ -4,7 +4,7 @@
 \alias{yf_get_dividends}
 \title{Get Yahoo Finance Dividends from a single stock}
 \usage{
-yf_get_dividends(ticker, first_date, last_date)
+yf_get_dividends(ticker, first_date = Sys.Date() - 365, last_date = Sys.Date())
 }
 \arguments{
 \item{ticker}{a single ticker symbol}
@@ -20,6 +20,6 @@ a tibble with dividends
 This function will use the json api to retrieve dividends from Yahoo finance.
 }
 \examples{
-yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
+yf_get_dividends(ticker = "PETR4.SA")
 
 }

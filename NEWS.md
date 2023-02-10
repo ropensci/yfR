@@ -1,7 +1,7 @@
-## Version 1.0.7 (2023-01-30) -- extra function yf_live_prices()
+## Version 1.0.7 (2023-01-30) -- extra functions
 
-- added function yf_live_prices() (see this [pr](https://github.com/ropensci/yfR/pull/24))
-- added function for fetching dividends (see this [PR](https://github.com/ropensci/yfR/pull/25)) 
+- new function yf_live_prices() (see this [pr](https://github.com/ropensci/yfR/pull/24))
+- new function for fetching dividends (see this [PR](https://github.com/ropensci/yfR/pull/25)) 
 
 Thank you [Henrique](https://github.com/henrique1008) for the work in both, live prices and dividends! 
 

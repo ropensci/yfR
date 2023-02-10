@@ -10,9 +10,16 @@
 #' @export
 #'
 #' @examples
-#' yf_get_dividends(ticker = "PETR4.SA", first_date = "2010-01-01", last_date = Sys.Date())
+#' yf_get_dividends(ticker = "PETR4.SA")
 #'
-yf_get_dividends <- function(ticker, first_date, last_date) {
+yf_get_dividends <- function(ticker,
+                             first_date = Sys.Date() - 365,
+                             last_date = Sys.Date()) {
+
+  cli::cli_warn(
+    paste0("Be aware that YF does not provide a consistent dividend database..",
+           "Use this function with caution.")
+  )
 
   if (length(ticker) > 1) {
     cli::cli_abort("input ticker should have only one symbol (found >1)")
