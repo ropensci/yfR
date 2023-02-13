@@ -16,9 +16,9 @@ yf_get_dividends <- function(ticker,
                              first_date = Sys.Date() - 365,
                              last_date = Sys.Date()) {
 
-  cli::cli_warn(
-    paste0("Be aware that YF does not provide a consistent dividend database..",
-           "Use this function with caution.")
+  cli::cli_alert_info(
+    paste0("Be aware that YF does not provide a consistent dividend database.",
+          " Use this function with caution.")
   )
 
   if (length(ticker) > 1) {
@@ -43,24 +43,25 @@ yf_get_dividends <- function(ticker,
     stop("can't change class of last_date to 'Date'")
   }
 
-  first_date_number <- lubridate::as_datetime(first_date,
-                                              tz = "America/Sao_Paulo"
-  ) |>
-    base::as.numeric()
+  first_date_number <- base::as.numeric(
+    lubridate::as_datetime(first_date,
+                           tz = "America/Sao_Paulo"
+  )
+  )
 
-  last_date_number <- lubridate::as_datetime(last_date,
-                                             tz = "America/Sao_Paulo"
-  ) |>
-    base::as.numeric()
+  last_date_number <- base::as.numeric(
+    lubridate::as_datetime(last_date,
+                          tz = "America/Sao_Paulo")
+  )
 
   link <- glue::glue("https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?formatted=true&crumb=DUrcw6zrjLP&lang=en-US&region=US&includeAdjustedClose=true&interval=1d&period1={first_date_number}&period2={last_date_number}&events=capitalGain%7Cdiv%7Csplit&useYfid=true&corsDomain=finance.yahoo.com")
 
   dividends <- tibble::tibble()
 
   dividends <- try({
-    httr::RETRY(verb = "GET",url = link,) |>
-      httr::content("text") |>
-      jsonlite::fromJSON() |>
+    httr::RETRY(verb = "GET",url = link,) %>%
+      httr::content("text") %>%
+      jsonlite::fromJSON() %>%
       purrr::pluck("chart", "result", "events", "dividends")
   })
 
@@ -69,15 +70,15 @@ yf_get_dividends <- function(ticker,
   } else if (base::nrow(dividends) == 0) {
     cli::cli_abort("Can't find ticker {ticker} or don\u00B4t have dividends..")
   } else {
-    dividends <- dividends |>
+    dividends <- dividends %>%
       purrr::map_dfr(
-        .f = ~{.x}) |>
-      dplyr::as_tibble() |>
+        .f = ~{.x}) %>%
+      dplyr::as_tibble() %>%
       dplyr::mutate(
         date = base::as.POSIXct(date, origin = "1970-01-01"),
         date = base::as.Date(date),
         ticker = stringr::str_to_upper(string = ticker)
-      ) |>
+      ) %>%
       dplyr::select(
         ref_date = date,
         ticker,

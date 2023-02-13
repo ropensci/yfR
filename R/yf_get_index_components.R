@@ -169,7 +169,7 @@ yf_index_ftse <- function(do_cache = TRUE,
 
   df_ftse <- df_ftse %>%
     dplyr::rename(
-      ticker = EPIC,
+      ticker = Ticker,
       company = Company,
       sector = names(df_ftse)[3]
     ) %>%
@@ -242,7 +242,7 @@ yf_index_ibov <- function(do_cache = TRUE,
     readr::write_rds(df_ibov_comp, cache_file)
   }
 
-  yf_index_format_msg("Ibovespa", nrow(df_ibov_comp))
+  yf_index_format_msg("IBOV", nrow(df_ibov_comp))
 
   return(df_ibov_comp)
 }
