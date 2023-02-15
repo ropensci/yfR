@@ -1,4 +1,4 @@
-## Version 1.0.7 (2023-01-30) -- extra functions
+## Version 1.1.0 (2023-01-30) -- major version
 
 - new function yf_live_prices() (see this [pr](https://github.com/ropensci/yfR/pull/24))
 - new function for fetching dividends (see this [PR](https://github.com/ropensci/yfR/pull/25)) 
