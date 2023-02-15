@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/ropensci/yfR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/yfR?branch=main)
 [![R build (rcmdcheck)](https://github.com/ropensci/yfR/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/yfR/actions)
 [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/523_status.svg)](https://github.com/ropensci/software-review/issues/523)
+[![R-CMD-check](https://github.com/ropensci/yfR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/yfR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # Motivation
