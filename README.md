@@ -77,8 +77,11 @@ The easiest way to find the tickers of a company stock is to search for
 it in [Yahoo Finance’s](https://finance.yahoo.com/) website. At the top
 page you’ll find a search bar:
 
-![YF
-Search](/inst/figures/search-yf.png?raw=true "Example of search in YF")
+<figure>
+<img src="/inst/figures/search-yf.png?raw=true"
+title="Example of search in YF" alt="YF Search" />
+<figcaption aria-hidden="true">YF Search</figcaption>
+</figure>
 
 A company can have many different stocks traded at different markets
 (see picture above). As the example shows, Petrobras is traded at NYQ
@@ -157,35 +160,37 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2023-01-17 --> 2023-02-16 (30 days) ──
+#> ── Running yfR for 1 stocks | 2024-05-25 --> 2024-06-24 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for META
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 22 valid rows (2023-01-17 --> 2023-02-15)
+#> ✔    - got 18 valid rows (2024-05-28 --> 2024-06-21)
 #> ✔    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 22 rows -- Youre doing good!
-#> ℹ Using 6.3 kB at /tmp/RtmpvCnCwr/yf_cache for 2 cache files
+#> ✔ Returned dataframe with 18 rows -- You got it msperlin!
+#> ℹ Using 5.5 kB at /tmp/Rtmp8A98vn/yf_cache for 2 cache files
 #> ℹ Out of 1 requested tickers, you got 1 (100%)
+```
+
+``` r
 
 # output is a tibble with data
 head(df_yf)
 #> # A tibble: 6 × 11
-#>   ticker ref_date   price_open price_h…¹ price…² price…³ volume price…⁴ ret_ad…⁵
-#>   <chr>  <date>          <dbl>     <dbl>   <dbl>   <dbl>  <dbl>   <dbl>    <dbl>
-#> 1 META   2023-01-17       136.      137.    134.    135. 2.11e7    135. NA      
-#> 2 META   2023-01-18       136.      137.    133.    133. 2.02e7    133. -1.73e-2
-#> 3 META   2023-01-19       132.      137.    132.    136. 2.86e7    136.  2.35e-2
-#> 4 META   2023-01-20       136.      140.    135.    139. 2.86e7    139.  2.37e-2
-#> 5 META   2023-01-23       139.      144.    139.    143. 2.75e7    143.  2.80e-2
-#> 6 META   2023-01-24       142.      145     141.    143. 2.20e7    143. -9.07e-4
-#> # … with 2 more variables: ret_closing_prices <dbl>,
-#> #   cumret_adjusted_prices <dbl>, and abbreviated variable names ¹​price_high,
-#> #   ²​price_low, ³​price_close, ⁴​price_adjusted, ⁵​ret_adjusted_prices
+#>   ticker ref_date   price_open price_high price_low price_close   volume
+#>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
+#> 1 META   2024-05-28       477.       481.      475.        480. 10175800
+#> 2 META   2024-05-29       475.       480.      474.        474.  9226200
+#> 3 META   2024-05-30       472.       472.      465.        467. 10735200
+#> 4 META   2024-05-31       466.       469.      454.        467. 16919800
+#> 5 META   2024-06-03       471.       480.      468.        477. 11279400
+#> 6 META   2024-06-04       477        479.      473.        477.  7088700
+#> # ℹ 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
+#> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
 ```
 
 # Acknowledgements

@@ -1,3 +1,7 @@
+## Version 1.1.1 (2024-06-24) -- minor
+
+- new function check_internet() that will check for an active internet connection every R session. It will not repeat the test once it is passed. 
+
 ## Version 1.1.0 (2023-01-30) -- major version
 
 - new function yf_live_prices() (see this [pr](https://github.com/ropensci/yfR/pull/24))

@@ -162,3 +162,34 @@ substitute_tickers <- function(df_index) {
 
   return(df_index)
 }
+
+
+#' Tests for an internet connection
+#'
+#' Tests for internet connect in every R session. If already tested, just skip it and saves time.
+#'
+#' @noRd
+check_internet <- function() {
+  f_flag <- paste0(
+    tempdir(), "/",
+    "yf-flag-internet-ok"
+  )
+
+  if (file.exists(f_flag)) {
+
+    flag <- TRUE
+
+  } else {
+
+    flag <- pingr::is_online()
+
+    if (!flag) {
+      stop("Can't find an active internet connection...")
+    } else {
+      readr::write_lines("internet ok", f_flag)
+    }
+
+  }
+
+  return(flag)
+}

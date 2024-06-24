@@ -122,9 +122,7 @@ yf_get <- function(tickers,
                    be_quiet = FALSE) {
 
   # check for internet
-  if (!pingr::is_online()) {
-    stop("Can't find an active internet connection...")
-  }
+  check_internet()
 
   # check cache folder
   if ((do_cache) & (!dir.exists(cache_folder))) dir.create(cache_folder,
@@ -197,14 +195,14 @@ yf_get <- function(tickers,
 
   # disable dplyr group message and respect user choice
   # will be null if options is not set
-  default_dplyr_summ <- options("dplyr.summarise.inform")[[1]]
+  default_dplyr_sum <- options("dplyr.summarise.inform")[[1]]
 
   # disable and enable at end with on exit
   options(dplyr.summarise.inform = FALSE)
 
   on.exit({
-    if (is.logical(default_dplyr_summ)) {
-      options(dplyr.summarise.inform = default_dplyr_summ)
+    if (is.logical(default_dplyr_sum)) {
+      options(dplyr.summarise.inform = default_dplyr_sum)
     }
   })
 
