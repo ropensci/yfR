@@ -1,5 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![Project Status: Active – The project has reached a stable, usable
@@ -131,8 +132,8 @@ For market indices, a list of tickers is available
   (research papers or academic documents – thesis and dissertations). If
   adjusted price data of individual stocks is important for your
   research, **use other data sources** such as
-  [EOD](https://eodhistoricaldata.com/), [SimFin](https://simfin.com/)
-  or [Economática](https://economatica.com/).
+  [EODHD](https://eodhd.com/), [SimFin](https://simfin.com/) or
+  [Economática](https://www.economatica.com/).
 
 ## Installation
 
@@ -160,35 +161,32 @@ df_yf <- yf_get(tickers = my_ticker,
                      first_date = first_date,
                      last_date = last_date)
 #> 
-#> ── Running yfR for 1 stocks | 2024-05-25 --> 2024-06-24 (30 days) ──
+#> ── Running yfR for 1 stocks | 2025-04-19 --> 2025-05-19 (30 days) ──
 #> 
 #> ℹ Downloading data for benchmark ticker ^GSPC
 #> ℹ (1/1) Fetching data for META
 #> !    - not cached
 #> ✔    - cache saved successfully
-#> ✔    - got 18 valid rows (2024-05-28 --> 2024-06-21)
-#> ✔    - got 100% of valid prices -- Time for some tea?
+#> ✔    - got 20 valid rows (2025-04-21 --> 2025-05-16)
+#> ✔    - got 100% of valid prices -- Well done msperlin!
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 18 rows -- You got it msperlin!
-#> ℹ Using 5.5 kB at /tmp/Rtmp8A98vn/yf_cache for 2 cache files
+#> ✔ Returned dataframe with 20 rows -- Good job msperlin!
+#> ℹ Using 5.9 kB at /tmp/RtmpzU4rZE/yf_cache for 2 cache files
 #> ℹ Out of 1 requested tickers, you got 1 (100%)
-```
-
-``` r
 
 # output is a tibble with data
 head(df_yf)
 #> # A tibble: 6 × 11
 #>   ticker ref_date   price_open price_high price_low price_close   volume
 #>   <chr>  <date>          <dbl>      <dbl>     <dbl>       <dbl>    <dbl>
-#> 1 META   2024-05-28       477.       481.      475.        480. 10175800
-#> 2 META   2024-05-29       475.       480.      474.        474.  9226200
-#> 3 META   2024-05-30       472.       472.      465.        467. 10735200
-#> 4 META   2024-05-31       466.       469.      454.        467. 16919800
-#> 5 META   2024-06-03       471.       480.      468.        477. 11279400
-#> 6 META   2024-06-04       477        479.      473.        477.  7088700
+#> 1 META   2025-04-21       491.       494.      480.        485. 16166000
+#> 2 META   2025-04-22       492.       507.      486.        500. 17399400
+#> 3 META   2025-04-23       529.       535.      517.        520. 18173900
+#> 4 META   2025-04-24       519.       534.      518.        533. 13910000
+#> 5 META   2025-04-25       547.       550.      536.        547. 17098900
+#> 6 META   2025-04-28       556.       558.      541.        550. 15179000
 #> # ℹ 4 more variables: price_adjusted <dbl>, ret_adjusted_prices <dbl>,
 #> #   ret_closing_prices <dbl>, cumret_adjusted_prices <dbl>
 ```

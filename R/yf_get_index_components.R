@@ -215,9 +215,10 @@ yf_index_ibov <- function(do_cache = TRUE,
     my_url <- 'https://en.wikipedia.org/wiki/List_of_companies_listed_on_B3'
 
     df_ibov_comp <- rvest::read_html(my_url) %>%
-      rvest::html_table()
+      rvest::html_table(header = TRUE)
 
-    df_ibov_comp <- df_ibov_comp[[1]]
+    df_ibov_comp <- df_ibov_comp[[1]]  %>%
+      janitor::clean_names()
 
     Sys.sleep(0.5)
 
@@ -225,16 +226,17 @@ yf_index_ibov <- function(do_cache = TRUE,
   }
 
   df_ibov_comp <- df_ibov_comp %>%
-    dplyr::rename(ticker = Ticker,
-                  company = Company,
-                  industry = Industry) %>%
-    dplyr::mutate(type_stock = NA,
+    dplyr::rename(ticker = codigo,
+                  company = acao
+                  #industry = Industry
+                  ) %>%
+    dplyr::mutate(type_stock = tipo,
                   quantity = NA,
                   percentage_participation = NA,
                   ref_date = Sys.Date(),
                   index = "IBOV",
                   index_ticker = "^BVSP") %>%
-    dplyr::select(-Headquarters)
+    dplyr::select(ticker, company, type_stock, ref_date, index, index_ticker)
 
   if (do_cache) {
     if (!dir.exists(cache_folder)) dir.create(cache_folder)

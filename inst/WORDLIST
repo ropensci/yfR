@@ -27,14 +27,17 @@ YYYY
 api
 arit
 cachefolder
+cran
 cumret
-dir
 dontrun
 donttest
+filesize
 furrr
 futureverse
+gerrymanoim
 github
 https
+ibov
 json
 magrittr
 md
@@ -47,7 +50,6 @@ rOpenSci
 rcmdcheck
 rds
 readme
-repo
 ret
 ropensci
 roxygen

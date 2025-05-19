@@ -15,7 +15,8 @@ my_globals <- c(
   "meta", "symbol", "regularMarketTime", "regularMarketPrice",
   "time_stamp","previousClose","price","last_price",
   # from yf_live_prices
-  "amount"
+  "amount",
+  "acao", "codigo", "index", "index_ticker", "tipo", "type_stock"
 )
 
 utils::globalVariables(my_globals)

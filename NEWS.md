@@ -1,3 +1,8 @@
+## Version 1.1.2 (2025-05-19) -- minor
+
+- removed dependency on pkg humanize, removed from cran -- new local function is used for natural_size().
+- fixed bug for ibov index composition
+
 ## Version 1.1.1 (2024-06-24) -- minor
 
 - new function check_internet() that will check for an active internet connection every R session. It will not repeat the test once it is passed. 
