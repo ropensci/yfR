@@ -132,7 +132,7 @@ For market indices, a list of tickers is available
   (research papers or academic documents – thesis and dissertations). If
   adjusted price data of individual stocks is important for your
   research, **use other data sources** such as
-  [EODHD](https://eodhd.com/), [SimFin](https://simfin.com/) or
+  [EODHD](https://eodhd.com/), [SimFin](https://www.simfin.com/) or
   [Economática](https://www.economatica.com/).
 
 ## Installation
@@ -168,12 +168,12 @@ df_yf <- yf_get(tickers = my_ticker,
 #> !    - not cached
 #> ✔    - cache saved successfully
 #> ✔    - got 20 valid rows (2025-04-21 --> 2025-05-16)
-#> ✔    - got 100% of valid prices -- Well done msperlin!
+#> ✔    - got 100% of valid prices -- Time for some tea?
 #> ℹ Binding price data
 #> 
 #> ── Diagnostics ─────────────────────────────────────────────────────────────────
-#> ✔ Returned dataframe with 20 rows -- Good job msperlin!
-#> ℹ Using 5.9 kB at /tmp/RtmpzU4rZE/yf_cache for 2 cache files
+#> ✔ Returned dataframe with 20 rows -- All OK!
+#> ℹ Using 5.9 kB at /tmp/Rtmpcyyijl/yf_cache for 2 cache files
 #> ℹ Out of 1 requested tickers, you got 1 (100%)
 
 # output is a tibble with data
