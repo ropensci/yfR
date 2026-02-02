@@ -1,3 +1,9 @@
+## Version 1.1.3 (2026-02-02) -- minor
+
+- now using parallelly::availableCores(), issue 32
+- using flag <- inherits(future::plan(), "sequential") from issue 33
+- update of fallback files for index composition
+
 ## Version 1.1.2 (2025-05-19) -- minor
 
 - removed dependency on pkg humanize, removed from cran -- new local function is used for natural_size().

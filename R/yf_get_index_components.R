@@ -11,9 +11,9 @@
 #' @examples
 #' df_sp500 <- yf_index_composition("SP500")
 yf_index_composition <- function(mkt_index,
-                              do_cache = TRUE,
-                              cache_folder = yf_cachefolder_get(),
-                              force_fallback = FALSE) {
+                                 do_cache = TRUE,
+                                 cache_folder = yf_cachefolder_get(),
+                                 force_fallback = FALSE) {
 
   available_indices <- yf_index_list()
   if (!any(mkt_index %in% available_indices)) {
@@ -140,7 +140,7 @@ yf_index_list <- function(print_description = FALSE) {
 #' FTSE100 index from Wikipedia
 #' @noRd
 yf_index_ftse <- function(do_cache = TRUE,
-                               cache_folder = yf_cachefolder_get()) {
+                          cache_folder = yf_cachefolder_get()) {
   cache_file <- file.path(
     cache_folder,
     paste0("yf_ftse100_Composition_", Sys.Date(), ".rds")
@@ -193,8 +193,8 @@ yf_index_ftse <- function(do_cache = TRUE,
 #' Ibovespa index from B3 website
 #' @noRd
 yf_index_ibov <- function(do_cache = TRUE,
-                               cache_folder = yf_cachefolder_get(),
-                               max_tries = 10) {
+                          cache_folder = yf_cachefolder_get(),
+                          max_tries = 10) {
   cache_file <- file.path(
     cache_folder,
     paste0("Ibov_Composition_", Sys.Date(), ".rds")
@@ -226,16 +226,13 @@ yf_index_ibov <- function(do_cache = TRUE,
   }
 
   df_ibov_comp <- df_ibov_comp %>%
-    dplyr::rename(ticker = codigo,
-                  company = acao
-                  #industry = Industry
-                  ) %>%
-    dplyr::mutate(type_stock = tipo,
-                  quantity = NA,
-                  percentage_participation = NA,
-                  ref_date = Sys.Date(),
-                  index = "IBOV",
-                  index_ticker = "^BVSP") %>%
+    dplyr::mutate(
+      type_stock = NA,
+      quantity = NA,
+      percentage_participation = NA,
+      ref_date = Sys.Date(),
+      index = "IBOV",
+      index_ticker = "^BVSP") %>%
     dplyr::select(ticker, company, type_stock, ref_date, index, index_ticker)
 
   if (do_cache) {
@@ -252,7 +249,7 @@ yf_index_ibov <- function(do_cache = TRUE,
 #' Function for fetching test tickers
 #' @noRd
 yf_index_test <- function(do_cache = TRUE,
-                               cache_folder = yf_cachefolder_get()) {
+                          cache_folder = yf_cachefolder_get()) {
 
   df_test <- dplyr::tibble(
     ticker = c("^GSPC", "^FTSE"),
@@ -265,7 +262,7 @@ yf_index_test <- function(do_cache = TRUE,
 #' Function to download the current components of the SP500 index from Wikipedia
 #' @noRd
 yf_index_sp500 <- function(do_cache = TRUE,
-                                cache_folder = yf_cachefolder_get()) {
+                           cache_folder = yf_cachefolder_get()) {
   cache_file <- file.path(
     cache_folder,
     paste0("SP500_Composition_", Sys.Date(), ".rds")
@@ -318,7 +315,7 @@ yf_index_sp500 <- function(do_cache = TRUE,
 #' Function to download the current components of the dOW index from Wikipedia
 #' @noRd
 yf_index_dow <- function(do_cache = TRUE,
-                           cache_folder = yf_cachefolder_get()) {
+                         cache_folder = yf_cachefolder_get()) {
   cache_file <- file.path(
     cache_folder,
     paste0("DOW30_Composition_", Sys.Date(), ".rds")

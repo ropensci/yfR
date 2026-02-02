@@ -279,7 +279,7 @@ yf_get <- function(tickers,
   } else {
 
     # available cores in R session
-    available_cores <- future::availableCores()
+    available_cores <- parallelly::availableCores()
     used_cores <- future::nbrOfWorkers()
 
     if (!be_quiet) {
@@ -290,10 +290,13 @@ yf_get <- function(tickers,
     }
 
     # test if plan() was called
-    msg <- utils::capture.output(future::plan())
+    # msg <- utils::capture.output(future::plan())
 
     # "sequential is the default plan
-    flag <- stringr::str_detect(msg[1], "sequential")
+    # flag <- stringr::str_detect(msg[1], "sequential")
+
+    # 20250202 new command from issue 33
+    flag <- inherits(future::plan(), "sequential")
 
     if (flag) {
       stop(paste0(
